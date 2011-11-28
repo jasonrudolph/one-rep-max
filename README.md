@@ -23,7 +23,7 @@ to install both the Starter Kit and ClojureScript:
     lein deps
     ./script/run
     
-If you already have ClojureScript and it is not at the same level as
+If you already have ClojureScript and it is not in the same directory as
 `clojurescript-starter-kit`, then you will need to set the
 CLOJURESCRIPT_HOME environment variable.
 
