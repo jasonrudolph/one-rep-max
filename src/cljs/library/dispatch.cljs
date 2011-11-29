@@ -1,4 +1,4 @@
-(ns library.event-dispatch)
+(ns library.dispatch)
 
 (def counter (atom 0))
 (def run-counts (atom {}))

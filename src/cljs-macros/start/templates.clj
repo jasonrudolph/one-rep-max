@@ -9,6 +9,5 @@
   (render (html/select (html/html-resource file) id)))
 
 (defmacro snippets []
-  {}
   {:form (snippet "form.html" [:div#content])
    :greeting (snippet "greeting.html" [:div#content])})

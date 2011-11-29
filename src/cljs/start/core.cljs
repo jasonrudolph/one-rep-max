@@ -1,6 +1,6 @@
 (ns start.core
   (:require [clojure.browser.repl :as repl]
-            [library.event-dispatch :as dispatch]
+            [library.dispatch :as dispatch]
             [start.view :as view]))
 
 (defn ^:export repl

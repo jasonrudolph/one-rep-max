@@ -2,7 +2,7 @@
   (:require-macros [start.templates :as templates])
   (:require [clojure.browser.dom :as dom]
             [clojure.browser.event :as event]
-            [library.event-dispatch :as dispatch]
+            [library.dispatch :as dispatch]
             [goog.dom.classes :as gclasses]))
 
 (defn on-click
@@ -24,10 +24,10 @@
                   (gclasses/add (dom/get-element :input-field) "error")))
   (on-click :greet-button :greeting #(hash-map :name (dom/get-value :name-input))))
 
-(defmethod render :greeting [{:keys [state name]}]
+(defmethod render :greeting [{:keys [state name exists]}]
   (dom/replace-node :content
                     (dom/html->dom (get snippets state)))
-  (dom/set-text :name name)
+  (dom/set-text :name (if exists (str " again " name) name))
   (on-click :content :form))
 
 (dispatch/respond-to :state-change (fn [_ m] (render m)))
