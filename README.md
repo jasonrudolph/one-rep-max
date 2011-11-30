@@ -29,6 +29,6 @@ CLOJURESCRIPT_HOME environment variable.
 
 # License
 
-Copyright © 2011 Brenton Ashworth
+Copyright © 2011 Brenton Ashworth and Relevance, Inc
 
 Distributed under the Eclipse Public License, the same as Clojure uses. See the file COPYING.
