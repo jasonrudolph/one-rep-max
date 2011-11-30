@@ -11,7 +11,10 @@
       newest)))
 
 (defn any-modified-cljs [dir k]
-  (any-modified k (filter #(.isFile %) (file-seq (io/file dir)))))
+  (let [files (filter #(.isFile %) (into (file-seq (io/file dir))
+                                         (file-seq (io/file "templates"))))]
+    (pr-str files)
+    (any-modified k files)))
 
 (defn watch-cljs [handler dir opts]
   (fn [request]
