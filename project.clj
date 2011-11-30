@@ -4,4 +4,5 @@
                  [ring "1.0.0-RC1"]
                  [compojure "0.6.4"]
                  [enlive "1.0.0"]]
+  :dev-dependencies [[jline "0.9.94"]]
   :source-path "src/clj")
