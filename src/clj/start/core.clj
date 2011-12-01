@@ -11,7 +11,8 @@
         [compojure.core :only (defroutes GET POST ANY)]
         [cljs.repl :only (repl)]
         [cljs.repl.browser :only (repl-env)]
-        [start.api :only (remote-routes)])
+        [start.api :only (remote-routes)]
+        [start.templates :only (load-html construct-html)])
   (:require [net.cgrand.enlive-html :as html]
             [start.reload :as reload])
   (:import java.io.File))
@@ -21,7 +22,7 @@
 (defn script [f] (html/transform script-snippet [:script] f))
 
 (defn application-view [& scripts]
-  (html/transform (html/html-resource "application.html")
+  (html/transform (construct-html (html/html-resource "application.html"))
                   [:body]
                   (apply html/append scripts)))
 
@@ -40,14 +41,14 @@
      :body body}))
 
 (defn design-view [params]
-  (file-response (str (get params "page") ".html") {:root "templates"}))
+  (load-html (str (get params "page") ".html")))
 
 (defroutes app-routes
   remote-routes
   (GET "/development" request (application-host request))
   (GET "/production" request (application-host request) )
   (GET "/design" {params :params} (design-view params))
-  (ANY "*" [] (file-response "404.html" {:root "public"})))
+  (ANY "*" request (do (prn request) (file-response "404.html" {:root "public"}))))
 
 (defn ensure-encoding [handler]
   (fn [request]
@@ -58,6 +59,17 @@
                   "text/javascript; charset=utf-8")
         response))))
 
+(defn apply-templates [handler]
+  (fn [request]
+    (let [{:keys [headers body] :as response} (handler request)]
+      (if (and (= (type body) File)
+               (.endsWith (.getName body) ".html"))
+        (let [new-body (html/emit* (construct-html (html/html-snippet (slurp body))))]
+          {:status 200
+           :headers {"Content-Type" "text/html; charset=utf-8"}
+           :body new-body})
+        response))))
+
 (def app (-> app-routes
              (reload/watch-cljs "src/cljs" {:output-to "public/javascripts/main.js"
                                             :output-to-prod "public/javascripts/mainp.js"
@@ -65,6 +77,7 @@
                                             :top-level-package "start"})
              (wrap-file "public")
              wrap-file-info
+             apply-templates
              ensure-encoding
              wrap-params
              wrap-stacktrace

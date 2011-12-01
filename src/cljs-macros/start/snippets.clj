@@ -1,4 +1,4 @@
-(ns start.templates
+(ns start.snippets
   "Macros for including html snippets at compile time. This technique
    allows designers to work in whatever way they feel comfortable."
   (:require [net.cgrand.enlive-html :as html]))

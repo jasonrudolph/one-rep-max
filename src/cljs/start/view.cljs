@@ -1,5 +1,5 @@
 (ns start.view
-  (:require-macros [start.templates :as templates])
+  (:require-macros [start.snippets :as snippets])
   (:require [clojure.browser.dom :as dom]
             [clojure.browser.event :as event]
             [library.dispatch :as dispatch]
@@ -13,7 +13,7 @@
                         "click"
                         #(dispatch/fire event-id (if (fn? d) (d) d)))))
 
-(def snippets (templates/snippets))
+(def snippets (snippets/snippets))
 
 (defmulti render :state)
 
