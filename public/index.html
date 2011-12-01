@@ -1,102 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>ClojureScript Starter Kit</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-      }
-    </style>
-
-    <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-  </head>
-
-  <body>
-
-    <div class="topbar">
-      <div class="fill">
-        <div class="container">
-          <a class="brand" href="/">ClojureScript Starter Kit</a>
-
-          <ul class="nav">
-            <li class="active"><a href="/">Home</a></li>
-            <li><a href="/design.html">Design</a></li>
-            <li><a href="/development">Development</a></li>
-            <li><a href="/production">Production</a></li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="container">
-
-      <div class="hero-unit">
-        <h1>Hello, ClojureScript!</h1>
-        <p>With the release of ClojureScript, developers can now write
-        web applications in a single language without making
-        compromises. This project provides a starting point for
-        ClojureScript development with code reloading, templating, a
-        browser-connected REPL, and both development and advanced mode
-        views of an application.
-        </p>
-      </div>
-
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="span6">
-          <h2>Design</h2>
-          <p>Designers can work with HTML, CSS and images without
+<_within file="application.html">
+  
+  <div id="content">
+    <h1>Hello, ClojureScript!</h1>
+    <p>With the release of ClojureScript, developers can now write
+      web applications in a single language without making
+      compromises. This project provides a starting point for
+      ClojureScript development with code reloading, templating, a
+      browser-connected REPL, and both development and advanced mode
+      views of an application.
+    </p>
+  </div>
+  
+  <div id="options">
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="span6">
+        <h2>Design</h2>
+        <p>Designers can work with HTML, CSS and images without
           having to deal with <a href="https://github.com/weavejester/hiccup/wiki/Syntax">
-          Hiccup</a> or Clojure source code.
+            Hiccup</a> or Clojure source code.
           Run <code>./script/run</code> and work on the files in the
           <code>templates</code> directory. Templates and snippets will be
           extracted from these files at compile time.</p>
-          <p><a class="btn" href="/design.html">Design &raquo;</a></p>
-
-        </div>
-        <div class="span5">
-          <h2>Development</h2>
-           <p>Work with the ClojureScript application in development
-             mode. Each input JavaScript file is visible for easier
-             debugging. Use the browser-connected REPL to interact
-             with the running application.</p>
-          <p><a class="btn" href="/development">Development &raquo;</a></p>
-       </div>
-        <div class="span5">
-
-          <h2>Production</h2>
-          <p>Advanced compilation will remove dead code, minify what
+        <p><a class="btn" href="/design.html">Design &raquo;</a></p>
+        
+      </div>
+      <div class="span5">
+        <h2>Development</h2>
+        <p>Work with the ClojureScript application in development
+          mode. Each input JavaScript file is visible for easier
+          debugging. Use the browser-connected REPL to interact
+          with the running application.</p>
+        <p><a class="btn" href="/development">Development &raquo;</a></p>
+      </div>
+      <div class="span5">
+        
+        <h2>Production</h2>
+        <p>Advanced compilation will remove dead code, minify what
           is left and emit a single JavaScript file. It is possible to
           do something that will break advanced compilation. This area
           allows one to easily check that the application works with
           advanced compilation.</p>
-          <p><a class="btn" href="/production">Production &raquo;</a></p>
-        </div>
+        <p><a class="btn" href="/production">Production &raquo;</a></p>
       </div>
+    </div>
+  </div>
 
-      <footer>
-        <p>&copy; Company 2011</p>
-
-      </footer>
-
-    </div> <!-- /container -->
-
-  </body>
-</html>
+</_within>
