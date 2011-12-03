@@ -1,5 +1,6 @@
 (ns start.reload
-  (:use [cljs.closure :only (build)])
+  (:use [start.config]
+        [cljs.closure :only (build)])
   (:require [clojure.java.io :as io]))
 
 (defonce last-compile (atom {}))
@@ -16,20 +17,20 @@
     (pr-str files)
     (any-modified k files)))
 
-(defn watch-cljs [handler dir opts]
+(defn watch-cljs [handler dir config]
   (fn [request]
     (let [k (:uri request)
           ts (any-modified-cljs dir k)]
       (when ts
         (swap! last-compile assoc k ts)
-        (let [out (:output-dir opts)]
-          (doseq [file (file-seq (io/file (str (:output-dir opts) "/"
-                                               (:top-level-package opts))))]
+        (let [build-opts (cljs-build-opts config)]
+          (doseq [file (file-seq (io/file (str (:output-dir build-opts) "/"
+                                               (:top-level-package config))))]
             (.setLastModified file 0))
           (build dir (if (= (:uri request) "/production")
-                       (assoc opts :optimizations :advanced
-                              :output-to (:output-to-prod opts))
-                       opts)))))
+                       (assoc build-opts :optimizations :advanced
+                              :output-to (production-js config))
+                       build-opts)))))
     (handler request)))
 
 (defn any-modified-clj [files]

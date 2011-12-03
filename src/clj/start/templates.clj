@@ -1,5 +1,6 @@
 (ns start.templates
-  (:use net.cgrand.enlive-html))
+  (:use net.cgrand.enlive-html)
+  (:import java.io.File))
 
 (defn render [t] (apply str (emit* t)))
 
@@ -46,9 +47,13 @@
 (defn load-html [file]
   (render (construct-html (html-resource file))))
 
-(comment
-
-  (println (render (construct-html (html-resource "application.html"))))
-  (println (render (construct-html (html-resource "test.html"))))
-  (println (render (construct-html (html-resource "form.html"))))
-  )
+(defn apply-templates [handler]
+  (fn [request]
+    (let [{:keys [headers body] :as response} (handler request)]
+      (if (and (= (type body) File)
+               (.endsWith (.getName body) ".html"))
+        (let [new-body (emit* (construct-html (html-snippet (slurp body))))]
+          {:status 200
+           :headers {"Content-Type" "text/html; charset=utf-8"}
+           :body new-body})
+        response))))
