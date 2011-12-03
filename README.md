@@ -27,8 +27,14 @@ If you already have ClojureScript and it is not in the same directory as
 `clojurescript-starter-kit`, then you will need to set the
 CLOJURESCRIPT_HOME environment variable.
 
+Open your browser and navigate to [http://localhost:8080](http://localhost:8080)
+
+For more information, see the [wiki][].
+
 # License
 
 Copyright © 2011 Brenton Ashworth and Relevance, Inc
 
 Distributed under the Eclipse Public License, the same as Clojure uses. See the file COPYING.
+
+[wiki]: https://github.com/brentonashworth/clojurescript-starter-kit/wiki
