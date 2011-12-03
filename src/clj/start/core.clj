@@ -34,7 +34,7 @@
   (GET "/design" {params :params} (design-view params))
   (ANY "*" request (file-response "404.html" {:root "public"})))
 
-(defn ensure-encoding [handler]
+(defn js-encoding [handler]
   (fn [request]
     (let [{:keys [headers body] :as response} (handler request)]
       (if (and (= (get headers "Content-Type") "text/javascript")
@@ -48,7 +48,7 @@
              (wrap-file "public")
              wrap-file-info
              apply-templates
-             ensure-encoding
+             js-encoding
              wrap-params
              wrap-stacktrace
              (reload/reload-clj (:reload-clj config))))
