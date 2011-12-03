@@ -1,4 +1,10 @@
-(ns start.config)
+(ns start.config
+  (:require [net.cgrand.enlive-html :as html]))
+
+(defn production-transform [h]
+  (html/transform h
+                  [:ul#navigation]
+                  (html/substitute (html/html-snippet ""))))
 
 (def config {:top-level-package "start"
              :js "public/javascripts"
@@ -8,9 +14,13 @@
                       "goog.require('start.model');"
                       "start.core.start();start.core.repl();"]
              :prod-js ["start.core.start();"]
-             :reload-clj ["/start/templates"
-                          "/start/api"
-                          "/start/core"]})
+             :reload-clj (map #(str "/start/" %) ["templates"
+                                                  "api"
+                                                  "config"
+                                                  "host_page"
+                                                  "reload"
+                                                  "dev_server"])
+             :prod-transform production-transform})
 
 (defn cljs-build-opts [config]
   {:output-to (str (:js config) "/" (:dev-js-file-name config))

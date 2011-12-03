@@ -1,4 +1,4 @@
-(ns start.core
+(ns start.dev-server
   "Serve a friendly ClojureScript environment with code reloading and
    the ClojureScript application in both development and advanced
    compiled mode."
@@ -59,7 +59,7 @@
 
 (comment
   ;; Start the server.
-  (use 'start.core :reload-all)
+  (use 'start.dev-server :reload-all)
   (run-server)
   ;; Start a REPL.
   (cljs-repl)

@@ -19,6 +19,8 @@
      (apply application-view (script (html/set-attr :src "javascripts/out/goog/base.js"))
             (script (html/set-attr :src "javascripts/main.js"))
             (map #(script (html/content %)) (:dev-js config)))
-     (apply application-view (script (html/set-attr :src (str "javascripts/"
-                                                              (:prod-js-file-name config))))
-            (map #(script (html/content %)) (:prod-js config))))))
+     (let [tfn (get config :prod-transform identity)]
+       (tfn (apply application-view
+                   (script (html/set-attr :src (str "javascripts/"
+                                                    (:prod-js-file-name config))))
+                   (map #(script (html/content %)) (:prod-js config))))))))

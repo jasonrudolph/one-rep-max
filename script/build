@@ -1,5 +1,15 @@
 #!/bin/sh
 
+set -e
+
+mkdir -p out
+
+echo "Creating out/public..."
+cp -a public out/
+rm out/public/index.html
+rm out/public/design.html
+rm -rf out/public/javascripts/*
+
 if [ "$CLOJURESCRIPT_HOME" = "" ]; then
   CLOJURESCRIPT_HOME=../clojurescript
 fi
@@ -11,8 +21,10 @@ done
 
 CLJSC_CP=$CLJSC_CP'src/clj:src/cljs:src/cljs-macros:test/clj:templates'
 
+echo "Create advanced compiled JavaScript..."
 java -server -cp $CLJSC_CP jline.ConsoleRunner clojure.main -e \
-"(use 'start.dev-server)
- (run-server)
- (println \"The application is being served from localhost:8080\")
- (cljs-repl)" --repl
+"(use 'start.tools)
+ (build-project)"
+
+echo "[build complete]"
+
