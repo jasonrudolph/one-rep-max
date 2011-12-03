@@ -48,7 +48,7 @@
   (GET "/development" request (application-host request))
   (GET "/production" request (application-host request) )
   (GET "/design" {params :params} (design-view params))
-  (ANY "*" request (do (prn request) (file-response "404.html" {:root "public"}))))
+  (ANY "*" request (file-response "404.html" {:root "public"})))
 
 (defn ensure-encoding [handler]
   (fn [request]
