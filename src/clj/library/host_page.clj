@@ -1,8 +1,9 @@
-(ns start.host-page
+(ns library.host-page
   "Create an HTML page to host a ClojureScript application."
-  (:use [start.templates :only (construct-html)]
-        [start.snippets :only (render)])
+  (:use [library.templates :only (construct-html)])
   (:require [net.cgrand.enlive-html :as html]))
+
+(defn render [t] (apply str (html/emit* t)))
 
 (def script-snippet (html/html-snippet "<script type='text/javascript'></script>"))
 

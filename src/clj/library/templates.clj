@@ -1,4 +1,7 @@
-(ns start.templates
+(ns library.templates
+  "HTML templating for designers. Templates are only used at design
+   time. At runtime all resources are included in the JavaScript
+   application."
   (:use net.cgrand.enlive-html)
   (:import java.io.File))
 

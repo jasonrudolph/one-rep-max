@@ -11,12 +11,12 @@
         [compojure.core :only (defroutes GET POST ANY)]
         [cljs.repl :only (repl)]
         [cljs.repl.browser :only (repl-env)]
+        [library.templates :only (load-html apply-templates)]
+        [library.host-page :only (application-host)]
         [start.api :only (remote-routes)]
-        [start.templates :only (load-html apply-templates)]
-        [start.host-page :only (application-host)]
         [start.config])
   (:require [net.cgrand.enlive-html :as html]
-            [start.reload :as reload])
+            [library.reload :as reload])
   (:import java.io.File))
 
 (defn make-host-page [request]

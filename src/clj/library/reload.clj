@@ -1,6 +1,11 @@
-(ns start.reload
-  (:use [start.config]
-        [cljs.closure :only (build)])
+(ns library.reload
+  "Clojure and ClojureScript code reloading. When any watched Clojure
+   file changes, all watched Clojure files will be recompiled. If any
+   ClojureScript file changes or if any template file changes, all
+   ClojureScript files will be recompiled. Recompilation only happens
+   on page reloads."
+  (:use [cljs.closure :only (build)]
+        [library.config])
   (:require [clojure.java.io :as io]))
 
 (defonce last-compile (atom {}))

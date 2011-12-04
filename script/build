@@ -23,8 +23,9 @@ CLJSC_CP=$CLJSC_CP'src/clj:src/cljs:src/cljs-macros:test/clj:templates'
 
 echo "Create advanced compiled JavaScript..."
 java -server -cp $CLJSC_CP jline.ConsoleRunner clojure.main -e \
-"(use 'start.tools)
- (build-project)"
+"(use 'library.tools)
+ (use 'start.config)
+ (build-project config)"
 
 echo "[build complete]"
 

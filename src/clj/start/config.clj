@@ -14,17 +14,10 @@
                       "goog.require('start.model');"
                       "start.core.start();start.core.repl();"]
              :prod-js ["start.core.start();"]
-             :reload-clj (map #(str "/start/" %) ["templates"
-                                                  "api"
-                                                  "config"
-                                                  "host_page"
-                                                  "reload"
-                                                  "dev_server"])
+             :reload-clj ["/library/host_page"
+                          "/library/reload"
+                          "/library/templates"
+                          "/start/api"
+                          "/start/config"
+                          "/start/dev_server"]
              :prod-transform production-transform})
-
-(defn cljs-build-opts [config]
-  {:output-to (str (:js config) "/" (:dev-js-file-name config))
-   :output-dir (str (:js config) "/out")})
-
-(defn production-js [config]
-  (str (:js config) "/" (:prod-js-file-name config)))
