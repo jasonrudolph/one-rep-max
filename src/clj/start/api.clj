@@ -3,7 +3,7 @@
 
 (defonce next-id (atom 0))
 
-(defonce database (atom #{}))
+(defonce ^:dynamic database (atom #{}))
 
 (defmulti remote :fn)
 
