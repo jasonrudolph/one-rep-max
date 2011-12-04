@@ -3,7 +3,6 @@
   (:require [cljs.reader :as reader]
             [clojure.browser.event :as event]
             [library.dispatch :as dispatch]
-            [library.browser.history :as history]
             [goog.uri.utils :as uri]))
 
 (def state (atom nil))
@@ -12,17 +11,10 @@
            (fn [k r o n]
              (dispatch/fire :state-change n)))
 
-(defn navigation [{:keys [token navigation?]}]
-  (when navigation?
-    (swap! state assoc :state token)))
-
-(def history (history/history navigation))
-
 (defmulti action :type)
 
 (defmethod action :form [_]
-  (history/set-token history :form)
-  (reset! state {:state :form}))
+  (swap! state assoc :state :form))
 
 (defn host []
   (uri/getHost (.toString window.location ())))
@@ -41,7 +33,6 @@
 
 
 (defmethod action :greeting [{name :name}]
-  (history/set-token history :greeting)
   (if (empty? name)
     (swap! state assoc :error "I can't greet you without knowing your name!")
     (remote :add-name {:name name} #(add-name-callback name %))))
