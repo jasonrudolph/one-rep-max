@@ -14,7 +14,7 @@
 (defmulti action :type)
 
 (defmethod action :form [_]
-  (swap! state assoc :state :form))
+  (reset! state {:state :form}))
 
 (defn host []
   (uri/getHost (.toString window.location ())))

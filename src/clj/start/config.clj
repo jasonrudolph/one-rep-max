@@ -13,6 +13,7 @@
              :dev-js ["goog.require('start.core');"
                       "goog.require('start.model');"
                       "goog.require('start.history');"
+                      "goog.require('start.logging');"
                       "start.core.start();start.core.repl();"]
              :prod-js ["start.core.start();"]
              :reload-clj ["/library/host_page"

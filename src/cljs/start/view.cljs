@@ -17,11 +17,12 @@
 
 (defmulti render :state)
 
-(defmethod render :form [{:keys [state error]}]
+(defmethod render :form [{:keys [state error name]}]
   (dom/replace-node :content
                     (dom/html->dom (get snippets state)))
   (when error (do (dom/set-text :name-input-error error)
                   (gclasses/add (dom/get-element :input-field) "error")))
+  (when name (dom/set-value :name-input name))
   (on-click :greet-button :greeting #(hash-map :name (dom/get-value :name-input))))
 
 (defmethod render :greeting [{:keys [state name exists]}]
