@@ -3,7 +3,8 @@
   (:require [cljs.reader :as reader]
             [clojure.browser.event :as event]
             [library.dispatch :as dispatch]
-            [library.browser.history :as history]))
+            [library.browser.history :as history]
+            [goog.uri.utils :as uri]))
 
 (def state (atom nil))
 
@@ -23,8 +24,11 @@
   (history/set-token history :form)
   (reset! state {:state :form}))
 
+(defn host []
+  (uri/getHost (.toString window.location ())))
+
 (defn remote [f data on-success]
-  (request f "http://localhost:8080/remote"
+  (request f (str (host) "/remote")
            :method "POST"
            :on-success #(on-success (reader/read-string (:body %)))
            :on-error #(swap! state assoc :error "Error communicating with server.")
