@@ -24,14 +24,11 @@
    :headers {"Content-Type" "text/html; charset=utf-8"}
    :body (application-host config request)})
 
-(defn design-view [params]
-  (load-html (str (get params "page") ".html")))
-
 (defroutes app-routes
   remote-routes
   (GET "/development" request (make-host-page request))
   (GET "/production" request (make-host-page request) )
-  (GET "/design" {params :params} (design-view params))
+  (GET "/design*" {{file :*} :route-params} (load-html (.substring file 1)))
   (ANY "*" request (file-response "404.html" {:root "public"})))
 
 (defn js-encoding [handler]
@@ -43,9 +40,18 @@
                   "text/javascript; charset=utf-8")
         response))))
 
+(defn rewrite-design-uris [handler]
+  (fn [{:keys [uri] :as request}]
+    (if (or (.startsWith uri "/design/css")
+            (.startsWith uri "/design/javascripts")
+            (.startsWith uri "/design/images"))
+      (handler (assoc request :uri (.substring uri 7)))
+      (handler request))))
+
 (def app (-> app-routes
              (reload/watch-cljs "src/cljs" config)
              (wrap-file "public")
+             rewrite-design-uris
              wrap-file-info
              apply-templates
              js-encoding
