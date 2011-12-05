@@ -17,4 +17,8 @@
     response))
 
 (defroutes remote-routes
-  (POST "/remote" {{data "data"} :params} (pr-str (remote (read-string data)))))
+  (POST "/remote" {{data "data"} :params}
+        (pr-str
+         (remote
+          (binding [*read-eval* false]
+            (read-string data))))))
