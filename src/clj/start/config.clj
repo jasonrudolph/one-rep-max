@@ -12,6 +12,7 @@
              :prod-js-file-name "mainp.js"
              :dev-js ["goog.require('start.core');"
                       "goog.require('start.model');"
+                      "goog.require('start.controller');"
                       "goog.require('start.history');"
                       "goog.require('start.logging');"
                       "start.core.start();start.core.repl();"]
