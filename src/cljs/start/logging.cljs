@@ -4,7 +4,7 @@
 
 (def logger (log/get-logger "events"))
 
-(dispatch/respond-to identity
+(dispatch/respond-to (constantly true)
                      (fn [t d] (log/info logger (str (pr-str t) " - " (pr-str d)))))
 
 (comment

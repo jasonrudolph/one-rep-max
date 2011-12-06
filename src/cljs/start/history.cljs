@@ -4,8 +4,7 @@
 
 (defn nav-handler [{:keys [token navigation?]}]
   (when navigation?
-    (dispatch/fire token)
-    #_(swap! state assoc :state token)))
+    (dispatch/fire token)))
 
 (def history (history/history nav-handler))
 
