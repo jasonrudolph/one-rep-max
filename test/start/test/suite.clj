@@ -23,5 +23,4 @@
       (run-tests 'start.test.api
                  'start.test.integration))
     (-tear-down eval-env)
-    (.stop server)
-    (System/exit 0)))
+    (.stop server)))

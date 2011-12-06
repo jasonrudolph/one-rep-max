@@ -13,4 +13,5 @@ CLJSC_CP=$CLJSC_CP'src/clj:src/cljs:src/cljs-macros:test:templates'
 
 java -server -cp $CLJSC_CP jline.ConsoleRunner clojure.main -e \
 "(use 'start.test.suite)
- (run-all)"
+ (run-all)
+ (shutdown-agents)"
