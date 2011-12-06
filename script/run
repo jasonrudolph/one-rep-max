@@ -14,5 +14,4 @@ CLJSC_CP=$CLJSC_CP'src/clj:src/cljs:src/cljs-macros:test/clj:templates'
 java -server -cp $CLJSC_CP jline.ConsoleRunner clojure.main -e \
 "(use 'start.dev-server)
  (run-server)
- (println \"The application is being served from localhost:8080\")
- (cljs-repl)" --repl
+ (println \"The application is being served from localhost:8080\")" --repl
