@@ -33,8 +33,26 @@
                    ret
                    nil))))))))
 
+(defn ensure-ns-loaded
+  "Ensure that that browser has completely loaded namespace ns. We
+   need this because in some situations, we wind up trying to run code
+   that depends on a namespace that isn't available yet, due to
+   asynchrony in the browser. Returns true if the namespace loads
+   within the specified timeout (roughly 60 seconds by default), and
+   throws Exception otherwise."
+  ([eval-env ns] (ensure-ns-loaded eval-env ns 60000))
+  ([eval-env ns remaining]
+     (if (pos? remaining)
+       (if (evaluate-cljs eval-env (list 'boolean ns))
+         true
+         (do (Thread/sleep 10)
+             (recur eval-env ns (- remaining 10))))
+       (throw (Exception. (str "Namespace " ns " did not load before the timeout expired."))))))
+
 (defmacro cljs-eval [ns & forms]
-  `(do ~@(map (fn [x] `(evaluate-cljs *eval-env* (quote ~ns) (quote ~x))) forms)))
+  `(do
+     (ensure-ns-loaded *eval-env* (quote ~ns))
+     ~@(map (fn [x] `(evaluate-cljs *eval-env* (quote ~ns) (quote ~x))) forms)))
 
 (defn pause
   ([]

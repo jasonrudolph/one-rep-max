@@ -4,7 +4,7 @@
        [clojure.test]
        [cljs.repl :only (-setup -tear-down)]
        [cljs.repl.browser :only (repl-env)]
-       [library.test :only (pause *eval-env*)]
+       [library.test :only (*eval-env*)]
        [start.dev-server :only (run-server)]       
        [start.test.api]
        [start.test.integration]))
@@ -18,7 +18,6 @@
         eval-env (repl-env)]
     (-setup eval-env)
     (browse-url "http://localhost:8080/development")
-    (pause 1000)
     (binding [*eval-env* eval-env]
       (run-tests 'start.test.api
                  'start.test.integration))
