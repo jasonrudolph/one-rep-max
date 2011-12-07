@@ -24,6 +24,7 @@
   (when error (do (dom/set-text :name-input-error error)
                   (gclasses/add (dom/get-element :input-field) "error")))
   (when name (dom/set-value :name-input name))
+  (.focus (dom/get-element :name-input) ())
   (on-click :greet-button :greeting #(hash-map :name (dom/get-value :name-input)))
   (event/listen (dom/get-element :input-field)
                 event-type/CHANGE
