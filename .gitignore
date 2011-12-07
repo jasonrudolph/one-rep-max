@@ -3,3 +3,4 @@ public/javascripts/
 .repl/
 classes/
 wiki
+.lein-deps-sum
