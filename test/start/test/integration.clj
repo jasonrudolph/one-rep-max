@@ -17,7 +17,7 @@
          {:state :greeting, :name "Ted", :exists false}))
   (is (true? (contains? @database "Ted"))))
 
-  (deftest test-enter-existing-name
+(deftest test-enter-existing-name
   (reset! database #{"Ted"})
   (cljs-eval start.view
              (dispatch/fire :form)
