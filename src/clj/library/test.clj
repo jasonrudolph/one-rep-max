@@ -33,6 +33,29 @@
                    ret
                    nil))))))))
 
+(defn cljs-wait-for*
+  "Using evaluation environment eval-env evaluate form in namespace
+  ns in the browser until pred applied to the result returns true or
+  the timeout expires. If pred returns logical true, returns the
+  result of pred. Throws Exception if the timeout (in milliseconds)
+  has expired."
+  [eval-env pred ns form remaining]
+  (if (pos? remaining)
+    (if-let [result (pred (evaluate-cljs eval-env ns form))]
+      result
+      (do (Thread/sleep 10)
+          (recur eval-env pred ns form (- remaining 10))))
+    (throw (Exception.
+            (str "Form "
+                 form
+                 " did not satisfy predicate before the timeout expired.")))))
+
+(defmacro cljs-wait-for
+  "Expands to a call to cljs-wait-for* using *eval-env* as the
+  evaluation environment and a timeout of roughly one minute."
+  [pred ns form]
+  `(cljs-wait-for* *eval-env* ~pred (quote ~ns) (quote ~form) 60000))
+
 (defn ensure-ns-loaded
   "Ensure that that browser has completely loaded namespace ns. We
    need this because in some situations, we wind up trying to run code
@@ -54,8 +77,4 @@
      (ensure-ns-loaded *eval-env* (quote ~ns))
      ~@(map (fn [x] `(evaluate-cljs *eval-env* (quote ~ns) (quote ~x))) forms)))
 
-(defn pause
-  ([]
-     (pause 500))
-  ([t]
-     (Thread/sleep t)))
+
