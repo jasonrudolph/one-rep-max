@@ -3,7 +3,8 @@
   (:require [clojure.browser.dom :as dom]
             [clojure.browser.event :as event]
             [library.dispatch :as dispatch]
-            [goog.dom.classes :as gclasses]))
+            [goog.dom.classes :as gclasses]
+            [goog.events.EventType :as event-type]))
 
 (defn on-click
   ([id event-id]
@@ -23,7 +24,10 @@
   (when error (do (dom/set-text :name-input-error error)
                   (gclasses/add (dom/get-element :input-field) "error")))
   (when name (dom/set-value :name-input name))
-  (on-click :greet-button :greeting #(hash-map :name (dom/get-value :name-input))))
+  (on-click :greet-button :greeting #(hash-map :name (dom/get-value :name-input)))
+  (event/listen (dom/get-element :input-field)
+                event-type/CHANGE
+                #(dispatch/fire :greeting {:name (dom/get-value :name-input)})))
 
 (defmethod render :greeting [{:keys [state name exists]}]
   (dom/replace-node :content
