@@ -20,4 +20,5 @@
              wrap-file-info
              wrap-params))
 
-(defn -main [] (run-jetty (var app) {:join? false :port 8080}))
+(defn -main [] (let [port (Integer/parseInt (get (System/getenv) "PORT" "8080"))]
+                 (run-jetty (var app) {:join? false :port port})))
