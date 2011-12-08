@@ -1,4 +1,5 @@
-(ns library.browser.history
+(ns ^{:doc "Wraps Google Closure's history functionality."}
+  library.browser.history
   (:require [clojure.browser.event :as event]
             [goog.History :as history]))
 
@@ -13,7 +14,8 @@
               v])
            (js->clj goog.history.EventType)))))
 
-(defn history [callback]
+(defn history
+  [callback]
   (let [h (goog.History.)]
     (do (event/listen h "navigate"
                       (fn [e]
@@ -23,6 +25,7 @@
         (.setEnabled h true)
         h)))
 
-(defn set-token [history token]
+(defn set-token
+  [history token]
   (.setToken history (name token)))
 

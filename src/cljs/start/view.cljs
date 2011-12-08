@@ -1,4 +1,5 @@
-(ns start.view
+(ns ^{:doc "Render the views for the application."}
+  start.view
   (:require-macros [start.snippets :as snippets])
   (:require [clojure.browser.dom :as dom]
             [clojure.browser.event :as event]
@@ -7,6 +8,12 @@
             [goog.events.EventType :as event-type]))
 
 (defn on-click
+  "Helper function for adding click listeners to DOM elements.
+
+  Accepts an id (the id of the DOM element to listen to), an
+  event-id (the name of the event to fire when the DOM element is
+  clicked) and an optional data object to pass along with the fired
+  event."
   ([id event-id]
      (on-click id event-id nil))
   ([id event-id d]
@@ -14,9 +21,14 @@
                         "click"
                         #(dispatch/fire event-id (if (fn? d) (d) d)))))
 
-(def snippets (snippets/snippets))
+(def ^{:doc "A map which contains chunks of HTML which may be used
+  when rendering views."}
+  snippets (snippets/snippets))
 
-(defmulti render :state)
+(defmulti render
+  "Acceptsls a map which represents the current state of the application
+  and renders a view based on the value of the :state key."
+  :state)
 
 (defmethod render :form [{:keys [state error name]}]
   (dom/replace-node :content

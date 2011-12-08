@@ -1,10 +1,19 @@
-(ns library.dispatch)
+(ns ^{:doc "Event dispatching."}
+  library.dispatch)
 
-(def counter (atom 0))
-(def run-counts (atom {}))
-(def listeners (atom {:map {} :fns []}))
+(def ^{:doc "A source of unique ids for listener functions."}
+  counter (atom 0))
 
-(defn add-run-counter [dispatch id c]
+(def ^{:doc "Maps listener functions to the number of times they have
+  been fired."}
+  run-counts (atom {}))
+
+(def ^{:doc "Stores the current listeners."}
+  listeners (atom {:map {} :fns []}))
+
+(defn add-run-counter
+  ""
+  [dispatch id c]
   (swap! run-counts assoc id [dispatch c]))
 
 (defn- decrement-run-count

@@ -1,8 +1,17 @@
-(ns start.logging
+(ns ^{:doc "When this library is loaded, create a logger named
+'events' and send all application-specific events to it.
+
+To view log messages in the browser console, add a call
+to (log/console-output) to this namespace or evaluate this from the
+REPL.
+
+For more information see library.logging."}
+  start.logging
   (:require [library.dispatch :as dispatch]
             [library.logging :as log]))
 
-(def logger (log/get-logger "events"))
+(def ^{:doc "The logger that receives all application-specific events."}
+  logger (log/get-logger "events"))
 
 (dispatch/respond-to (constantly true)
                      (fn [t d] (log/info logger (str (pr-str t) " - " (pr-str d)))))
