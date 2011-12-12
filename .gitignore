@@ -4,3 +4,4 @@ public/javascripts/
 classes/
 wiki
 .lein-deps-sum
+*~
