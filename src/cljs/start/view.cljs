@@ -48,4 +48,4 @@
   (dom/set-text :name (if exists (str " again " name) name))
   (on-click :content :form))
 
-(dispatch/respond-to :state-change (fn [_ m] (render m)))
+(dispatch/react-to #{:state-change} (fn [_ m] (render m)))

@@ -13,8 +13,8 @@ For more information see library.logging."}
 (def ^{:doc "The logger that receives all application-specific events."}
   logger (log/get-logger "events"))
 
-(dispatch/respond-to (constantly true)
-                     (fn [t d] (log/info logger (str (pr-str t) " - " (pr-str d)))))
+(dispatch/react-to (constantly true)
+                   (fn [t d] (log/info logger (str (pr-str t) " - " (pr-str d)))))
 
 (comment
 

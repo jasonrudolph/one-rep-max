@@ -1,101 +1,85 @@
-(ns ^{:doc "Event dispatching."}
+(ns ^{:doc "Event dispatching.
+
+  Provides a way for code to react to events. Terminology:
+
+  * event-id: Identifies a class of events. Can be any Clojure value.
+
+  * event-data: Parameterizes a particular event. Can be any Clojure
+    value.
+
+  * reactor: A function that is invoked in response to an event
+    occurring.
+
+  * reaction: A relationship between a set of events and a reactor.
+
+  * event-pred: A function which takes an event ID and returns true or
+    false.
+
+  Reactors are associated with events via react-to. When events are
+  fired with an event-id and optional event-data, any reactors whose
+  event-pred returns true for the event-id are invoked."}
   library.dispatch)
 
-(def ^{:doc "A source of unique ids for listener functions."}
-  counter (atom 0))
+(def ^{:doc "Stores the current reactions."}
+  reactions (atom {}))
 
-(def ^{:doc "Maps listener functions to the number of times they have
-  been fired."}
-  run-counts (atom {}))
+(defn react-to
+  "Cause the specified reactor to be invoked whenever an event that
+  satisfies event-pred is fired. reactor is a function that accepts
+  two arguments: event-id and event-data.
 
-(def ^{:doc "Stores the current listeners."}
-  listeners (atom {:map {} :fns []}))
+  Returns the reaction.
 
-(defn add-run-counter
-  ""
-  [dispatch id c]
-  (swap! run-counts assoc id [dispatch c]))
+  The reactor will continue to be invoked until one of two things
+  happens:
 
-(defn- decrement-run-count
-  [id]
-  (swap! run-counts
-         (fn [old]
-           (if-let [[dispatch c] (get old id)]
-             (assoc old id [dispatch (dec c)])
-             old))))
+    1) delete-reaction is called on this reaction.
 
-(defn- add-keyword-listener
-  [id f]
-  (fn [old]
-    (let [m (:map old)
-          l (get m id [])]
-      (assoc-in old [:map id] (conj l f)))))
+    2) The reaction occurs max-count times. If max-count is not
+    specified, the reaction will continue to be invoked until deleted.
 
-(defn- add-pred-listener
-  [p f]
-  (fn [old]
-    (let [v (:fns old)]
-      (assoc old :fns (conj v [p f])))))
+  If max-count is specified, delete-reaction will be called
+  automatically when the reaction has occurred the specified number of
+  times."
+  ([event-pred reactor]
+     (react-to nil event-pred reactor))
+  ([max-count event-pred reactor]
+     (let [reaction {:max-count max-count
+                     :event-pred event-pred
+                     :reactor reactor}]
+       (swap! reactions assoc reaction 0)
+       reaction)))
 
-(defn respond-to
-  ([id f]
-     (respond-to 0 id f)) ; 0 means respond until removed
-  ([c id f]
-     (let [fn-id (swap! counter inc)
-           f {:id fn-id :fn f}]
-       (when (> c 0) (add-run-counter id fn-id c))
-       (swap! listeners
-              (if (keyword? id)
-                (add-keyword-listener id f)
-                (add-pred-listener id f)))
-       fn-id)))
-
-(defn- remove-keyword-listener
-  [state dispatch id]
-  (let [m (:map state)
-        l (get m dispatch)
-        l (filter #(not= (:id %) id) l)]
-    (if (empty? l)
-      (assoc state :map (dissoc m dispatch))
-      (assoc-in state [:map dispatch] (vec l)))))
-
-(defn- remove-pred-listener
-  [state id]
-  (let [v (:fns state)]
-    (assoc state :fns (vec (filter (fn [[_ f]] (not= (:id f) id)) v)))))
-
-(defn remove-listener [dispatch id]
-  (swap! listeners
-         (fn [old]
-           (if (keyword? dispatch)
-             (remove-keyword-listener old dispatch id)
-             (remove-pred-listener old id))))
-  (swap! run-counts dissoc id))
-
-(defn get-listeners [id]
-  (concat (map second (filter (fn [[p f]] (p id)) (:fns @listeners)))
-          (id (:map @listeners))))
-
-(defn collect-garbage [listeners]
-  (doseq [{id :id} listeners]
-    (if-let [[dispatch c] (get @run-counts id)]
-      (let [counts (decrement-run-count id)]
-        (when (<= (second (get counts id)) 0)
-          (remove-listener dispatch id))))))
+(defn delete-reaction
+  "Delete a reaction. After calling this function, the specified
+  reaction will no longer be invoked."
+  [reaction]
+  (swap! reactions dissoc reaction))
 
 (defn fire
-  ([id]
-     (fire id nil))
-  ([id data]
-     (when-let [fns (get-listeners id)]
-       (doseq [f (map :fn fns)] (f id data))
-       (collect-garbage fns))))
-
-
-
-
+  "Raise an event to any reactors whose event-pred returns true for
+  event-id. The event-id and event-data, if specified, are passed to
+  the reactor."
+  ([event-id]
+     (fire event-id nil))
+  ([event-id event-data]
+     (let [matching-reactions (filter (fn [[{event-pred :event-pred} run-count]]
+                                        (event-pred event-id))
+                                      @reactions)]
+       (doseq [[reaction run-count] matching-reactions]
+         (let [{:keys [max-count reactor]} reaction
+               run-count (inc run-count)]
+           (reactor event-id event-data)
+           (if (and max-count
+                    (<= max-count run-count))
+             (delete-reaction reaction)
+             (swap! reactions assoc reaction run-count)))))))
 
 (comment
+
+  (require '[cljs.repl :as repl])
+  (require '[cljs.repl.rhino :as rhino])
+  (repl/repl (rhino/repl-env))
 
   (do
     (let [recorded-reactions (atom [])
@@ -110,7 +94,7 @@
       (assert (= [[:do-something nil] [:do-something nil]] @recorded-reactions))
       (fire :something-else)
       ;; Did we ignore events we're not reacting to?
-      (assert (= [[:do-something nil]] @recorded-reactions))
+      (assert (= [[:do-something nil] [:do-something nil]] @recorded-reactions))
       (reset! recorded-reactions [])
       (fire :do-something 17)
       ;; Does event data arrive intact?
@@ -137,18 +121,5 @@
       (assert (= #{[1 :do-something 1] [2 :do-something 1] [2 :do-something 2]}
                  @recorded-reactions)))
     true
-    )  
-  
-;;  (is (= (fire :)))
-  
-;;  (fire :do-something {:a :b}) ;; event-id, event-data
-;; ;;  (fire [:something-else 2])   ;; event-id
-
-;;   (react-to #{:do-something} #(...reactor...)) ;; event-pred, reactor function
-  ;;=> #<Reaction:0xabcdef01>
-
-  ;; (react-to 1 #{...} #)
-
-  ;; (delete-reaction #<Reaction:0xabcdef01>) ;; reaction
-  ;; 2
+    )
   )

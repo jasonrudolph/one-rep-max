@@ -62,5 +62,5 @@
     (swap! state assoc :error "I can't greet you without knowing your name!")
     (remote :add-name {:name name} #(add-name-callback name %))))
 
-(dispatch/respond-to #{:form :greeting}
+(dispatch/react-to #{:form :greeting}
                      (fn [t d] (action (assoc d :type t))))
