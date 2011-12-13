@@ -3,9 +3,9 @@
   (:use [clojure.test]))
 
 (deftest test-add-name
-  (binding [database (atom #{})]
+  (binding [*database* (atom #{})]
     (let [r (remote {:fn :add-name :args {:name "A"}})]
       (is (= r {:exists false}))))
-  (binding [database (atom #{"A"})]
+  (binding [*database* (atom #{"A"})]
     (let [r (remote {:fn :add-name :args {:name "A"}})]
       (is (= r {:exists true})))))

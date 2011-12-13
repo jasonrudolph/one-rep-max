@@ -1,13 +1,16 @@
-(ns ^{:doc "Taken from Bobby Calderwood's Trail framework."}
+(ns ^{:doc "Make network requests.
+
+  Adapted from Bobby Calderwood's Trail framework:
+  https://github.com/bobby/trail"}
   library.browser.remote
   (:require [cljs.reader :as reader]
             [clojure.browser.net :as net]
             [clojure.browser.event :as event]
             [goog.net.XhrManager :as manager]))
 
-(def responders (atom {}))
+(def ^{:private true} responders (atom {}))
 
-(defn add-responders [id success error]
+(defn- add-responders [id success error]
   (when (or success error)
     (swap! responders assoc id {:success success :error error})))
 
@@ -31,7 +34,18 @@
                         5000))
 
 (defn request
-  [id url & {:keys [method content headers priority retries on-success on-error]
+  "Asynchronously make a network request for the resource at url. If
+  provided via the :on-success and :on-error keword arguments, the
+  appropriate one of on-success or on-error will be called on
+  completion. They will be passed a map containing the keys :id,
+  :body, :status, and :event. The entry for :event contains an
+  instance of the goog.net.XhrManager.Event.
+
+  Other allowable keyword arguments are :method, :content, :headers,
+  :priority, and :retries. :method defaults to \"GET\" and :retries
+  defaults to 0."
+  [id url & {:keys [method content headers priority retries on-success
+                    on-error]
              :or   {method   "GET"
                     retries  0}}]
   (try
@@ -43,34 +57,29 @@
            content
            headers
            priority
+           ;; This next one is a callback, and we could use it to get
+           ;; rid of the atom and figure out success/failure ourselves
            nil
            retries)
     (catch js/Error e
       nil)))
 
-(defmulti response-success :id)
-
-(defmethod response-success :default [e]
+(defn- response-success [e]
   (when-let [{success :success} (get @responders (:id e))]
     (success e)
     (swap! responders dissoc (:id e))))
 
-(defmulti response-error :id)
-
-(defmethod response-error :default [e]
+(defn- response-error [e]
   (when-let [{error :error} (get @responders (:id e))]
     (error e)
     (swap! responders dissoc (:id e))))
 
 (defn- response-received
-  [type e]
-  ((if (= type :success)
-     response-success
-     response-error)
-   {:id     (.id e)
-    :body   (. e/xhrIo (getResponseText))
-    :status (. e/xhrIo (getStatus))
-    :event  e}))
+  [f e]
+  (f {:id     (.id e)
+      :body   (. e/xhrIo (getResponseText))
+      :status (. e/xhrIo (getStatus))
+      :event  e}))
 
-(event/listen *xhr-manager* "success" (partial response-received :success))
-(event/listen *xhr-manager* "error"   (partial response-received :error))
+(event/listen *xhr-manager* "success" (partial response-received response-success))
+(event/listen *xhr-manager* "error"   (partial response-received response-error))

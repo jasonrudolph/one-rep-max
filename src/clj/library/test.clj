@@ -8,8 +8,8 @@
 
 (defn evaluate-cljs
   "Evaluate a ClojureScript form within the given evaluation
-   environment. The form will also be evaluated in the passed
-   namespace which defaults to 'cljs.user."
+  environment. The form will also be evaluated in the passed namespace
+  which defaults to 'cljs.user."
   ([eval-env form]
      (evaluate-cljs eval-env 'cljs.user form))
   ([eval-env ns form]
@@ -72,7 +72,10 @@
              (recur eval-env ns (- remaining 10))))
        (throw (Exception. (str "Namespace " ns " did not load before the timeout expired."))))))
 
-(defmacro cljs-eval [ns & forms]
+(defmacro cljs-eval
+  "Evaluate forms in namespace ns in the evaluation environment
+  *eval-env*."
+  [ns & forms]
   `(do
      (ensure-ns-loaded *eval-env* (quote ~ns))
      ~@(map (fn [x] `(evaluate-cljs *eval-env* (quote ~ns) (quote ~x))) forms)))

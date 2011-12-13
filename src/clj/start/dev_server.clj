@@ -19,10 +19,13 @@
             [library.reload :as reload])
   (:import java.io.File))
 
-(defn make-host-page [request]
+(defn- environment [uri]
+  (if (= uri "/development") :development :production))
+
+(defn- make-host-page [request]
   {:status 200
    :headers {"Content-Type" "text/html; charset=utf-8"}
-   :body (application-host config request)})
+   :body (application-host config (environment (:uri request)))})
 
 (defroutes app-routes
   remote-routes
@@ -31,7 +34,7 @@
   (GET "/design*" {{file :*} :route-params} (load-html (.substring file 1)))
   (ANY "*" request (file-response "404.html" {:root "public"})))
 
-(defn js-encoding [handler]
+(defn- js-encoding [handler]
   (fn [request]
     (let [{:keys [headers body] :as response} (handler request)]
       (if (and (= (get headers "Content-Type") "text/javascript")
@@ -40,7 +43,7 @@
                   "text/javascript; charset=utf-8")
         response))))
 
-(defn rewrite-design-uris [handler]
+(defn- rewrite-design-uris [handler]
   (fn [{:keys [uri] :as request}]
     (if (or (.startsWith uri "/design/css")
             (.startsWith uri "/design/javascripts")
@@ -48,20 +51,29 @@
       (handler (assoc request :uri (.substring uri 7)))
       (handler request))))
 
-(def app (-> app-routes
-             (reload/watch-cljs "src/cljs" config)
-             (wrap-file "public")
-             rewrite-design-uris
-             wrap-file-info
-             apply-templates
-             js-encoding
-             wrap-params
-             wrap-stacktrace
-             (reload/reload-clj (:reload-clj config))))
+(def ^:private app (-> app-routes
+                       (reload/watch-cljs "src/cljs" config)
+                       (wrap-file "public")
+                       rewrite-design-uris
+                       wrap-file-info
+                       apply-templates
+                       js-encoding
+                       wrap-params
+                       wrap-stacktrace
+                       (reload/reload-clj (:reload-clj config))))
 
-(defn run-server [] (run-jetty (var app) {:join? false :port 8080}))
+(defn run-server
+  "Start the development server on port 8080."
+  []
+  (run-jetty (var app) {:join? false :port 8080}))
 
-(defn cljs-repl [] (repl (repl-env)))
+(defn cljs-repl
+  "Start a ClojureScript REPL which can connect to the development
+  version of the application. The REPL will not work until the
+  development page connects to it, so you will need to either open or
+  refresh the development page after calling this function."
+  []
+  (repl (repl-env)))
 
 (comment
   ;; Start the server.
@@ -69,4 +81,6 @@
   (run-server)
   ;; Start a REPL.
   (cljs-repl)
+  ;; Don't forget to open the development page, or refresh it if it's
+  ;; already open, or the REPL won't work
   )

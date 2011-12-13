@@ -1,12 +1,14 @@
 (ns start.config
+  "Contains configuration for the sample application."
   (:require [net.cgrand.enlive-html :as html]))
 
-(defn production-transform [h]
+(defn- production-transform [h]
   (html/transform h
                   [:ul#navigation]
                   (html/substitute (html/html-snippet ""))))
 
-(def config {:top-level-package "start"
+(def ^{:doc "Configuration for the sample application."}
+  config {:top-level-package "start"
              :js "public/javascripts"
              :dev-js-file-name "main.js"
              :prod-js-file-name "mainp.js"

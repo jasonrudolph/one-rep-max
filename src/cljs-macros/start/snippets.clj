@@ -1,12 +1,15 @@
 (ns start.snippets
-  "Macros for including html snippets at compile time. This technique
-   allows designers to work in whatever way they feel comfortable."
-  (:use [library.host-page :only (render)])
+  "Macros for including HTML snippets in the ClojureScript application
+  at compile time."
+  (:use [library.templates :only (render)])
   (:require [net.cgrand.enlive-html :as html]))
 
-(defn snippet [file id]
+(defn- snippet [file id]
   (render (html/select (html/html-resource file) id)))
 
-(defmacro snippets []
+(defmacro snippets
+  "Expands to a map of HTML snippets which are extracted from the
+  design templates."
+  []
   {:form (snippet "form.html" [:div#content])
    :greeting (snippet "greeting.html" [:div#content])})

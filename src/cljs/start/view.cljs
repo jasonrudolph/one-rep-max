@@ -26,7 +26,7 @@
   snippets (snippets/snippets))
 
 (defmulti render
-  "Acceptsls a map which represents the current state of the application
+  "Accepts a map which represents the current state of the application
   and renders a view based on the value of the :state key."
   :state)
 

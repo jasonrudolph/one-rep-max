@@ -5,8 +5,11 @@
         [library.config :only (cljs-build-opts production-js)])
   (:require [clojure.java.io :as io]))
 
-(defn build-project [config]
+(defn build-project
+  "Emit both a JavaScript file containing the compiled ClojureScript
+  application and the host HTML page."
+  [config]
   (build "src/cljs" (assoc (cljs-build-opts config)
                       :optimizations :advanced
                       :output-to (str "out/" (production-js config))))
-  (spit "out/public/index.html" (application-host config {:uri "/production"})))
+  (spit "out/public/index.html" (application-host config :production)))

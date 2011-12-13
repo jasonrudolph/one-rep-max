@@ -9,9 +9,9 @@
         [compojure.core :only (defroutes ANY)]
         [start.api :only (remote-routes)]))
 
-(def root "out/public")
+(def ^:private root "out/public")
 
-(defn wrap-require-auth
+(defn- wrap-require-auth
   [app]
   (fn [req]
     (let [denied-response {:headers {"WWW-Authenticate" "Basic realm=\"Restricted\""}
@@ -31,8 +31,8 @@
       wrap-file-info
       wrap-require-auth))
 
-(def app (-> app-routes
-             wrap-params))
+(def ^:private app (-> app-routes
+                       wrap-params))
 
 (defn -main [] (let [port (Integer/parseInt (get (System/getenv) "PORT" "8080"))]
                  (run-jetty (var app) {:join? false :port port})))

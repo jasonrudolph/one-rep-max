@@ -1,28 +1,39 @@
 (ns library.reload
-  "Clojure and ClojureScript code reloading. When any watched Clojure
-   file changes, all watched Clojure files will be recompiled. If any
-   ClojureScript file changes or if any template file changes, all
-   ClojureScript files will be recompiled. Recompilation only happens
-   on page reloads."
+  "Contains functions which implement Clojure and ClojureScript code
+  reloading.
+
+  When any watched Clojure file changes, all watched Clojure files
+  will be recompiled. If any ClojureScript file changes or if any
+  template file changes, all ClojureScript files will be recompiled.
+
+  Recompilation only happens on page reloads."
   (:use [cljs.closure :only (build)]
         [library.config])
   (:require [clojure.java.io :as io]))
 
-(defonce last-compile (atom {}))
+(defonce ^{:private true}
+  last-compile (atom {}))
 
-(defn any-modified [k files]
+(defn- any-modified
+  [k files]
   (let [newest (apply max
                       (map #(.lastModified %) files))]
     (when (> newest (get @last-compile k 0))
       newest)))
 
-(defn any-modified-cljs [dir k]
+(defn- any-modified-cljs
+  [dir k]
   (let [files (filter #(.isFile %) (into (file-seq (io/file dir))
                                          (file-seq (io/file "templates"))))]
     (pr-str files)
     (any-modified k files)))
 
-(defn watch-cljs [handler dir config]
+(defn watch-cljs 
+  "Ring middleware which watches dir for changes to ClojureScript
+  source files and template HTML files. When changes are detected,
+  recompiles only the ClojureScript and template files (not the
+  Clojure files) using a build configuration derived from config."
+  [handler dir config]
   (fn [request]
     (let [k (:uri request)
           ts (any-modified-cljs dir k)]
@@ -38,7 +49,8 @@
                        build-opts)))))
     (handler request)))
 
-(defn any-modified-clj [files]
+(defn- any-modified-clj
+  [files]
   (any-modified "clj"
                 (map #(-> (str % ".clj")
                           (.substring 1)
@@ -47,7 +59,10 @@
                           io/file)
                      files)))
 
-(defn reload-clj [handler files]
+(defn reload-clj
+  "Ring middleware which watches a list of Clojure files for changes
+  and recompiles all of them when any of the files change."
+  [handler files]
   (fn [request]
     (when-let [ts (any-modified-clj files)]
       (swap! last-compile assoc "clj" ts)
