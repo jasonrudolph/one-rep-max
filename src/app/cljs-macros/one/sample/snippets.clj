@@ -1,4 +1,4 @@
-(ns start.snippets
+(ns one.sample.snippets
   "Macros for including HTML snippets in the ClojureScript application
   at compile time."
   (:use [library.templates :only (render)])

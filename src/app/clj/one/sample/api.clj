@@ -1,4 +1,4 @@
-(ns start.api
+(ns one.sample.api
   "The server side of the sample application. Provides a simple API for
   updating an in-memory database."
   (:use [compojure.core :only (defroutes POST)]))

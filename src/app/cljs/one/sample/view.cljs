@@ -1,6 +1,6 @@
 (ns ^{:doc "Render the views for the application."}
-  start.view
-  (:require-macros [start.snippets :as snippets])
+  one.sample.view
+  (:require-macros [one.sample.snippets :as snippets])
   (:require [clojure.browser.dom :as dom]
             [clojure.browser.event :as event]
             [library.dispatch :as dispatch]

@@ -1,4 +1,4 @@
-(ns start.prod-server
+(ns one.sample.prod-server
   "Production server serves the backend API. This is only required if
    there is a back end API."
   (:use [ring.adapter.jetty :only (run-jetty)]
@@ -7,7 +7,7 @@
         [ring.middleware.params :only (wrap-params)]
         [ring.util.response :only (file-response)]
         [compojure.core :only (defroutes ANY)]
-        [start.api :only (remote-routes)]))
+        [one.sample.api :only (remote-routes)]))
 
 (def ^:private root "out/public")
 

@@ -4,7 +4,7 @@
   accomplished by using library.browser.history to keep track of views
   that have previously been visited, and traversing them when
   navigation events are detected."}
-  start.history
+  one.sample.history
   (:require [library.dispatch :as dispatch]
             [library.browser.history :as history]))
 

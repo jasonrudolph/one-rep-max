@@ -6,7 +6,7 @@ to (log/console-output) to this namespace or evaluate this from the
 REPL.
 
 For more information see library.logging."}
-  start.logging
+  one.sample.logging
   (:require [library.dispatch :as dispatch]
             [library.logging :as log]))
 

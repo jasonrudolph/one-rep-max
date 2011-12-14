@@ -1,4 +1,4 @@
-(ns start.dev-server
+(ns one.sample.dev-server
   "Serve a friendly ClojureScript environment with code reloading and
    the ClojureScript application in both development and advanced
    compiled mode."
@@ -13,8 +13,8 @@
         [cljs.repl.browser :only (repl-env)]
         [library.templates :only (load-html apply-templates)]
         [library.host-page :only (application-host)]
-        [start.api :only (remote-routes)]
-        [start.config])
+        [one.sample.api :only (remote-routes)]
+        [one.sample.config])
   (:require [net.cgrand.enlive-html :as html]
             [library.reload :as reload])
   (:import java.io.File))
@@ -76,8 +76,8 @@
   (repl (repl-env)))
 
 (comment
-  ;; Start the server.
-  (use 'start.dev-server :reload-all)
+  ;; One.Sample.the server.
+  (use 'one.sample.dev-server :reload-all)
   (run-server)
   ;; Start a REPL.
   (cljs-repl)
