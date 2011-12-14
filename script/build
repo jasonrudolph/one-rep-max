@@ -1,30 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
+
+cd `dirname $0`/..
 
 mkdir -p out
 
 echo "Creating out/public..."
-cp -a public out/
+cp --archive public out/
 rm out/public/index.html
 rm out/public/design.html
 rm -rf out/public/javascripts/*
 
-if [ "$CLOJURESCRIPT_HOME" = "" ]; then
-  CLOJURESCRIPT_HOME=../clojurescript
-fi
-
-CLJSC_CP='lib/*:lib/dev/*:'
-for next in lib/*: src/clj: src/cljs: test/cljs:; do
-  CLJSC_CP=$CLJSC_CP$CLOJURESCRIPT_HOME'/'$next
-done
-
-CLJSC_CP=$CLJSC_CP'src/clj:src/cljs:src/cljs-macros:test/clj:templates'
+source script/setup_classpath.sh
 
 echo "Create advanced compiled JavaScript..."
 java -server -cp $CLJSC_CP jline.ConsoleRunner clojure.main -e \
-"(use 'library.tools)
- (use 'start.config)
+"(use 'one.tools)
+ (use 'one.sample.config)
  (build-project config)"
 
 echo "[build complete]"
