@@ -603,17 +603,12 @@ label,
 input,
 select,
 textarea {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
   font-weight: normal;
   line-height: normal;
 }
 label {
   padding-top: 6px;
-  font-size: 13px;
-  line-height: 18px;
   float: left;
-  width: 130px;
   text-align: right;
   color: #404040;
 }
@@ -1767,12 +1762,7 @@ a.menu:after, .dropdown-toggle:after {
   color: #404040;
 }
 .hero-unit {
-  background-color: #f5f5f5;
   margin-bottom: 30px;
-  padding: 60px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
 }
 .hero-unit h1 {
   margin-bottom: 0;
