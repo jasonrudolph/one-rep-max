@@ -4,7 +4,7 @@
   (:use [library.templates :only (construct-html render)])
   (:require [net.cgrand.enlive-html :as html]))
 
-(def ^{:private true} script-snippet
+(def ^:private script-snippet
   (html/html-snippet "<script type='text/javascript'></script>"))
 
 (defn- script

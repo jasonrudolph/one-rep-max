@@ -11,7 +11,7 @@
         [library.config])
   (:require [clojure.java.io :as io]))
 
-(defonce ^{:private true}
+(defonce ^:private
   last-compile (atom {}))
 
 (defn- any-modified

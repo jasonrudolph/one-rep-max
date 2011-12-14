@@ -8,7 +8,7 @@
             [clojure.browser.event :as event]
             [goog.net.XhrManager :as manager]))
 
-(def ^{:private true} responders (atom {}))
+(def ^:private responders (atom {}))
 
 (defn- add-responders [id success error]
   (when (or success error)
@@ -25,7 +25,7 @@
               v])
            (js->clj goog.net.EventType)))))
 
-(def ^{:private true}
+(def ^:private
   *xhr-manager*
   (goog.net.XhrManager. nil
                         nil
