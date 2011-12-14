@@ -7,7 +7,7 @@ cd `dirname $0`/..
 mkdir -p out
 
 echo "Creating out/public..."
-cp --archive public out/
+cp -a public out/
 rm out/public/index.html
 rm out/public/design.html
 rm -rf out/public/javascripts/*
