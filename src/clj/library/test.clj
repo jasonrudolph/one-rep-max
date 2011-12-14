@@ -22,7 +22,7 @@
         (load-namespace eval-env (second form))
         
         :else
-        (let [ret (evaluate-form env
+        (let [ret (evaluate-form eval-env
                                  (assoc env :ns (@namespaces ns))
                                  "<testing>"
                                  form
