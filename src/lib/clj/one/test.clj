@@ -1,4 +1,4 @@
-(ns library.test
+(ns one.test
   "Support for evaluating ClojureScript code from Clojure tests."
   (:refer-clojure :exclude [load-file])
   (:use [cljs.compiler :only (namespaces)]

@@ -1,8 +1,8 @@
-(ns library.tools
+(ns one.tools
   "Support for building deployment artifacts for a project."
   (:use [cljs.closure :only (build)]
-        [library.host-page :only (application-host)]
-        [library.config :only (cljs-build-opts production-js)])
+        [one.host-page :only (application-host)]
+        [one.config :only (cljs-build-opts production-js)])
   (:require [clojure.java.io :as io]))
 
 (defn build-project

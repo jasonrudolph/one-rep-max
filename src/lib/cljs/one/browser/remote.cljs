@@ -2,7 +2,7 @@
 
   Adapted from Bobby Calderwood's Trail framework:
   https://github.com/bobby/trail"}
-  library.browser.remote
+  one.browser.remote
   (:require [cljs.reader :as reader]
             [clojure.browser.net :as net]
             [clojure.browser.event :as event]

@@ -2,7 +2,7 @@
 
   This library can be improved to support more of the features
   provided by Google Closure's logging."}
-  library.logging
+  one.logging
   (:require [goog.debug.Console :as console]
             [goog.debug.FancyWindow :as fancy]
             [goog.debug.Logger :as logger]))

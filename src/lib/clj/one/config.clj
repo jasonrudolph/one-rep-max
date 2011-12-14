@@ -1,5 +1,5 @@
 (ns ^{:doc "Convenience functions for working with configuration data."}
-  library.config)
+  one.config)
 
 (defn cljs-build-opts
   "Given a configuration map, return output directory options."

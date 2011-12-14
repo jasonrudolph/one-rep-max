@@ -1,4 +1,4 @@
-(ns library.reload
+(ns one.reload
   "Contains functions which implement Clojure and ClojureScript code
   reloading.
 
@@ -8,7 +8,7 @@
 
   Recompilation only happens on page reloads."
   (:use [cljs.closure :only (build)]
-        [library.config])
+        [one.config])
   (:require [clojure.java.io :as io]))
 
 (defonce ^:private

@@ -1,7 +1,7 @@
-(ns library.host-page
+(ns one.host-page
   "Functions to create an HTML page that hosts a ClojureScript
   application."
-  (:use [library.templates :only (construct-html render)])
+  (:use [one.templates :only (construct-html render)])
   (:require [net.cgrand.enlive-html :as html]))
 
 (def ^:private script-snippet

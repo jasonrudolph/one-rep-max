@@ -1,6 +1,6 @@
 (ns ^{:doc "Supports working with Google Closure's history management
   object."}
-  library.browser.history
+  one.browser.history
   (:require [clojure.browser.event :as event]
             [goog.History :as history]))
 

@@ -1,4 +1,4 @@
-(ns library.templates
+(ns one.templates
   "Contains functions for combining HTML fragments into complete HTML documents."
   (:use net.cgrand.enlive-html)
   (:import java.io.File))
