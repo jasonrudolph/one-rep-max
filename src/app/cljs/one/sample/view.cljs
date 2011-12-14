@@ -3,7 +3,7 @@
   (:require-macros [one.sample.snippets :as snippets])
   (:require [clojure.browser.dom :as dom]
             [clojure.browser.event :as event]
-            [library.dispatch :as dispatch]
+            [one.dispatch :as dispatch]
             [goog.dom.classes :as gclasses]
             [goog.events.EventType :as event-type]))
 

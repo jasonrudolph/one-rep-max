@@ -1,11 +1,11 @@
 (ns ^{:doc "Respond to user actions by updating local and remote
   application state."}
   one.sample.controller
-  (:use [library.browser.remote :only (request)]
+  (:use [one.browser.remote :only (request)]
         [one.sample.model :only (state)])
   (:require [cljs.reader :as reader]
             [clojure.browser.event :as event]
-            [library.dispatch :as dispatch]
+            [one.dispatch :as dispatch]
             [goog.uri.utils :as uri]))
 
 (defmulti action

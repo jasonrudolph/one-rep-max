@@ -5,8 +5,8 @@
   that have previously been visited, and traversing them when
   navigation events are detected."}
   one.sample.history
-  (:require [library.dispatch :as dispatch]
-            [library.browser.history :as history]))
+  (:require [one.dispatch :as dispatch]
+            [one.browser.history :as history]))
 
 (defn nav-handler
   "Handle navigation events by firing the appropriate view token."

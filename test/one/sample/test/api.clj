@@ -1,5 +1,5 @@
-(ns start.test.api
-  (:use [start.api])
+(ns one.sample.test.api
+  (:use [one.sample.api])
   (:use [clojure.test]))
 
 (deftest test-add-name

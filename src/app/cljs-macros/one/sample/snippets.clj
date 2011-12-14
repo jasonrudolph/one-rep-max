@@ -1,7 +1,7 @@
 (ns one.sample.snippets
   "Macros for including HTML snippets in the ClojureScript application
   at compile time."
-  (:use [library.templates :only (render)])
+  (:use [one.templates :only (render)])
   (:require [net.cgrand.enlive-html :as html]))
 
 (defn- snippet [file id]

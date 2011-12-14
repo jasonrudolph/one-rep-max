@@ -1,7 +1,7 @@
 (ns ^{:doc "Contains the entry point for the ClojureScript sample application."}
   one.sample.core
   (:require [clojure.browser.repl :as repl]
-            [library.dispatch :as dispatch]
+            [one.dispatch :as dispatch]
             [one.sample.view :as view]))
 
 ;; TODO: Add marginalia comment to explain what :export is for.

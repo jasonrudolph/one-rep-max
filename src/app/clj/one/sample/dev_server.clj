@@ -11,12 +11,12 @@
         [compojure.core :only (defroutes GET POST ANY)]
         [cljs.repl :only (repl)]
         [cljs.repl.browser :only (repl-env)]
-        [library.templates :only (load-html apply-templates)]
-        [library.host-page :only (application-host)]
+        [one.templates :only (load-html apply-templates)]
+        [one.host-page :only (application-host)]
         [one.sample.api :only (remote-routes)]
         [one.sample.config])
   (:require [net.cgrand.enlive-html :as html]
-            [library.reload :as reload])
+            [one.reload :as reload])
   (:import java.io.File))
 
 (defn- environment [uri]
@@ -52,7 +52,7 @@
       (handler request))))
 
 (def ^:private app (-> app-routes
-                       (reload/watch-cljs "src/cljs" config)
+                       (reload/watch-cljs "src" config)
                        (wrap-file "public")
                        rewrite-design-uris
                        wrap-file-info

@@ -8,21 +8,21 @@
                   (html/substitute (html/html-snippet ""))))
 
 (def ^{:doc "Configuration for the sample application."}
-  config {:top-level-package "one.sample"
-             :js "public/javascripts"
-             :dev-js-file-name "main.js"
-             :prod-js-file-name "mainp.js"
-             :dev-js ["goog.require('one.sample.core');"
-                      "goog.require('one.sample.model');"
-                      "goog.require('one.sample.controller');"
-                      "goog.require('one.sample.history');"
-                      "goog.require('one.sample.logging');"
-                      "one.sample.core.start();one.sample.core.repl();"]
-             :prod-js ["one.sample.core.start();"]
-             :reload-clj ["/one/host_page"
-                          "/one/reload"
-                          "/one/templates"
-                          "/one/sample/api"
-                          "/one/sample/config"
-                          "/one/sample/dev_server"]
-             :prod-transform production-transform})
+  config {:top-level-package "one/sample"
+          :js "public/javascripts"
+          :dev-js-file-name "main.js"
+          :prod-js-file-name "mainp.js"
+          :dev-js ["goog.require('one.sample.core');"
+                   "goog.require('one.sample.model');"
+                   "goog.require('one.sample.controller');"
+                   "goog.require('one.sample.history');"
+                   "goog.require('one.sample.logging');"
+                   "one.sample.core.start();one.sample.core.repl();"]
+          :prod-js ["one.sample.core.start();"]
+          :reload-clj ["/one/host_page"
+                       "/one/reload"
+                       "/one/templates"
+                       "/one/sample/api"
+                       "/one/sample/config"
+                       "/one/sample/dev_server"]
+          :prod-transform production-transform})

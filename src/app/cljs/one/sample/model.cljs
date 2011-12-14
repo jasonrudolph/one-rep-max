@@ -2,7 +2,7 @@
   named 'state' and a watcher which fires a state-change event when
   the atom is modified."}
   one.sample.model
-  (:require [library.dispatch :as dispatch]))
+  (:require [one.dispatch :as dispatch]))
 
 (def ^{:doc "An atom containing a map which is the application's current state."}
   state (atom {}))

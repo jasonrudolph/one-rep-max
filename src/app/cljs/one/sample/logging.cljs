@@ -7,8 +7,8 @@ REPL.
 
 For more information see library.logging."}
   one.sample.logging
-  (:require [library.dispatch :as dispatch]
-            [library.logging :as log]))
+  (:require [one.dispatch :as dispatch]
+            [one.logging :as log]))
 
 (def ^{:doc "The logger that receives all application-specific events."}
   logger (log/get-logger "events"))

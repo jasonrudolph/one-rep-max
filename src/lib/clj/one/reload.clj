@@ -21,9 +21,15 @@
     (when (> newest (get @last-compile k 0))
       newest)))
 
+(defn- descendants-ending-with
+  "Return a seq of File objects that are descendants of dir that end
+  with extension ext."
+  [dir ext]
+  (filter #(.endsWith (.getName %) ext) (file-seq (io/file dir))))
+
 (defn- any-modified-cljs
   [dir k]
-  (let [files (filter #(.isFile %) (into (file-seq (io/file dir))
+  (let [files (filter #(.isFile %) (into (descendants-ending-with dir ".cljs")
                                          (file-seq (io/file "templates"))))]
     (pr-str files)
     (any-modified k files)))
