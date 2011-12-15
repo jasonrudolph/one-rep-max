@@ -52,7 +52,7 @@
       (handler request))))
 
 (def ^:private app (-> app-routes
-                       (reload/watch-cljs "src" config)
+                       (reload/watch-cljs config)
                        (wrap-file "public")
                        rewrite-design-uris
                        wrap-file-info

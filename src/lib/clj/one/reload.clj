@@ -31,7 +31,6 @@
   [dir k]
   (let [files (filter #(.isFile %) (into (descendants-ending-with dir ".cljs")
                                          (file-seq (io/file "templates"))))]
-    (pr-str files)
     (any-modified k files)))
 
 (defn watch-cljs 
@@ -39,20 +38,20 @@
   source files and template HTML files. When changes are detected,
   recompiles only the ClojureScript and template files (not the
   Clojure files) using a build configuration derived from config."
-  [handler dir config]
+  [handler config]
   (fn [request]
     (let [k (:uri request)
-          ts (any-modified-cljs dir k)]
+          ts (any-modified-cljs (:src-root config) k)]
       (when ts
         (swap! last-compile assoc k ts)
         (let [build-opts (cljs-build-opts config)]
           (doseq [file (file-seq (io/file (str (:output-dir build-opts) "/"
                                                (:top-level-package config))))]
             (.setLastModified file 0))
-          (build dir (if (= (:uri request) "/production")
-                       (assoc build-opts :optimizations :advanced
-                              :output-to (production-js config))
-                       build-opts)))))
+          (build (:app-root config) (if (= (:uri request) "/production")
+                                      (assoc build-opts :optimizations :advanced
+                                             :output-to (production-js config))
+                                      build-opts)))))
     (handler request)))
 
 (defn- any-modified-clj

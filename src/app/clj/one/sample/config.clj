@@ -8,7 +8,9 @@
                   (html/substitute (html/html-snippet ""))))
 
 (def ^{:doc "Configuration for the sample application."}
-  config {:top-level-package "one/sample"
+  config {:src-root "src"
+          :app-root "src/app/cljs"
+          :top-level-package "one"
           :js "public/javascripts"
           :dev-js-file-name "main.js"
           :prod-js-file-name "mainp.js"
