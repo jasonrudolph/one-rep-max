@@ -220,17 +220,17 @@ body {
 
 #greeting h2 {
   font-size: 3.2em;
-  padding: 116px 0 10px 0;
+  padding: 122px 0 10px 0;
 }
 
-#greeting > *{
+#greeting > * {
   margin: 0 auto;
 }
 
 .break {
   border-bottom: 3px dashed #d9dee9;
   height: 5px;
-  width: 420px;
+  width: 370px;
 }
 
 #greeting h3 {
