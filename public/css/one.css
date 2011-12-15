@@ -168,7 +168,11 @@ textarea {
   vertical-align: top;
 }
 
-/* MAIN */
+/* ****************************************************************************************
+ * 
+ * MAIN
+ * 
+ **************************************************************************************** */
 body {
   background-color: #d3def7;
   background-image: url('/images/main-background-noise.png');
@@ -179,12 +183,41 @@ body {
   margin: 0;
 }
 
+code {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #fff;
+  color: #0f3617;
+  font-family: Courier, monospace;
+  font-size: .8em;
+  padding: 2px 4px;
+}
+
+.panel code {
+  background-color: #c0efb6;
+}
+
 p {
   line-height: 1.8em;
 }
 
+p strong {
+  font-family: "Museo700", serif;
+}
+
+a, a:hover, a:visited {
+  color: #248e0f;
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
 ul, li
 {
+  line-height: 1.6em;
   list-style-type: disc;
 }
 
