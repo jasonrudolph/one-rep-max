@@ -36,9 +36,9 @@
   (when error (do (dom/set-text :name-input-error error)
                   (gclasses/add (dom/get-element :input-field) "error")))
   (when name (dom/set-value :name-input name))
-  (.focus (dom/get-element :name-input) ())
+  #_(.focus (dom/get-element :name-input) ())
   (on-click :greet-button :greeting #(hash-map :name (dom/get-value :name-input)))
-  (event/listen (dom/get-element :input-field)
+  #_(event/listen (dom/get-element :input-field)
                 event-type/CHANGE
                 #(dispatch/fire :greeting {:name (dom/get-value :name-input)})))
 
@@ -46,6 +46,6 @@
   (dom/replace-node :content
                     (dom/html->dom (get snippets state)))
   (dom/set-text :name (if exists (str " again " name) name))
-  (on-click :content :form))
+  #_(on-click :content :form))
 
 (dispatch/react-to #{:state-change} (fn [_ m] (render m)))

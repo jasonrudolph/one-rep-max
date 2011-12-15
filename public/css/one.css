@@ -171,6 +171,7 @@ textarea {
 /* MAIN */
 body {
   background-color: #d3def7;
+  background-image: url('/images/main-background-noise.png');
   color: #404040;
   font-family: "Museo300", sans-serif;
   font-size: 1em;
@@ -195,7 +196,8 @@ h1, h2 {
 }
 
 h1 {
-  font-size: 2.6em;
+  font-family: "Chunkfive", serif;
+  font-size: 4.4em;
 }
 
 h2 {
@@ -221,6 +223,13 @@ h2 {
 
 .section {
   padding: 40px 40px;
+}
+
+#index-header {
+  background-image: url('/images/index-header.png');
+  height: 264px;
+  padding-bottom: 0;
+  padding-top: 80px;
 }
 
 .panel {
@@ -249,7 +258,10 @@ h2 {
 }
 
 #form {
-  margin-top: 120px;
+  background: url('/images/form-background-gradient.png') center center no-repeat;
+  margin-top: -40px;
+  padding-top: 160px;
+  height: 447px;
 }
 
 #form h2 {
@@ -265,6 +277,7 @@ h2 {
   margin: 0 auto;
   width: 494px;
   height: 344px;
+  display: none;
 }
 
 #greeting h2, #greeting h3
@@ -302,7 +315,12 @@ h2 {
   color: #cc5b5b;
 }
 
-input {
+.input
+{
+  padding: 40px 0;
+}
+
+input[type="text"] {
   -moz-box-shadow: inset 0 1px 4px 0 rgba(173, 184, 210, 0.75);
   -webkit-box-shadow: inset 0 1px 4px 0 rgba(173, 184, 210, 0.75);
   box-shadow: inset 0 1px 4px 0 rgba(173, 184, 210, 0.75),
@@ -312,8 +330,27 @@ input {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+  font-family: 'Museo300', serif;
+  font-size: 1em;
   padding: 10px;
-  margin-bottom: 10px;
+  text-align: center;
+}
+
+#name-input-label
+{
+  display: block;
+  margin: 0 auto;
+  width: 254px;
+}
+
+#name-input-label span
+{
+  color: #bbc4d7;
+  cursor: text;
+  padding-top: 12px;
+  position: absolute;
+  width: 254px;
+  z-index: 1;
 }
 
 .clearfix {
