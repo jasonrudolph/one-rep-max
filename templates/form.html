@@ -1,19 +1,20 @@
 <_within file="application.html">
 
   <div id="content">
-    <fieldset>
-      <legend>A simple form</legend>
-      <div id="input-field" class="clearfix">
-        <label for="name-input">What is your name?</label>
-        <div class="input">
-          <input class="xlarge" id="name-input" size="30" type="text" placeholder="Your name"/>
-          <span id="name-input-error" class="help-inline"></span>
+    <div id="form">
+      <fieldset>
+        <div id="input-field">
+          <h2><label for="name-input">Enter your name</label></h2>
+          <div class="clearfix"></div>
+          <div class="input">
+            <input id="name-input" size="30" type="text" placeholder="Your name"/>
+            <div id="name-input-error" class="small error"></div>
+          </div>
         </div>
-      </div>
-      <div class="actions">
-        <input id="greet-button" type="button" class="btn primary" value="Greet me">
-      </div>
-    </fieldset>
+        <div class="clearfix"></div>
+        <input id="greet-button" class="button green" href="#" type="button" value="Done!">
+      </fieldset>
+    </div>
   </div>
 
 </_within>
