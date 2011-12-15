@@ -171,11 +171,15 @@ textarea {
 /* MAIN */
 body {
   background-color: #d3def7;
-  margin: 0;
+  color: #404040;
   font-family: "Museo300", sans-serif;
   font-size: 1em;
   font-weight: normal;
-  color: #404040;
+  margin: 0;
+}
+
+p {
+  line-height: 1.8em;
 }
 
 ul, li
@@ -216,12 +220,7 @@ h2 {
 }
 
 .section {
-  padding: 40px 20px;
-}
-
-.category {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 40px 40px;
 }
 
 .panel {
@@ -238,7 +237,7 @@ h2 {
 
 .container {
   margin: 0 auto;
-  width: 920px;
+  width: 960px;
 }
 
 #content {
