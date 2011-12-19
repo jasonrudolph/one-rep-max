@@ -21,7 +21,7 @@
         :else e))
 
 (defprotocol IPosition
-  (position [this] "Return the position of the passed object as a 2D array, [X Y]."))
+  (position [this] "Return the position of the passed object as a 2D array, `[X Y]`."))
 
 (extend-protocol IPosition
 
@@ -34,7 +34,7 @@
       [(:x p) (:y p)])))
 
 (defprotocol IScroll
-  (scroll [this] "Return the scroll position of an element as [X Y]."))
+  (scroll [this] "Return the scroll position of an element as `[X Y]`."))
 
 (extend-protocol IScroll
 
@@ -49,7 +49,7 @@
     [(.scrollLeft this) (.scrollTop this)]))
 
 (defprotocol ISize
-  (size [this] "Return the size of an element as [W H].")
+  (size [this] "Return the size of an element as `[W H]`.")
   (width [this] "Return the width of an element.")
   (height [this] "Return the height of an element."))
 
@@ -133,7 +133,7 @@
 
 (defn- accel
   "Given a map which represents an effect. Return the acceleration
-  function or nil."
+  function or `nil`."
   [m]
   (when-let [a (:accel m)]
     (if (fn? a)
@@ -144,9 +144,9 @@
   "Accepts a map and returns an effect. The returned effect may be run
   or composed with other effects.
 
-  Available effects include: :color, :fade, :fade-in, :fade-out,
-  :fade-in-and-show, :fade-out-and-hide, :slide, :swipe, :bg-color,
-  :resize, :resize-width and :resize-height."
+  Available effects include: `:color`, `:fade`, `:fade-in`, `:fade-out`,
+  `:fade-in-and-show`, `:fade-out-and-hide`, `:slide`, `:swipe`, `:bg-color`,
+  `:resize`, `:resize-width` and `:resize-height`."
   (fn [e {effect :effect}] effect))
 
 (defmethod effect :color [element m]
@@ -235,7 +235,7 @@
 
 (defn- calculate-slide-end
   "Calculate the end of a slide based on the start value and the
-  passed :left, :right, :up and :down values."
+  passed `:left`, `:right`, `:up` and `:down` values."
   [[x y] m]
   (vector (+ (- x (:left m 0)) (:right m 0))
           (+ (- y (:up m 0)) (:down m 0))))

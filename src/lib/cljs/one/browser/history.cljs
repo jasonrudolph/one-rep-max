@@ -1,5 +1,6 @@
-(ns ^{:doc "Supports working with Google Closure's history management
-  object."}
+(ns ^{:doc "Supports working with [Google Closure's history management object][gch].
+   [gch]: http://closure-library.googlecode.com/svn/docs/namespace_goog_history.html"}
+
   one.browser.history
   (:require [clojure.browser.event :as event]
             [goog.History :as history]))
@@ -37,7 +38,7 @@
         h)))
 
 (defn set-token
-  "Sets the history state. The URL fragment will be set to the
+  "Sets the `history` state. The URL fragment will be set to the
   provided token."
   [history token]
   (.setToken history (name token)))

@@ -1,13 +1,15 @@
-(ns ^{:doc "Basic wrapper around Google Closure's logging API.
+(ns ^{:doc "Basic wrapper around [Google Closure's logging API][gcl].
 
   This library can be improved to support more of the features
-  provided by Google Closure's logging."}
+  provided by Google Closure's logging.
+
+  [gcl]: http://closure-library.googlecode.com/svn/docs/class_goog_debug_Logger.html"}
   one.logging
   (:require [goog.debug.Console :as console]
             [goog.debug.FancyWindow :as fancy]
             [goog.debug.Logger :as logger]))
 
-(def ^{:doc "Maps log level keywords to goog.debug.Logger.Levels."}
+(def ^{:doc "Maps log level keywords to `goog.debug.Logger.Levels`."}
   levels {:severe goog.debug.Logger.Level.SEVERE
           :warning goog.debug.Logger.Level.WARNING
           :info goog.debug.Logger.Level.INFO
@@ -24,48 +26,48 @@
 
 (defn severe
   "Given a logger and a message, write the message to the log with a
-  logging level of severe."
+  logging level of `severe`."
   [logger s] (.severe logger s))
 
 (defn warning
   "Given a logger and a message, write the message to the log with a
-  logging level of warning."
+  logging level of `warning`."
   [logger s] (.warning logger s))
 
 (defn info
   "Given a logger and a message, write the message to the log with a
-  logging level of info."
+  logging level of `info`."
   [logger s] (.info logger s))
 
 (defn config
   "Given a logger and a message, write the message to the log with a
-  logging level of config."
+  logging level of `config`."
   [logger s] (.config logger s))
 
 (defn fine
   "Given a logger and a message, write the message to the log with a
-  logging level of fine."
+  logging level of `fine`."
   [logger s] (.fine logger s))
 
 (defn finer
   "Given a logger and a message, write the message to the log with a
-  logging level of finer."
+  logging level of `finer`."
   [logger s] (.finer logger s))
 
 (defn finest
   "Given a logger and a message, write the message to the log with a
-  logging level of finest."
+  logging level of `finest`."
   [logger s] (.finest logger s))
 
 (defn set-level
-  "Set the logging level of logger to level.
+  "Set the logging level of `logger` to `level`.
 
-  The level argument must be a keyword."
+  The `level` argument must be a keyword."
   [logger level]
   (.setLevel logger (get levels level goog.debug.Logger.Level.INFO)))
 
 (defn console-output
-  "Direct log messages to the browser's console window."
+  "Direct log messages to the browser's `console` window."
   []
   (doto (goog.debug.Console.)
     (.setCapturing true)))

@@ -9,7 +9,7 @@
 (defn evaluate-cljs
   "Evaluate a ClojureScript form within the given evaluation
   environment. The form will also be evaluated in the passed namespace
-  which defaults to 'cljs.user."
+  which defaults to `'cljs.user`."
   ([eval-env form]
      (evaluate-cljs eval-env 'cljs.user form))
   ([eval-env ns form]
@@ -34,10 +34,10 @@
                    nil))))))))
 
 (defn cljs-wait-for*
-  "Using evaluation environment eval-env evaluate form in namespace
-  ns in the browser until pred applied to the result returns true or
-  the timeout expires. If pred returns logical true, returns the
-  result of pred. Throws Exception if the timeout (in milliseconds)
+  "Using evaluation environment `eval-env` evaluate form in namespace
+  `ns` in the browser until `pred` applied to the result returns `true` or
+  the timeout expires. If `pred` returns logical true, returns the
+  result of `pred`. Throws `Exception` if the timeout (in milliseconds)
   has expired."
   [eval-env pred ns form remaining]
   (if (pos? remaining)
@@ -51,7 +51,7 @@
                  " did not satisfy predicate before the timeout expired.")))))
 
 (defmacro cljs-wait-for
-  "Expands to a call to cljs-wait-for* using *eval-env* as the
+  "Expands to a call to `cljs-wait-for*` using `*eval-env*` as the
   evaluation environment and a timeout of roughly one minute."
   [pred ns form]
   `(cljs-wait-for* *eval-env* ~pred (quote ~ns) (quote ~form) 60000))
@@ -62,7 +62,7 @@
    that depends on a namespace that isn't available yet, due to
    asynchrony in the browser. Returns true if the namespace loads
    within the specified timeout (roughly 60 seconds by default), and
-   throws Exception otherwise."
+   throws `Exception` otherwise."
   ([eval-env ns] (ensure-ns-loaded eval-env ns 60000))
   ([eval-env ns remaining]
      (if (pos? remaining)
@@ -73,8 +73,8 @@
        (throw (Exception. (str "Namespace " ns " did not load before the timeout expired."))))))
 
 (defmacro cljs-eval
-  "Evaluate forms in namespace ns in the evaluation environment
-  *eval-env*."
+  "Evaluate forms in namespace `ns` in the evaluation environment
+  `*eval-env*`."
   [ns & forms]
   `(do
      (ensure-ns-loaded *eval-env* (quote ~ns))
