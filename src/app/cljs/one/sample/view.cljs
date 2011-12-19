@@ -63,7 +63,7 @@
 
 (defn- add-input-event-listeners
   "Accepts a field-id and creates listeners for blur and focus events which will then fire
-  :field-changed and :editing-field events."
+  `:field-changed` and `:editing-field` events."
   [field-id]
   (let [field (by-id field-id)]
     (event/listen field
@@ -75,7 +75,7 @@
 
 (defmulti render
   "Accepts a map which represents the current state of the application
-  and renders a view based on the value of the :state key."
+  and renders a view based on the value of the `:state` key."
   :state)
 
 (defmethod render :init [_]
@@ -99,8 +99,9 @@
 (dispatch/react-to #{:state-change} (fn [_ m] (render m)))
 
 (defn- form-fields-status
-  "Given a map of old and new form states, generate a map with :id, :transition and
-  :error keys which can be passed to render-form-field."
+  "Given a map of old and new form states, generate a map with `:id`,
+  `:transition` and `:error` keys which can be passed to
+  `render-form-field`."
   [m]
   (map #(hash-map :id %
                   :transition [(or (-> m :old :fields % :status) :empty)
