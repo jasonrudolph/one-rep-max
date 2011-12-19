@@ -15,7 +15,7 @@ experience.
 You will need to have Java, lein and git installed. Execute the following commands
 to install both One, ClojureScript and Domina:
 
-    git clone git://github.com/brentonashworth/one.git
+    git clone git@github.com:brentonashworth/one.git
     git clone git://github.com/levand/domina.git
     git clone git://github.com/clojure/clojurescript.git
     cd clojurescript
