@@ -17,5 +17,7 @@
 (def ^{:doc "The global history object for this application."}
   history (history/history nav-handler))
 
-(dispatch/react-to #{:form :greeting}
-                   (fn [t _] (history/set-token history t)))
+(dispatch/react-to #{:init :form :greeting}
+                   (fn [t _]
+                     (history/set-token history (if (#{:init} t) :form t))))
+

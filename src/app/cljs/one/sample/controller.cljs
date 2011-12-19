@@ -13,17 +13,23 @@
 
   Actions may cause state changes on the client or the server. This
   function dispatches on the value of the :type key and currently
-  supports :form and :greeting actions.
+  supports :init, :form and :greeting actions.
 
-  The :form action will initialize the appliation's state.
+  The :init action will initialize the appliation's state.
 
-  The :greeting action will validate form input, send the entered name
-  to the server and update the state to :greeting while adding
-  :name and :exists values to the application's state."
+  The :form action will only update the status atom, setting its state
+  to :from.
+
+  The :greeting action will send the entered name to the server and
+  update the state to :greeting while adding :name and :exists values
+  to the application's state."
   :type)
 
+(defmethod action :init [_]
+  (reset! state {:state :init}))
+
 (defmethod action :form [_]
-  (reset! state {:state :form}))
+  (swap! state assoc :state :form))
 
 (defn host
   "Get the name of the host which served this script."
@@ -56,11 +62,8 @@
                  (assoc (assoc old :state :greeting :name name)
                    :exists (boolean (:exists response))))))
 
-
 (defmethod action :greeting [{name :name}]
-  (if (empty? name)
-    (swap! state assoc :error "I can't greet you without knowing your name!")
-    (remote :add-name {:name name} #(add-name-callback name %))))
+  (remote :add-name {:name name} #(add-name-callback name %)))
 
-(dispatch/react-to #{:form :greeting}
-                     (fn [t d] (action (assoc d :type t))))
+(dispatch/react-to #{:init :form :greeting}
+                   (fn [t d] (action (assoc d :type t))))

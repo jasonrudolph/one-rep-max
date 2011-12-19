@@ -22,4 +22,4 @@
   This function must be called from the host HTML page to start the
   application."
   []
-  (dispatch/fire :form))
+  (dispatch/fire :init))
