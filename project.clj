@@ -1,4 +1,4 @@
-(defproject clojurescript-starter-kit "1.0.0-SNAPSHOT"
+(defproject one "1.0.0-SNAPSHOT"
   :description "Getting Started with ClojureScript."
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [ring "1.0.0-RC1"]
