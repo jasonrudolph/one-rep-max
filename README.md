@@ -1,6 +1,6 @@
-# ClojureScript Starter Kit
+# ClojureScript One
 
-The ClojureScript Starter Kit gives you a working client/server application 
+ClojureScript One gives you a working client/server application 
 with ClojureScript and Clojure code reloading, a way to do templating, easy
 access to both development mode and advanced compiled versions of your
 application and a browser-connected REPL.
@@ -13,7 +13,7 @@ experience.
 # Getting Started
 
 You will need to have Java, lein and git installed. Execute the following commands
-to install both the Starter Kit and ClojureScript:
+to install both One and ClojureScript:
 
     git clone git@github.com:brentonashworth/clojurescript-starter-kit.git
     git clone git://github.com/clojure/clojurescript.git
