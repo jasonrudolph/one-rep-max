@@ -234,11 +234,13 @@ h1 {
 }
 
 h2 {
+  border-bottom: 3px dashed #d3def7;
   font-size: 2em;
+  margin-bottom: 20px;
 }
 
 .section {
-  padding: 40px 40px;
+  padding: 30px 30px;
 }
 
 #index-header {
@@ -257,7 +259,16 @@ h2 {
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #fafafa;
-  margin: 20px 0;
+  margin: 0px 5px 40px 5px;
+  width: 240px;
+  min-height: 320px;
+  float: left;
+}
+
+.panel p {
+  font-family: Helvetica, sans-serif;
+  font-size: 0.9em;
+  line-height: 160%;
 }
 
 .container {
@@ -412,8 +423,8 @@ input[type="text"] {
 
 .topbar div > ul, .nav {
   display: block;
-  float: left;
-  margin: 0 10px 0 0;
+  float: right;
+  margin: 0 0 0 10px;
   position: relative;
   left: 0;
 }
@@ -448,7 +459,7 @@ input.button, a.button {
                 0 1px 4px 0 rgba(0, 0, 0, 0.35);
     color: #555;
     display: inline-block;
-    margin: 5px 0 10px 0;
+    margin: 20px 0 10px 0;
     padding: 10px 20px;
     position: relative;
     text-align: center;
