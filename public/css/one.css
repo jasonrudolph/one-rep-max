@@ -310,7 +310,6 @@ h2 {
   margin: 0 auto;
   width: 494px;
   height: 344px;
-  display: none;
 }
 
 #greeting h2, #greeting h3
@@ -403,7 +402,7 @@ input.button, a.button {
                 0 1px 4px 0 rgba(0, 0, 0, 0.35);
     color: #555;
     display: inline-block;
-    margin: 20px 0 10px 0;
+    margin: 5px 0 10px 0;
     padding: 10px 20px;
     position: relative;
     text-align: center;
@@ -446,7 +445,7 @@ input.button.green:active, a.button.green:active {
                 inset 0 0 6px 1px rgba(0, 0, 0, 0.65),
                 0 0 0 1px rgba(255, 255, 255, 0.75),
                 0 1px 4px 0 rgba(0, 0, 0, 0.35);
-    margin-top: 22px;
+    margin-top: 8px;
 }
 
 /* FONTS */
