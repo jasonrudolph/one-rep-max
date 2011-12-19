@@ -19,9 +19,7 @@ to install both One, ClojureScript and Domina:
     git clone git://github.com/levand/domina.git
     git clone git://github.com/clojure/clojurescript.git
     cd clojurescript
-    ./script/bootstrap
-    cd ../domina
-    lein deps
+    script/bootstrap
     cd ../one
     lein deps
     script/run
