@@ -7,8 +7,9 @@
 (deftest test-enter-new-name
   (reset! *database* #{})
   (cljs-eval one.sample.view
-             (dispatch/fire :form)
+             (dispatch/fire :init)
              (dom/set-value :name-input "Ted")
+             (enable-button "greet-button")
              (dom/click-element :greet-button))
   (cljs-wait-for #(= % :greeting) one.sample.model (:state @state))
   (is (= (cljs-eval one.sample.view (.innerHTML (dom/get-element :name)))
@@ -20,8 +21,9 @@
 (deftest test-enter-existing-name
   (reset! *database* #{"Ted"})
   (cljs-eval one.sample.view
-             (dispatch/fire :form)
+             (dispatch/fire :init)
              (dom/set-value :name-input "Ted")
+             (enable-button "greet-button")
              (dom/click-element :greet-button))
   (cljs-wait-for #(= % :greeting) one.sample.model (:state @state))
   (is (= (cljs-eval one.sample.view (.innerHTML (dom/get-element :name)))
