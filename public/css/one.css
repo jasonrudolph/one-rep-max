@@ -265,12 +265,24 @@ h2 {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #fafafa;
   margin: 0px 5px 40px 5px;
+}
+
+.panel-index {
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #fbfbfb;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #fafafa;
+  margin: 0px 5px 40px 5px;
   width: 240px;
   height: 320px;
   float: left;
 }
 
-.panel p {
+.panel-index p {
   font-family: Helvetica, sans-serif;
   font-size: 0.9em;
   line-height: 160%;
@@ -314,6 +326,7 @@ h2 {
 
 #greeting h2, #greeting h3
 {
+  border-bottom: none;
   color: #57c142;
   font-family: "Museo700", serif;
   text-shadow: 0 1px 0 #3e3e3e;
