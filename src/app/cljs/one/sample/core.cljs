@@ -16,7 +16,7 @@
   (repl/connect "http://localhost:9000/repl"))
 
 (defn ^:export start
-  "Start the application by firing a `:form` event which will cause the
+  "Start the application by firing a `:init` event which will cause the
   form view to be displayed.
 
   This function must be called from the host HTML page to start the
