@@ -29,10 +29,10 @@
 
   This function is normally called in two situations:
 
-  1) From a Ring application to dynamically generate the application
+  1. From a Ring application to dynamically generate the application
      HTML.
 
-  2) From the build script to create static deployment artifacts."
+  2. From the build script to create static deployment artifacts."
   [config environment]
   (render
    (case environment
