@@ -9,6 +9,10 @@
             [goog.debug.FancyWindow :as fancy]
             [goog.debug.Logger :as logger]))
 
+(defprotocol ILogViewer
+  (start-display [this] "Start displaying log messages in this viewer.")
+  (stop-display [this] "Stop displaying log messages in this viewer."))
+
 (def ^{:doc "Maps log level keywords to `goog.debug.Logger.Levels`."}
   levels {:severe goog.debug.Logger.Level.SEVERE
           :warning goog.debug.Logger.Level.WARNING
@@ -66,15 +70,35 @@
   [logger level]
   (.setLevel logger (get levels level goog.debug.Logger.Level.INFO)))
 
+(extend-protocol ILogViewer
+  
+  goog.debug.Console
+  (start-display [this]
+    (.setCapturing this true))
+  (stop-display [this]
+    (.setCapturing this false))
+  
+  goog.debug.FancyWindow
+  (start-display [this]
+    (doto this
+      (.setEnabled true)
+      (.init ())))
+  (stop-display [this]
+    (.setCapturing this false)))
+
 (defn console-output
-  "Direct log messages to the browser's `console` window."
+  "Returns a log viewer which will direct log messages to the
+  browser's `console` window. Use the `start-display` and
+  `stop-display` functions to start and stop printing log messages to
+  the console."
   []
-  (doto (goog.debug.Console.)
-    (.setCapturing true)))
+  (goog.debug.Console.))
 
 (defn fancy-output
-  "Open a fancy logging window and direct log messages to it."
+  "Returns a log viewer which will open a fancy logging window and
+  direct log messages to it. Use the `start-display` and
+  `stop-display` functions to start and stop printing log messages in
+  this window."
   [name]
-  (doto (goog.debug.FancyWindow. name)
-    (.setEnabled true)
-    (.init ())))
+  (goog.debug.FancyWindow. name))
+
