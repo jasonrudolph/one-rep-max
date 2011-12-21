@@ -250,6 +250,11 @@ h2 {
   padding-top: 80px;
 }
 
+#index-header p {
+  font-size: 110%;
+  line-height: 160%;
+}
+
 .panel {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -261,7 +266,7 @@ h2 {
   border: 1px solid #fafafa;
   margin: 0px 5px 40px 5px;
   width: 240px;
-  min-height: 320px;
+  height: 320px;
   float: left;
 }
 
@@ -269,6 +274,7 @@ h2 {
   font-family: Helvetica, sans-serif;
   font-size: 0.9em;
   line-height: 160%;
+  height: 180px;
 }
 
 .container {
@@ -481,6 +487,7 @@ input.button.green, a.button.green {
     font-family: "Chunkfive", serif;
     font-size: 1.3em;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+    float: right;
 }
     
 input.button.green:hover, a.button.green:hover {
