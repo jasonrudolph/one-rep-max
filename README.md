@@ -13,16 +13,11 @@ experience.
 # Getting Started
 
 You will need to have Java, lein and git installed. Execute the following commands
-to install both One, ClojureScript and Domina:
+to install One:
 
     git clone git@github.com:brentonashworth/one.git
-    git clone git://github.com/levand/domina.git
-    git clone git://github.com/clojure/clojurescript.git
-    cd clojurescript
-    script/bootstrap
-    cd ../one
-    lein deps
-    script/run
+    cd one
+    script/deps
     
 If you already have ClojureScript and it is not in the same directory
 as `one`, then you will need to set the CLOJURESCRIPT_HOME environment
