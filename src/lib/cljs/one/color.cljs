@@ -1,5 +1,5 @@
 (ns ^{:doc "Provide support for working with colors. Wraps Google
-  Closure's color support.  The goog.color namespace provides support for
+  Closure's color support.  The `goog.color` namespace provides support for
   additional color formats."}
   one.color
   (:require [goog.string :as gstring]
@@ -8,11 +8,11 @@
             [goog.color.alpha :as alpha]))
 
 (defprotocol IColor
-  (rgb [this] "Returns a vector [r g b].")
-  (rgba [this] "Returns a vector [r g b a].")
+  (rgb [this] "Returns a vector `[r g b]`.")
+  (rgba [this] "Returns a vector `[r g b a]`.")
   (hex [this] "Returns a hex string for this color.")
   (hex-rgba [this] "Returns a hex rgba string for this color.")
-  (alpha [this] "Returns the alpha for this color, a number in the range [0 1]."))
+  (alpha [this] "Returns the alpha for this color, a number in the range `[0 1]`."))
 
 (defrecord Color [r g b a]
   IColor
@@ -41,9 +41,9 @@
   )
 
 (defprotocol IColorSource
-  (color [this] "Get the color from the passed object. Return a Color object.")
+  (color [this] "Get the color from the passed object. Return a `Color` object.")
   (bg-color [this] "Get the background color from the passed
-  object. Returns a Color object."))
+  object. Returns a `Color` object."))
 
 (extend-protocol IColorSource
 

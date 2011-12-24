@@ -18,8 +18,7 @@
                            :body "HTTP authentication required."
                            :status 401}]
       (if-let [auth ((:headers req) "authorization")]
-        (if (= auth "Basic Y3Nzazppc2F3ZXNvbWU=")
-          ;; username=cssk,password=isawesome
+        (if (= auth "Basic Y3Nzazppc2F3ZXNvbWU=") ;; username=cssk,password=isawesome
           (app req)
           denied-response)
         denied-response))))

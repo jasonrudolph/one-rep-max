@@ -46,18 +46,20 @@
       h)))
 
 (defn construct-html
-  "Process a seq of Enlive nodes looking for _include and _within tags.
-  Occurrences of _include are replaced by the resource to which they
-  refer. The contents of _within tags are inserted into the resource
-  to which they refer. _within is always the top-level tag in a file.
-  _include can appear anywhere. Files with _include can reference
-  files which themselves contain _include or _within tags, to an
+  "Process a seq of Enlive nodes looking for `_include` and `_within` tags.
+  Occurrences of `_include` are replaced by the resource to which they
+  refer. The contents of `_within` tags are inserted into the resource
+  to which they refer. `_within` is always the top-level tag in a file.
+  `_include` can appear anywhere. Files with `_include` can reference
+  files which themselves contain `_include` or `_within` tags, to an
   arbitrary level of nesting.
 
-  For more information, see 'Design and Templating' in the project
+  For more information, see '[Design and Templating][dt]' in the project
   wiki.
 
-  Returns a seq of Enlive nodes."
+  Returns a seq of Enlive nodes.
+
+  [dt]: https://github.com/brentonashworth/one/wiki/Design-and-templating"
   [nodes]
   (wrap-html (include-html nodes)))
 

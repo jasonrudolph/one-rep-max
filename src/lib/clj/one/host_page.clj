@@ -20,19 +20,19 @@
 (defn application-host
   "Given a configuration map and an environment, return HTML (as a
   string) that can host a ClojureScript application. The environment
-  must be either :development or :production - any other value results
+  must be either `:development` or `:production` - any other value results
   in an exception. The generated HTML is based on the contents of
   application.html, which is loaded as an Enlive resource.
 
   In production mode, the HTML (as a sequence of Enlive nodes) is
-  transformed via the :prod-transform function from the config map.
+  transformed via the `:prod-transform` function from the config map.
 
   This function is normally called in two situations:
 
-  1) From a Ring application to dynamically generate the application
+  1. From a Ring application to dynamically generate the application
      HTML.
 
-  2) From the build script to create static deployment artifacts."
+  2. From the build script to create static deployment artifacts."
   [config environment]
   (render
    (case environment

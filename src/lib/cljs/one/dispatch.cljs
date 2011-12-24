@@ -15,9 +15,9 @@
   * event-pred: A function which takes an event ID and returns true or
     false.
 
-  Reactors are associated with events via react-to. When events are
-  fired with an event-id and optional event-data, any reactors whose
-  event-pred returns true for the event-id are invoked."}
+  Reactors are associated with events via `react-to`. When events are
+  fired with an `event-id` and optional `event-data`, any reactors whose
+  `event-pred` returns true for the `event-id` are invoked."}
   one.dispatch)
 
 (def ^{:doc "Stores the current reactions."}
@@ -25,20 +25,20 @@
 
 (defn react-to
   "Cause the specified reactor to be invoked whenever an event that
-  satisfies event-pred is fired. reactor is a function that accepts
-  two arguments: event-id and event-data.
+  satisfies `event-pred` is fired. reactor is a function that accepts
+  two arguments: `event-id` and `event-data`.
 
   Returns the reaction.
 
   The reactor will continue to be invoked until one of two things
   happens:
 
-    1) delete-reaction is called on this reaction.
+   1. `delete-reaction` is called on this reaction.
 
-    2) The reaction occurs max-count times. If max-count is not
-    specified, the reaction will continue to be invoked until deleted.
+   2. The reaction occurs `max-count` times. If `max-count` is not
+      specified, the reaction will continue to be invoked until deleted.
 
-  If max-count is specified, delete-reaction will be called
+  If `max-count` is specified, `delete-reaction` will be called
   automatically when the reaction has occurred the specified number of
   times."
   ([event-pred reactor]
@@ -58,7 +58,7 @@
 
 (defn fire
   "Raise an event to any reactors whose event-pred returns true for
-  event-id. The event-id and event-data, if specified, are passed to
+  `event-id`. The `event-id` and `event-data`, if specified, are passed to
   the reactor."
   ([event-id]
      (fire event-id nil))

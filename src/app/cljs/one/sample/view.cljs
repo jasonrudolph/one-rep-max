@@ -1,7 +1,7 @@
 (ns ^{:doc "Render the views for the application."}
   one.sample.view
   (:use [domina :only (xpath set-html! set-styles! styles by-id set-style!
-                       value set-value! set-text!)])
+                       by-class value set-value! set-text! nodes)])
   (:require-macros [one.sample.snippets :as snippets])
   (:require [clojure.browser.event :as event]
             [one.dispatch :as dispatch]
@@ -63,7 +63,7 @@
 
 (defn- add-input-event-listeners
   "Accepts a field-id and creates listeners for blur and focus events which will then fire
-  :field-changed and :editing-field events."
+  `:field-changed` and `:editing-field` events."
   [field-id]
   (let [field (by-id field-id)]
     (event/listen field
@@ -75,7 +75,7 @@
 
 (defmulti render
   "Accepts a map which represents the current state of the application
-  and renders a view based on the value of the :state key."
+  and renders a view based on the value of the `:state` key."
   :state)
 
 (defmethod render :init [_]
@@ -93,14 +93,16 @@
   (dispatch/fire [:field-changed "name-input"] ""))
 
 (defmethod render :greeting [{:keys [state name exists]}]
-  (set-text! (by-id "name") (if exists (str " again " name) name))
+  (set-text! (by-class "name") name)
+  (set-text! (by-class "again") (if exists "again" ""))
   (fx/show-greeting))
 
 (dispatch/react-to #{:state-change} (fn [_ m] (render m)))
 
 (defn- form-fields-status
-  "Given a map of old and new form states, generate a map with :id, :transition and
-  :error keys which can be passed to render-form-field."
+  "Given a map of old and new form states, generate a map with `:id`,
+  `:transition` and `:error` keys which can be passed to
+  `render-form-field`."
   [m]
   (map #(hash-map :id %
                   :transition [(or (-> m :old :fields % :status) :empty)

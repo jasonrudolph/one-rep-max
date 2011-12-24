@@ -1,7 +1,7 @@
 (ns ^{:doc "Make network requests.
 
   Adapted from Bobby Calderwood's Trail framework:
-  https://github.com/bobby/trail"}
+  <https://github.com/bobby/trail>"}
   one.browser.remote
   (:require [cljs.reader :as reader]
             [clojure.browser.net :as net]
@@ -35,15 +35,15 @@
 
 (defn request
   "Asynchronously make a network request for the resource at url. If
-  provided via the :on-success and :on-error keword arguments, the
-  appropriate one of on-success or on-error will be called on
-  completion. They will be passed a map containing the keys :id,
-  :body, :status, and :event. The entry for :event contains an
-  instance of the goog.net.XhrManager.Event.
+  provided via the `:on-success` and `:on-error` keword arguments, the
+  appropriate one of `on-success` or `on-error` will be called on
+  completion. They will be passed a map containing the keys `:id`,
+  `:body`, `:status`, and `:event`. The entry for `:event` contains an
+  instance of the `goog.net.XhrManager.Event`.
 
-  Other allowable keyword arguments are :method, :content, :headers,
-  :priority, and :retries. :method defaults to \"GET\" and :retries
-  defaults to 0."
+  Other allowable keyword arguments are `:method`, `:content`, `:headers`,
+  `:priority`, and `:retries`. `:method` defaults to \"GET\" and `:retries`
+  defaults to `0`."
   [id url & {:keys [method content headers priority retries on-success
                     on-error]
              :or   {method   "GET"
