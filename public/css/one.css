@@ -278,7 +278,7 @@ h2 {
   border: 1px solid #fafafa;
   margin: 0px 5px 40px 5px;
   width: 240px;
-  height: 320px;
+  height: 250px;
   float: left;
 }
 
@@ -286,7 +286,7 @@ h2 {
   font-family: Helvetica, sans-serif;
   font-size: 0.9em;
   line-height: 160%;
-  height: 180px;
+  height: 130px;
 }
 
 .container {
@@ -478,7 +478,7 @@ input.button, a.button {
                 0 1px 4px 0 rgba(0, 0, 0, 0.35);
     color: #555;
     display: inline-block;
-    margin: 20px 0 10px 0;
+    margin: 10px 0 10px 0;
     padding: 10px 20px;
     position: relative;
     text-align: center;
