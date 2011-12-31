@@ -77,7 +77,7 @@
     (let [{:keys [headers body] :as response} (handler request)]
       (if (and (= (type body) File)
                (.endsWith (.getName body) ".html"))
-        (let [new-body (emit* (construct-html (html-snippet (slurp body))))]
+        (let [new-body (render (construct-html (html-snippet (slurp body))))]
           {:status 200
            :headers {"Content-Type" "text/html; charset=utf-8"}
            :body new-body})

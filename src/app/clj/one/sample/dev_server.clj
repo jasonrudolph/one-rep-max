@@ -11,7 +11,7 @@
         [compojure.core :only (defroutes GET POST ANY)]
         [cljs.repl :only (repl)]
         [cljs.repl.browser :only (repl-env)]
-        [one.templates :only (load-html apply-templates)]
+        [one.templates :only (load-html apply-templates render)]
         [one.host-page :only (application-host)]
         [one.sample.api :only (remote-routes)]
         [one.sample.config])
@@ -51,6 +51,27 @@
       (handler (assoc request :uri (.substring uri 7)))
       (handler request))))
 
+(defn- active-menu-transform
+  "Accepts the selected menu (a keyword) and the response and returns
+  an updated response body with the correct menu activated."
+  [menu response]
+  (assoc response
+    :body (render (html/transform (html/html-snippet (:body response))
+                                  [:ul#navigation (keyword (str "li." (name menu)))]
+                                  (html/add-class "active")))))
+
+(defn- set-active-menu
+  "Middleware which will highlight the current active menu item."
+  [handler]
+  (fn [request]
+    (let [response (handler request)
+          uri (:uri request)]
+      (cond (= uri "/") (active-menu-transform :home response)
+            (and (.startsWith uri "/design") (.endsWith uri ".html")) (active-menu-transform :design response)
+            (= uri "/development") (active-menu-transform :development response)
+            (= uri "/production") (active-menu-transform :production response)
+            :else response))))
+
 (def ^:private app (-> app-routes
                        (reload/watch-cljs config)
                        (wrap-file "public")
@@ -59,6 +80,7 @@
                        apply-templates
                        js-encoding
                        wrap-params
+                       set-active-menu
                        wrap-stacktrace
                        (reload/reload-clj (:reload-clj config))))
 
