@@ -35,7 +35,7 @@
 
 (defn request
   "Asynchronously make a network request for the resource at url. If
-  provided via the `:on-success` and `:on-error` keword arguments, the
+  provided via the `:on-success` and `:on-error` keyword arguments, the
   appropriate one of `on-success` or `on-error` will be called on
   completion. They will be passed a map containing the keys `:id`,
   `:body`, `:status`, and `:event`. The entry for `:event` contains an

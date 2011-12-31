@@ -7,5 +7,5 @@
   :dev-dependencies [[jline "0.9.94"]
                      [marginalia "0.7.0-SNAPSHOT"]
                      [lein-marginalia "0.7.0-SNAPSHOT"]]
-  :main start.prod-server
-  :source-path "src/clj")
+  :main one.sample.prod-server
+  :source-path "src/app/clj")
