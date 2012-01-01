@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cd `dirname $0`/..
+
+source script/setup_classpath.sh
+
+java -server -cp $CLJSC_CP jline.ConsoleRunner clojure.main -e \
+"(use '[one.sample.dev-server :only (run-server cljs-repl)])
+ (use '[clojure.java.browse :only (browse-url)])
+ (run-server)
+ (future (Thread/sleep 3000) (browse-url \"http://localhost:8080/development\"))
+ (cljs-repl)" --repl
+

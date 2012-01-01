@@ -141,8 +141,8 @@
       (acceleration a))))
 
 (defmulti effect
-  "Accepts a map and returns an effect. The returned effect may be run
-  or composed with other effects.
+  "Accepts an element and a map and returns an effect. The returned
+  effect may be run or composed with other effects.
 
   Available effects include: `:color`, `:fade`, `:fade-in`, `:fade-out`,
   `:fade-in-and-show`, `:fade-out-and-hide`, `:slide`, `:swipe`, `:bg-color`,
