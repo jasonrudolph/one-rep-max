@@ -18,10 +18,7 @@ to install One:
     git clone git@github.com:brentonashworth/one.git
     cd one
     script/deps
-    
-If you already have ClojureScript and it is not in the same directory
-as `one`, then you will need to set the CLOJURESCRIPT_HOME environment
-variable.
+    script/run
 
 Open your browser and navigate to [http://localhost:8080](http://localhost:8080)
 
