@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e
+
+cd `dirname $0`/..
+
+echo "Getting lein deps..."
+lein deps
+
+cd lib
+
+git clone git://github.com/levand/domina.git
+
+git clone git://github.com/clojure/clojurescript.git
+
+cd domina
+git checkout -b clojurescript-one-lib 7391ffbe1cdbaa84380083270f2452b35c6ed6b7
+
+cd ../clojurescript
+git checkout -b clojurescript-one-lib 329708bdd0f039241b187bc639836d9997d8fbd4
+script/bootstrap
+
+echo "Copy ClojureScript deps to lib directory..."
+
+cp lib/compiler.jar ..
+cp lib/goog.jar ..
+cp lib/js.jar ..
+
+echo "[Deps Completed]"
