@@ -59,6 +59,10 @@
   (color [this] (apply make-color this))
   (bg-color [this] (apply make-color this))
 
+  js/Array
+  (color [this] (apply make-color (js->clj this)))
+  (bg-color [this] (apply make-color (js->clj this)))
+
   js/String
   (color [this]
     (color (js->clj (cond (gstring/startsWith this "#")
