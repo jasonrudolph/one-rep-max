@@ -26,7 +26,12 @@
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-    
+
+    <!-- Add xpath support to IE. Domina needs this -->
+    <!--[if IE]>
+        <script type="text/javascript" src="js/xpath.js"></script>
+        <![endif]-->
+
   </head>
 
   <body>
@@ -34,7 +39,7 @@
     <_include file="toolbar.html"/>
 
     <div class="container">
-      
+
       <div id="content"></div>
 
       <div id="options"></div>

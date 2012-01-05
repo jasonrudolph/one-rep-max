@@ -10,7 +10,8 @@
             [goog.fx.dom :as anim]
             [clojure.browser.event :as event]
             [clojure.browser.dom :as dom]
-            [domina :as d]))
+            [domina :as d]
+            [domina.xpath :as dx]))
 
 (def ^:dynamic *default-time* 1000)
 
@@ -19,7 +20,7 @@
   element. Strings are assumed to be xpath format."
   [e]
   (cond (keyword? e) (d/by-id (name e))
-        (string? e) (first (d/nodes (d/xpath e)))
+        (string? e) (first (d/nodes (dx/xpath e)))
         :else e))
 
 (defprotocol IPosition

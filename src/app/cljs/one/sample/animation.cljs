@@ -3,7 +3,8 @@
   one.sample.animation
   (:use [one.core :only (start)]
         [one.browser.animation :only (bind parallel serial)]
-        [domina :only (xpath by-id set-html! set-styles! destroy-children! append!)])
+        [domina :only (by-id set-html! set-styles! destroy-children! append!)]
+        [domina.xpath :only (xpath)])
   (:require [goog.dom.forms :as gforms]))
 
 (def form "//div[@id='form']")
