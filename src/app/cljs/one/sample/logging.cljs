@@ -18,9 +18,9 @@ For more information see library.logging."}
 
 (comment
   ;; log to the console
-  (start-display (log/console-output))
+  (log/start-display (log/console-output))
   ;; log to to the "fancy" window
-  (start-display (log/fancy-output "main"))
+  (log/start-display (log/fancy-output "main"))
   ;; change the logging level
   (log/set-level logger :fine)
   )
