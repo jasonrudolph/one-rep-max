@@ -291,7 +291,6 @@ h2 {
 
 .container {
   margin: 0 auto;
-  width: 960px;
 }
 
 #content {
@@ -322,6 +321,7 @@ h2 {
   margin: 0 auto;
   width: 494px;
   height: 344px;
+  margin-top: -500px;
 }
 
 #greeting h2, #greeting h3
@@ -420,6 +420,10 @@ input[type="text"] {
   width: 100%;
 }
 
+.topbar .container {
+  max-width: 960px;
+}
+
 .topbar a {
   color: #bfbfbf;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -433,11 +437,14 @@ input[type="text"] {
   float: left;
   display: block;
   padding: 8px 20px 12px;
-  margin-left: -20px;
   color: #ffffff;
   font-size: 20px;
   font-weight: 200;
   line-height: 1;
+}
+
+.topbar #navigation {
+  margin-right: 20px;
 }
 
 .topbar div > ul, .nav {

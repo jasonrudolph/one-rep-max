@@ -18,8 +18,7 @@
   (start (apply bind element animations)))
 
 (def ^:private
-  form-in [{:effect :slide :down 880 :time 800}
-           {:effect :fade :start 0 :end 1 :time 400}])
+  form-in {:effect :fade :start 0 :end 1 :time 800})
 
 (defn initialize-views
   "Accepts the form and greeting view HTML and adds them to the
@@ -27,13 +26,11 @@
   run before any other view functions. It may be called from any state
   to reset the UI."
   [form-html greeting-html]
-  (let [style {:position "absolute" :width "960px"}
-        content (xpath "//div[@id='content']")]
+  (let [content (xpath "//div[@id='content']")]
     (destroy-children! content)
     (set-html! content form-html)
-    (set-styles! (xpath form) (assoc style :top "-780px"))
     (append! content greeting-html)
-    (set-styles! (xpath cloud) (assoc style :top "460px" :opacity "0"))
+    (set-styles! (xpath cloud) {:opacity "0" :display "none"})
     (play form form-in)))
 
 (comment ;; Try it
@@ -80,21 +77,19 @@
   "Move the form out of view and the greeting into view. Run when the
   submit button is clicked and the form has valid input."
   []
-  (start (parallel (bind form [{:effect :slide :up 800 :time 800}
-                               {:effect :fade :start 1 :end 0 :time 400}])
-                   (bind cloud [{:effect :slide :up 400 :time 500}
-                                {:effect :fade :start 0 :end 1 :time 500}]))))
+  (start (parallel (bind form {:effect :fade :start 1 :end 0 :time 500})
+                   (bind cloud
+                         {:effect :delay :time 500}
+                         {:effect :fade-in-and-show :time 600}))))
 
 (defn show-form
   "Move the greeting cloud out of view and show the form. Run when the
   back button is clicked from the greeting view."
   []
-  (start (serial (parallel (bind form form-in)
-                           (bind cloud [{:effect :slide
-                                         :down 400
-                                         :time 400
-                                         :accel :ease-in}
-                                        fade-out]))
+  (start (serial (parallel (bind cloud {:effect :fade-out-and-hide :time 500})
+                           (bind form
+                                 {:effect :delay :time 300}
+                                 form-in))
                  (bind label fade-in move-down))))
 
 (comment ;; Switch between greeting and form views
