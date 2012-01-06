@@ -3,7 +3,8 @@
 
   one.browser.history
   (:require [clojure.browser.event :as event]
-            [goog.History :as history]))
+            [goog.History :as history]
+            [goog.history.Html5History :as history5]))
 
 (extend-type goog.History
   
@@ -28,7 +29,9 @@
   Any changes to the location hash will call the passed callback
   function."
   [callback]
-  (let [h (goog.History.)]
+  (let [h (if (history5/isSupported)
+            (goog.history.Html5History.)
+            (goog.History.))]
     (do (event/listen h "navigate"
                       (fn [e]
                         (callback {:token (keyword (.token e))

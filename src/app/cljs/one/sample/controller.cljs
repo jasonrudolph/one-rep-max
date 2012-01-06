@@ -29,7 +29,8 @@
   (reset! state {:state :init}))
 
 (defmethod action :form [_]
-  (swap! state assoc :state :form))
+  (when-not (#{:form :init} (:state @state))
+    (swap! state assoc :state :form)))
 
 (defn host
   "Get the name of the host which served this script."
