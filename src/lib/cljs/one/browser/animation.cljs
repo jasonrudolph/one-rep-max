@@ -635,6 +635,6 @@
                       {:effect :slide :up 40 :time 200}))
   (event/listen-once label-up
                      "finish"
-                     #(js/alert "Anaimation finished."))
+                     #(js/alert "Animation finished."))
   (start label-up)
   )
