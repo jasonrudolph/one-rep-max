@@ -1,9 +1,12 @@
 (ns ^{:doc "Render the views for the application."}
   one.sample.view
   (:use [domina :only (xpath set-html! set-styles! styles by-id set-style!
-                       by-class value set-value! set-text! nodes)])
+                       by-class value set-value! set-text! nodes)]
+        [one.browser.animation :only (play)])
   (:require-macros [one.sample.snippets :as snippets])
-  (:require [clojure.browser.event :as event]
+  (:require [goog.events.KeyCodes :as key-codes]
+            [goog.events.KeyHandler :as key-handler]
+            [clojure.browser.event :as event]
             [one.dispatch :as dispatch]
             [one.sample.animation :as fx]))
 
@@ -45,33 +48,62 @@
 (defmethod render-form-field [:editing :empty] [{:keys [id]}]
   (fx/label-move-down (label-xpath id)))
 
-(defmethod render-form-field [:editing :valid] [{:keys [id]}]
+(defmethod render-form-field [:editing-valid :valid] [{:keys [id]}]
   (fx/label-fade-out (label-xpath id)))
 
-(defmethod render-form-field [:valid :editing] [{:keys [id]}]
-  (fx/play (label-xpath id) fx/fade-in))
+(defmethod render-form-field [:valid :editing-valid] [{:keys [id]}]
+  (play (label-xpath id) fx/fade-in))
 
 (defmethod render-form-field [:editing :error] [{:keys [id error]}]
   (let [error-element (by-id (str id "-error"))]
     (set-style! error-element "opacity" "0")
     (set-html! error-element error)
-    (fx/play error-element fx/fade-in)))
+    (play error-element fx/fade-in)))
 
-(defmethod render-form-field [:error :editing] [{:keys [id]}]
+(defn- swap-error-messages
+  "Accepts an id and an error message and fades the old error message
+  out and the new one in."
+  [id error]
   (let [error-element (by-id (str id "-error"))]
-    (fx/play error-element (assoc fx/fade-out :time 1000))))
+    (play error-element fx/fade-out
+             {:name "fade out error"})
+    (play error-element fx/fade-in {:before #(set-html! error-element error)})))
+
+(defmethod render-form-field [:error :editing-error] [{:keys [id error]}]
+  (swap-error-messages id error))
+
+(defmethod render-form-field [:editing-error :error] [{:keys [id error]}]
+  (swap-error-messages id error))
+
+(defmethod render-form-field [:editing-error :editing-valid] [{:keys [id]}]
+  (let [error-element (by-id (str id "-error"))]
+    (play error-element (assoc fx/fade-out :time 200))))
+
+(defmethod render-form-field [:editing-error :empty] [{:keys [id]}]
+  (let [error-element (by-id (str id "-error"))]
+    (play error-element (assoc fx/fade-out :time 200))
+    (fx/label-move-down (label-xpath id))))
 
 (defn- add-input-event-listeners
   "Accepts a field-id and creates listeners for blur and focus events which will then fire
   `:field-changed` and `:editing-field` events."
   [field-id]
-  (let [field (by-id field-id)]
+  (let [field (by-id field-id)
+        keyboard (goog.events.KeyHandler. (by-id "form"))]
     (event/listen field
                   "blur"
-                  #(dispatch/fire [:field-changed field-id] (value field)))
+                  #(dispatch/fire [:field-finished field-id] (value field)))
     (event/listen field
                   "focus"
-                  #(dispatch/fire [:editing-field field-id]))))
+                  #(dispatch/fire [:editing-field field-id]))
+    (event/listen field
+                  "keyup"
+                  #(dispatch/fire [:field-changed field-id] (value field)))
+    (event/listen keyboard
+                  "key"
+                  (fn [e] (when (= (.keyCode e) key-codes/ENTER)
+                           (do (.blur (by-id "name-input") ())
+                               (dispatch/fire :form-submit)))))))
 
 (defmulti render
   "Accepts a map which represents the current state of the application
@@ -81,7 +113,6 @@
 (defmethod render :init [_]
   (fx/initialize-views (:form snippets) (:greeting snippets))
   (add-input-event-listeners "name-input")
-  (fx/disable-button "greet-button")
   (event/listen (by-id "greet-button")
                 "click"
                 #(dispatch/fire :greeting
@@ -90,7 +121,7 @@
 (defmethod render :form [{:keys [state error name]}]
   (fx/show-form)
   (set-value! (by-id "name-input") "")
-  (dispatch/fire [:field-changed "name-input"] ""))
+  (dispatch/fire [:field-finished "name-input"] ""))
 
 (defmethod render :greeting [{:keys [state name exists]}]
   (set-text! (by-class "name") name)
@@ -113,6 +144,8 @@
 (dispatch/react-to #{:form-change}
                    (fn [_ m]
                      (doseq [s (form-fields-status m)]
+                       (.log js/console (pr-str (:transition s)))
                        (render-form-field s))
+                     #_(.log js/console (str "render button: " (pr-str [(-> m :old :status) (-> m :new :status)])))
                      (render-button [(-> m :old :status)
                                      (-> m :new :status)] )))

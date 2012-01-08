@@ -2,7 +2,7 @@
   application."}
   one.sample.animation
   (:use [one.core :only (start)]
-        [one.browser.animation :only (bind parallel serial)]
+        [one.browser.animation :only (bind parallel serial play play-animation)]
         [domina :only (by-id set-html! set-styles! destroy-children! append!)]
         [domina.xpath :only (xpath)])
   (:require [goog.dom.forms :as gforms]))
@@ -10,12 +10,6 @@
 (def form "//div[@id='form']")
 (def cloud "//div[@id='greeting']")
 (def label "//label[@id='name-input-label']/span")
-
-(defn play
-  "Accepts an element and any number of animations and plays them in
-  order."
-  [element & animations]
-  (start (apply bind element animations)))
 
 (def ^:private
   form-in {:effect :fade :start 0 :end 1 :time 800})
@@ -31,12 +25,14 @@
     (set-html! content form-html)
     (append! content greeting-html)
     (set-styles! (xpath cloud) {:opacity "0" :display "none"})
-    (play form form-in)))
+    (set-styles! (by-id "greet-button") {:opacity "0.2" :disabled true})
+    (play form form-in {:after #(.focus (by-id "name-input") ())})))
 
 (comment ;; Try it
 
   (initialize-views (:form one.sample.view/snippets)
                     (:greeting one.sample.view/snippets))
+  
   )
 
 (defn label-move-up
@@ -86,11 +82,12 @@
   "Move the greeting cloud out of view and show the form. Run when the
   back button is clicked from the greeting view."
   []
-  (start (serial (parallel (bind cloud {:effect :fade-out-and-hide :time 500})
-                           (bind form
-                                 {:effect :delay :time 300}
-                                 form-in))
-                 (bind label fade-in move-down))))
+  (play-animation (serial (parallel (bind cloud {:effect :fade-out-and-hide :time 500})
+                                    (bind form
+                                          {:effect :delay :time 300}
+                                          form-in)
+                                    (bind label fade-in move-down)))
+                  {:after #(.focus (by-id "name-input") ())}))
 
 (comment ;; Switch between greeting and form views
 
@@ -105,7 +102,7 @@
   [id]
   (let [button (by-id id)]
     (gforms/setDisabled button true)
-    (play button (assoc fade-out :end 0.2))))
+    (play button {:effect :fade :end 0.2 :time 400})))
 
 (defn enable-button
   "Accepts an element id for a button and enables it. Fades the button
