@@ -1,6 +1,6 @@
 # ClojureScript One
 
-We think that ClojureScript is amazing and that it provides endless
+We think that [ClojureScript][] is amazing and that it provides endless
 possibilities for making web development much more fun. To realize
 these possibilities, we need your help. Someone has to do the work to
 turn the possible into reality.
@@ -14,8 +14,8 @@ with an excellent working environment.
 Getting started means many things. We often forget how much we need to
 know to be comfortable in a programming environment. How do we
 organize code? How do we test? What is the most productive workflow?
-How do I deploy my application? We will attempt to answer all of these
-questions while providing working examples.
+How do we deploy our application? We will attempt to answer all of these
+questions and provide working examples.
 
 The project includes a working sample application, useful tools, and
 libraries in various states of development. Many of the libraries in
@@ -27,15 +27,14 @@ that you will want to join in and help.
 
 # What's here
 
-This project will help you to lean how to:
+This project will help you lean how to:
 
 * use ClojureScript tools and other Clojure libraries to create a
   productive development environment
 * effectively work with the ClojureScript tools
 * organize your code
 * keep visual design activities separate from application code
-* run ClojureScript (in a remote JavaScript environment) from
-  Clojure
+* run ClojureScript (in a remote JavaScript environment) from Clojure
 * test ClojureScript using any Clojure test framework
 * structure a ClojureScript application
 * use Clojure data to talk to a Clojure service
@@ -50,24 +49,23 @@ kit. Frameworks limit you to a specific way of the thinking. Libraries
 attempt to do something for you. We hope that this project will help
 you to think of things that no one has ever thought of and empower you
 to do things that you may not have thought possible. But most of all,
-we hope that it will show you how much fun web development can be
+we hope that it will show you how much fun web development can be in
 ClojureScript.
 
-The intended use of the project is to:
+The intended use of the project is:
 
-1) Get all the tools running
-2) Read through the wiki, running all the examples
-3) Explore working with the sample application - fire up a
-browser-connected REPL and make some changes
-3) Use this project as a starting point for your own applications
-4) Contribute what you have learned back to this project
+1. Get all the tools running
+2. Read through the wiki, running all the examples
+3. Fire up a browser-connected REPL and explore the sample application
+3. Use this project as a starting point for your own applications
+4. Contribute what you have learned back to this project
 
 # Getting started
 
-You will need to have Java, lein and git installed. Execute the
+You will need to have Java, [lein][] and git installed. Execute the
 following commands to install and run One:
 
-    git clone git@github.com:brentonashworth/one.git
+    git clone https://github.com/brentonashworth/one.git
     cd one
     script/deps
     script/run
@@ -75,22 +73,20 @@ following commands to install and run One:
 Open your browser and navigate to
 [http://localhost:8080](http://localhost:8080)
 
-Once you have this running, see the
-[wiki](https://github.com/brentonashworth/one/wiki) for more
-information.
+Once you have this running, see the [wiki][] for more information.
 
-# ClojureScript is for Client-service applications
+# One last rant
 
 ClojureScript is designed to make client-service
 applications. Traditional web applications run mostly on a server with
 a small amount of UI code running on the client. The problem with this
 kind of application is that there is a big giant network right in the
 middle of your application. We have learned how to deal with this so
-well that we actually think this is a good way to write
-software. In reality it is, for some kinds of applications, but
-not all of them. Many applications would be better as client-service
-applications where the entire application runs in the client and uses
-backend services which can easily be thought of as other applications.
+well that we actually think this is a good way to write software. There 
+are many applications for which this is a good approach. But there are 
+also many applications which would be better as client-service applications 
+where the entire application runs in the client and uses backend services 
+which can easily be thought of as other applications.
 
 The reason we haven't used the right tool for the job in the past is
 because it much harder than it should have been. For Clojure
@@ -110,4 +106,6 @@ Copyright © 2012 Brenton Ashworth and Relevance, Inc
 
 Distributed under the Eclipse Public License, the same as Clojure uses. See the file COPYING.
 
+[ClojureScript]: https://github.com/clojure/clojurescript
+[lein]: https://github.com/technomancy/leiningen
 [wiki]: https://github.com/brentonashworth/one/wiki
