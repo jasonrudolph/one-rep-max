@@ -8,6 +8,7 @@
             [goog.fx.AnimationQueue :as queue]
             [goog.fx.easing :as easing]
             [goog.fx.dom :as anim]
+            [goog.async.Delay :as delay]
             [clojure.browser.event :as event]
             [clojure.browser.dom :as dom]
             [domina :as d]
@@ -638,3 +639,130 @@
                      #(js/alert "Animation finished."))
   (start label-up)
   )
+
+(def ^{:doc "Source of unique animation ids."
+       :private true}
+  animation-id (atom 0))
+
+(def ^{:doc "Data structure which supports running animations
+  sequentially which have been started by the play and play-animation
+  functions."
+       :private true}
+  animation-queue (atom {:runner nil :running nil :next []}))
+
+(defn- add-to-queue
+  "Add an animation to the `animation-queue`. If no runner is
+  currently running animations then assign that job to the calling
+  function by setting `:runner` to the passed `id` and putting the
+  first animation to run under `:running`.
+
+  If a runner is already running then add this animation to the
+  vector under `:next`."
+  [queue id animations]
+  (let [new-next (conj (:next queue) animations)]
+    (if (:runner queue)
+      (assoc queue :next new-next)
+      (assoc queue
+        :runner id
+        :running (first new-next)
+        :next (vec (rest new-next))))))
+
+(comment
+
+  (add-to-queue {:runner nil :running nil :next []} 2 {:e 1 :a 2})
+  (add-to-queue {:runner nil :running nil :next [{:e 1 :a 2}]} 2 {:e 3 :a 4})
+  (add-to-queue {:runner 3 :running nil :next [{:e 1 :a 2}]} 2 {:e 3 :a 4})
+  )
+
+(defn- record-finished-animation
+  "Record that the runner with `id` has finished running the
+  animation. If there are more animations to run, move the next
+  animation under the running key and remove it from `:next`. The same
+  runner will continue running animations.
+
+  If there are no more animations to run, release the runner from duty
+  by setting `:runner` to nil."
+  [queue id]
+  (if (empty? (:next queue))
+    (assoc queue :runner nil :running nil)
+    (assoc queue :running (first (:next queue)) :next (vec (rest (:next queue))))))
+
+(comment
+
+  (record-finished-animation {:runner 2, :running [{:e 1, :a 2}], :next []} 2)
+  (record-finished-animation {:runner 3, :running nil, :next [{:e 1, :a 2} {:e 3, :a 4}]} 3)
+  )
+
+(declare play-animations)
+
+(defn- animation-finished
+  "This function is called when the runner with `id` has finished
+  running an animation. After updating the queue, if this runner is
+  still the designated runner, then start running the next
+  animation. If the animation which has completed has an associated
+  `:after` function, run it."
+  [id {after :after}]
+  (let [new-queue (swap! animation-queue record-finished-animation id)]
+    (when after (after))
+    (when (= (:runner new-queue) id)
+      (play-animations id new-queue))))
+
+(defn- make-animation
+  "Create the animation to run."
+  [{:keys [element animation]}]
+  (if element (bind element animation) animation))
+
+(defn- play-animations
+  "Called by a function which has been assigned the task of running
+  animations until there are no more to run. `id` is the runner
+  id. `queue` is the value of animation-queue after it was last
+  updated. Runs any `:before` function then runs the
+  animation. Arranges for `animation-finished` to be called when the
+  animation is complete.
+
+  Implementation note: The delay is a hack to get around the fact that
+  the `finish` event fires just before the animation has completed. The
+  100 ms delay gives the finished animation just enough time to
+  complete before the next animation is started."
+  [id queue]
+  (let [animation-map (:running queue)
+        animation (make-animation animation-map)]
+    (event/listen-once animation
+                       "finish"
+                       (fn [] (.start (goog.async.Delay. #(animation-finished id animation-map)) 100)))
+    (when-let [before (:before animation-map)]
+      (before))
+    (start animation)))
+
+(defn play
+  "Accepts an element and an animation and ensures that this animation
+  will be run after all other animations that have been started by
+  this function or by `play-animation`. An optional map may also be
+  passed which may contain the keys `:before` and `:after`. Use the `:before`
+  key to provide a function which will be called just before
+  the animation starts. Use the `:after` key to provide a function
+  which will be called after the aniamtion is finished.
+
+  The `serial` function allows you to create animations which run in
+  sequence. The `start` function will run these animations. If `start`
+  is called to run an animation before a previous call to `start` has
+  completed, the animations can conflict. This function should be used
+  instead of `start` when you need to ensure that animations do not
+  overlap."
+  ([element animation]
+     (play element animation {}))
+  ([element animation {:keys [name after before]}]
+     (let [id (swap! animation-id inc)
+           animation {:name name :id id :element element :animation animation :before before :after after}
+           queue (swap! animation-queue add-to-queue id animation)]
+       (when (= (:runner queue) id)
+         (play-animations id queue)))))
+
+(defn play-animation
+  "Accepts an animation and an optional map and ensures that this
+  animation will be run after all other animations that have been
+  started by this function or by `play`. See documentation for `play`."
+  ([animation]
+     (play animation {}))
+  ([animation opts]
+     (play nil animation opts)))
