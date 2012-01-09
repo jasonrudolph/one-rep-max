@@ -45,7 +45,7 @@ This project will help you lean how to:
 
 ClojureScript One is hard to classify. It is not a library or a
 framework. It is more like a classroom, a laboratory or a starter
-kit. Frameworks limit you to a specific way of the thinking. Libraries
+kit. Frameworks limit you to a specific way of thinking. Libraries
 attempt to do something for you. We hope that this project will help
 you to think of things that no one has ever thought of and empower you
 to do things that you may not have thought possible. But most of all,
@@ -89,7 +89,7 @@ where the entire application runs in the client and uses backend services
 which can easily be thought of as other applications.
 
 The reason we haven't used the right tool for the job in the past is
-because it much harder than it should have been. For Clojure
+because it was much harder than it should have been. For Clojure
 developers, ClojureScript has changed this. ClojureScript allows us to
 write very large applications that run on any JavaScript platform. Not
 only can we do it, but the experience is better than any other
