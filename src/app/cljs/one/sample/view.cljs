@@ -1,7 +1,7 @@
 (ns ^{:doc "Render the views for the application."}
   one.sample.view
   (:use [domina :only (xpath set-html! set-styles! styles by-id set-style!
-                       by-class value set-value! set-text! nodes)])
+                       by-class value set-value! set-text! nodes single-node)])
   (:require-macros [one.sample.snippets :as snippets])
   (:require [clojure.browser.event :as event]
             [one.dispatch :as dispatch]
@@ -93,8 +93,8 @@
   (dispatch/fire [:field-changed "name-input"] ""))
 
 (defmethod render :greeting [{:keys [state name exists]}]
-  (set-text! (by-class "name") name)
-  (set-text! (by-class "again") (if exists "again" ""))
+  (set-text! (single-node (by-class "name")) name)
+  (set-text! (single-node (by-class "again")) (if exists "again" ""))
   (fx/show-greeting))
 
 (dispatch/react-to #{:state-change} (fn [_ m] (render m)))
