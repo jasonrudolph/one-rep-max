@@ -2,7 +2,7 @@
   represented as Clojure data."}
   one.browser.animation
   (:use [one.color :only (color bg-color rgb IColorSource)]
-        [one.core :only (start dispose)])
+        [one.core :only (start dispose get-style)])
   (:require [goog.style :as style]
             [goog.string :as gstring]
             [goog.fx.AnimationQueue :as queue]
@@ -34,7 +34,7 @@
   js/Array
   (position [this] (js->clj this))
 
-  js/HTMLElement
+  js/Element
   (position [this]
     (let [p (js->clj (style/getPosition this) :keywordize-keys true)]
       [(:x p) (:y p)])))
@@ -50,7 +50,7 @@
   cljs.core.Vector
   (scroll [this] this)
 
-  js/HTMLElement
+  js/Element
   (scroll [this]
     [(.scrollLeft this) (.scrollTop this)]))
 
@@ -71,7 +71,7 @@
   (width [this] (first this))
   (height [this] (second this))
 
-  js/HTMLElement
+  js/Element
   (size [this]
     (let [s (js->clj (style/getSize this)
                      :keywordize-keys true)]
@@ -93,9 +93,9 @@
   js/Number
   (opacity [this] this)
 
-  js/HTMLElement
+  js/Element
   (opacity [this]
-    (opacity (style/getComputedStyle this "opacity"))))
+    (opacity (style/getOpacity this))))
 
 (extend-type goog.fx.AnimationQueue
   

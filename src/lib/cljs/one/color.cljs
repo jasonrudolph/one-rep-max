@@ -2,7 +2,8 @@
   Closure's color support.  The `goog.color` namespace provides support for
   additional color formats."}
   one.color
-  (:require [goog.string :as gstring]
+  (:require [one.core :as core]
+            [goog.string :as gstring]
             [goog.style :as style]
             [goog.color :as gcolor]
             [goog.color.alpha :as alpha]))
@@ -80,9 +81,9 @@
   (color [this] (color (:hex this)))
   (bg-color [this] (color this))
   
-  js/HTMLElement
+  js/Element
   (color [this]
-    (color (js->clj (gcolor/parse (style/getComputedStyle this "color"))
+    (color (js->clj (gcolor/parse (core/get-style this "color"))
                     :keywordize-keys true)))
   (bg-color [this]
     (color (js->clj (let [c (style/getBackgroundColor this)]
