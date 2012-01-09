@@ -14,7 +14,7 @@ git clone git://github.com/levand/domina.git
 git clone git://github.com/clojure/clojurescript.git
 
 cd domina
-git checkout -b clojurescript-one-lib aaa9af302436ceb12ea3ef10b044dca1b47a19b7
+git checkout -b clojurescript-one-lib c0eb06f677e0f9f72537682e3c702dd27b03e2e4
 
 cd ../clojurescript
 git checkout -b clojurescript-one-lib 329708bdd0f039241b187bc639836d9997d8fbd4
