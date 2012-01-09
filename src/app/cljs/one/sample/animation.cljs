@@ -5,7 +5,8 @@
         [one.browser.animation :only (bind parallel serial play play-animation)]
         [domina :only (by-id set-html! set-styles! destroy-children! append!)]
         [domina.xpath :only (xpath)])
-  (:require [goog.dom.forms :as gforms]))
+  (:require [goog.dom.forms :as gforms]
+            [goog.style :as style]))
 
 (def form "//div[@id='form']")
 (def cloud "//div[@id='greeting']")
@@ -74,11 +75,14 @@
   submit button is clicked and the form has valid input."
   []
   (let [e {:effect :fade :start 1 :end 0 :time 500}]
-   (start (parallel (bind form e)
+   (play-animation (parallel (bind form e)
                     (bind label e)
                     (bind cloud
                           {:effect :color :time 500} ; Dummy animation for delay purposes
-                          {:effect :fade-in-and-show :time 600})))))
+                          {:effect :fade-in-and-show :time 600}))
+                   {:after #(do
+                              (set-styles! (xpath form) {:display "none"})
+                              (set-styles! (xpath cloud) {:margin-top "67px"}))})))
 
 (defn show-form
   "Move the greeting cloud out of view and show the form. Run when the
@@ -89,7 +93,11 @@
                                           {:effect :color :time 300} ; Dummy animation for delay purposes
                                           form-in)
                                     (bind label fade-in move-down)))
-                  {:after #(.focus (by-id "name-input") ())}))
+                  {:before #(do
+                              (set-styles! (xpath form) {:display "block"})
+                              (set-styles! (xpath cloud) {:margin-top "-500px"}))
+                   :after #(do
+                             (.focus (by-id "name-input") ()))}))
 
 (comment ;; Switch between greeting and form views
 
