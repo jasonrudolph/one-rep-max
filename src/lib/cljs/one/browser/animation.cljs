@@ -204,9 +204,6 @@
                                  time
                                  accel)))
 
-(defmethod standardize :delay [element m]
-  (standardize element {:effect :color :time (:time m)}))
-
 (comment ;; Color effect examples
 
   (def label (get-element "//label[@id='name-input-label']/span"))

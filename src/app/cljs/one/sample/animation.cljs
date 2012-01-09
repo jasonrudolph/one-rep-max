@@ -79,7 +79,7 @@
   []
   (start (parallel (bind form {:effect :fade :start 1 :end 0 :time 500})
                    (bind cloud
-                         {:effect :delay :time 500}
+                         {:effect :color :time 500} ; Dummy animation for delay purposes
                          {:effect :fade-in-and-show :time 600}))))
 
 (defn show-form
@@ -88,7 +88,7 @@
   []
   (start (serial (parallel (bind cloud {:effect :fade-out-and-hide :time 500})
                            (bind form
-                                 {:effect :delay :time 300}
+                                 {:effect :color :time 300} ; Dummy animation for delay purposes
                                  form-in))
                  (bind label fade-in move-down))))
 
