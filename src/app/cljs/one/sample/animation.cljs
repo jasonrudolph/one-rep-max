@@ -77,10 +77,12 @@
   "Move the form out of view and the greeting into view. Run when the
   submit button is clicked and the form has valid input."
   []
-  (start (parallel (bind form {:effect :fade :start 1 :end 0 :time 500})
-                   (bind cloud
-                         {:effect :color :time 500} ; Dummy animation for delay purposes
-                         {:effect :fade-in-and-show :time 600}))))
+  (let [e {:effect :fade :start 1 :end 0 :time 500}]
+   (start (parallel (bind form e)
+                    (bind label e)
+                    (bind cloud
+                          {:effect :color :time 500} ; Dummy animation for delay purposes
+                          {:effect :fade-in-and-show :time 600})))))
 
 (defn show-form
   "Move the greeting cloud out of view and show the form. Run when the
