@@ -47,7 +47,7 @@
   "Make the passed input field label invisible. Run when the input
   field loses focus and contains a valid input value."
   [label]
-  (play label {:effect :fade :end 0 :time 200}))
+  (play label {:effect :fade :start 1 :end 0 :time 200}))
 
 (def move-down [{:effect :fade :end 1 :time 200}
                 {:effect :color :end "#BBC4D7" :time 200}
