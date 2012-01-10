@@ -75,12 +75,14 @@
   submit button is clicked and the form has valid input."
   []
   (let [e {:effect :fade :start 1 :end 0 :time 500}]
-   (play-animation (parallel (bind form e)
-                    (bind label e)      ; Since the label won't fade in IE
-                    (bind cloud
-                          {:effect :color :time 500} ; Dummy animation for delay purposes
-                          {:effect :fade-in-and-show :time 600}))
-                   {:before #(gforms/setDisabled (by-id "name-input") true)})))
+    (play-animation (parallel (bind form e)
+                              (bind label e) ; Since the label won't fade in IE
+                              (bind cloud
+                                    {:effect :color :time 500} ; Dummy animation for delay purposes
+                                    {:effect :fade-in-and-show :time 600}))
+                    {:before #(gforms/setDisabled (by-id "name-input") true)
+                     ;; We need this next one because IE8 won't hide the button
+                     :after #(set-styles! (by-id "greet-button") {:display "none"})})))
 
 (defn show-form
   "Move the greeting cloud out of view and show the form. Run when the
@@ -91,7 +93,10 @@
                                           {:effect :color :time 300} ; Dummy animation for delay purposes
                                           form-in)
                                     (bind label fade-in move-down)))
-                  {:after #(do
+                  {;; Because IE8 won't hide the button, we need to
+                   ;; toggle it between displaying inline and none
+                   :before #(set-styles! (by-id "greet-button") {:display "inline"})
+                   :after #(do
                              (gforms/setDisabled (by-id "name-input") false)
                              (.focus (by-id "name-input") ()))}))
 
