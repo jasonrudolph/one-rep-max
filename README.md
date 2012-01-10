@@ -73,7 +73,24 @@ following commands to install and run One:
 Open your browser and navigate to
 [http://localhost:8080](http://localhost:8080)
 
-Once you have this running, see the [wiki][] for more information.
+Once you have this running, see the [wiki][] and the [website][] for
+more information.
+
+# Getting Help
+
+The best place to get help is on the
+[Clojure Mailing List](https://groups.google.com/group/clojure). You
+can also log issues in the
+[project issue tracker](https://github.com/brentonashworth/one/issues).
+
+# Known Issues
+
+* ClojureScript One does not currently support developing under
+  Windows. The included sample application, however, can be viewed in
+  IE9 and (with some degradation in behavior) in IE8. Versions of
+  Internet Explorer previous to 8 are not supported at this time.
+* Everything on the
+  [project issues list](https://github.com/brentonashworth/one/issues).
 
 # One last rant
 
@@ -82,10 +99,10 @@ applications. Traditional web applications run mostly on a server with
 a small amount of UI code running on the client. The problem with this
 kind of application is that there is a big giant network right in the
 middle of your application. We have learned how to deal with this so
-well that we actually think this is a good way to write software. There 
-are many applications for which this is a good approach. But there are 
-also many applications which would be better as client-service applications 
-where the entire application runs in the client and uses backend services 
+well that we actually think this is a good way to write software. There
+are many applications for which this is a good approach. But there are
+also many applications which would be better as client-service applications
+where the entire application runs in the client and uses backend services
 which can easily be thought of as other applications.
 
 The reason we haven't used the right tool for the job in the past is
@@ -109,3 +126,4 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [ClojureScript]: https://github.com/clojure/clojurescript
 [lein]: https://github.com/technomancy/leiningen
 [wiki]: https://github.com/brentonashworth/one/wiki
+[website]: http://clojurescriptone.com
