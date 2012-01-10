@@ -25,7 +25,7 @@
     (destroy-children! content)
     (set-html! content form-html)
     (append! content greeting-html)
-    (set-styles! (xpath cloud) {:opacity "0" :display "none"})
+    (set-styles! (xpath cloud) {:opacity "0" :display "none" :margin-top "-500px"})
     (set-styles! (by-id "greet-button") {:opacity "0.2" :disabled true})
     (play form form-in {:after #(.focus (by-id "name-input") ())})))
 
