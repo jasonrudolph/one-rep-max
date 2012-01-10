@@ -393,6 +393,7 @@ input[type="text"] {
 {
   color: #bbc4d7;
   cursor: text;
+  display: block;
   padding-top: 12px;
   position: absolute;
   width: 254px;
