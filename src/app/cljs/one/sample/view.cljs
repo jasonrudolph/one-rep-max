@@ -144,8 +144,6 @@
 (dispatch/react-to #{:form-change}
                    (fn [_ m]
                      (doseq [s (form-fields-status m)]
-                       (.log js/console (pr-str (:transition s)))
                        (render-form-field s))
-                     #_(.log js/console (str "render button: " (pr-str [(-> m :old :status) (-> m :new :status)])))
                      (render-button [(-> m :old :status)
                                      (-> m :new :status)] )))

@@ -82,7 +82,6 @@
   {:status :empty})
 
 (defmethod new-status :default [a b c v]
-  (.log js/console (str "******** no multi for: " (pr-str [a b c])))
   {:status :nothing :value v})
 
 (defmulti ^:private validate
@@ -101,7 +100,6 @@
   "Calculates the status of the whole form based on the status of each
   field. Retuns `:finished` or `:editing`."
   [m]
-  #_(.log js/console (str "field status: " (pr-str (map :status (vals (:fields m))))))
   (if (every? #(or (= % :valid) (= % :editing-valid)) (map :status (vals (:fields m))))
     :finished
     :editing))
