@@ -76,13 +76,11 @@
   []
   (let [e {:effect :fade :start 1 :end 0 :time 500}]
    (play-animation (parallel (bind form e)
-                    (bind label e)
+                    (bind label e)      ; Since the label won't fade in IE
                     (bind cloud
                           {:effect :color :time 500} ; Dummy animation for delay purposes
                           {:effect :fade-in-and-show :time 600}))
-                   {:after #(do
-                              (set-styles! (xpath form) {:display "none"})
-                              (set-styles! (xpath cloud) {:margin-top "67px"}))})))
+                   {:before #(gforms/setDisabled (by-id "name-input") true)})))
 
 (defn show-form
   "Move the greeting cloud out of view and show the form. Run when the
@@ -93,10 +91,8 @@
                                           {:effect :color :time 300} ; Dummy animation for delay purposes
                                           form-in)
                                     (bind label fade-in move-down)))
-                  {:before #(do
-                              (set-styles! (xpath form) {:display "block"})
-                              (set-styles! (xpath cloud) {:margin-top "-500px"}))
-                   :after #(do
+                  {:after #(do
+                             (gforms/setDisabled (by-id "name-input") false)
                              (.focus (by-id "name-input") ()))}))
 
 (comment ;; Switch between greeting and form views

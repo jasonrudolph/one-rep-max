@@ -760,6 +760,6 @@
   animation will be run after all other animations that have been
   started by this function or by `play`. See documentation for `play`."
   ([animation]
-     (play animation {}))
+     (play-animation animation {}))
   ([animation opts]
      (play nil animation opts)))
