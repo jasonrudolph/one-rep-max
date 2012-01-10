@@ -81,8 +81,8 @@
 (defmethod new-status [:valid :finished :empty] [p e f]
   {:status :empty})
 
-(defmethod new-status :default [a b c v]
-  {:status :nothing :value v})
+(defmethod new-status :default [p e f]
+  {:status p})
 
 (defmulti ^:private validate
   "Accepts a form id and a value and returns a map
