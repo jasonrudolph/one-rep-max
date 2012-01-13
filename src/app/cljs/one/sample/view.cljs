@@ -101,7 +101,7 @@
                   #(dispatch/fire [:field-changed field-id] (value field)))
     (event/listen keyboard
                   "key"
-                  (fn [e] (when (= (.keyCode e) key-codes/ENTER)
+                  (fn [e] (when (= (.-keyCode e) key-codes/ENTER)
                            (do (.blur (by-id "name-input") ())
                                (dispatch/fire :form-submit)))))))
 

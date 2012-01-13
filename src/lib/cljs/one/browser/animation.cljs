@@ -53,7 +53,7 @@
 
   js/Element
   (scroll [this]
-    [(.scrollLeft this) (.scrollTop this)]))
+    [(.-scrollLeft this) (.-scrollTop this)]))
 
 (defprotocol ISize
   (size [this] "Return the size of an element as `[W H]`.")

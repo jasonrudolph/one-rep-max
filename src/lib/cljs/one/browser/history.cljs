@@ -34,9 +34,9 @@
             (goog.History.))]
     (do (event/listen h "navigate"
                       (fn [e]
-                        (callback {:token (keyword (.token e))
-                                   :type (.type e)
-                                   :navigation? (.isNavigation e)})))
+                        (callback {:token (keyword (.-token e))
+                                   :type (.-type e)
+                                   :navigation? (.-isNavigation e)})))
         (.setEnabled h true)
         h)))
 

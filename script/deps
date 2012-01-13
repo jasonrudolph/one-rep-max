@@ -9,15 +9,16 @@ lein deps
 
 cd lib
 
-git clone https://github.com/levand/domina.git
+# change this to levand's repo once he merges in the prop-lookup changes
+git clone https://github.com/fogus/domina.git
 
 git clone https://github.com/clojure/clojurescript.git
 
 cd domina
-git checkout -b clojurescript-one-lib c0eb06f677e0f9f72537682e3c702dd27b03e2e4
+git checkout -b clojurescript-one-lib cc2ee723b28fd3de6023156cab23b86daaa72210
 
 cd ../clojurescript
-git checkout -b clojurescript-one-lib 329708bdd0f039241b187bc639836d9997d8fbd4
+git checkout -b clojurescript-one-lib3 493213cca55f4d4d112b57a040a7f5363b60a28b
 script/bootstrap
 
 echo "Copy ClojureScript deps to lib directory..."

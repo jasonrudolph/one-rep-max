@@ -16,6 +16,6 @@
   (some #(let [v (%)] (when (not= "" v) v))
         [#(style/getComputedStyle element style)
          #(style/getStyle element style)
-         #(aget (.currentStyle element) style)
+         #(aget (.-currentStyle element) style)
          #(throw (js/Error. (str "Could not retrieve value for style " style)))]))
 
