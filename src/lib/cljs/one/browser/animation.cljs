@@ -707,7 +707,9 @@
 (defn- make-animation
   "Create the animation to run."
   [{:keys [element animation]}]
-  (if element (bind element animation) animation))
+  (cond element (bind element animation)
+        (fn? animation) (animation)
+        :else animation))
 
 (defn- play-animations
   "Called by a function which has been assigned the task of running
