@@ -7,5 +7,14 @@
   :dev-dependencies [[jline "0.9.94"]
                      [marginalia "0.7.0-SNAPSHOT"]
                      [lein-marginalia "0.7.0-SNAPSHOT"]]
-  :main one.sample.prod-server
-  :source-path "src/app/clj")
+  ;:main one.sample.prod-server
+  ;:test-path "test"
+  :source-path "src/app/clj"
+  :extra-classpath-dirs ["lib/clojurescript/src/clj"
+                         "lib/clojurescript/src/cljs"
+                         "lib/domina/src/cljs"
+                         "src/app/cljs"
+                         "src/app/cljs-macros"
+                         "src/lib/clj"
+                         "src/lib/cljs"
+                         "templates"])
