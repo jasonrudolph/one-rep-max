@@ -96,7 +96,10 @@
 
   js/Element
   (opacity [this]
-    (opacity (style/getOpacity this))))
+    (let [op (style/getComputedStyle this "opacity")]
+      (if (= op "")
+        (opacity (style/getOpacity this))
+        op))))
 
 (extend-type goog.fx.AnimationQueue
   
