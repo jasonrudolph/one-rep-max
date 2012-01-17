@@ -3,7 +3,7 @@
   one.sample.animation
   (:use [one.core :only (start)]
         [one.browser.animation :only (bind parallel serial play play-animation)]
-        [domina :only (by-id set-html! set-styles! destroy-children! append!)]
+        [domina :only (by-id set-html! set-styles! destroy-children! append! single-node)]
         [domina.xpath :only (xpath)])
   (:require [goog.dom.forms :as gforms]
             [goog.style :as style]))
@@ -25,6 +25,8 @@
     (destroy-children! content)
     (set-html! content form-html)
     (append! content greeting-html)
+    ;; Required for IE8 to work correctly
+    (style/setOpacity (single-node (xpath label)) 1)
     (set-styles! (xpath cloud) {:opacity "0" :display "none" :margin-top "-500px"})
     (set-styles! (by-id "greet-button") {:opacity "0.2" :disabled true})
     (play form form-in {:after #(.focus (by-id "name-input") ())})))
@@ -47,7 +49,7 @@
   "Make the passed input field label invisible. Run when the input
   field loses focus and contains a valid input value."
   [label]
-  (play label {:effect :fade :start 1 :end 0 :time 200}))
+  (play label {:effect :fade :end 0 :time 200}))
 
 (def move-down [{:effect :fade :end 1 :time 200}
                 {:effect :color :end "#BBC4D7" :time 200}
@@ -55,7 +57,7 @@
 
 (def fade-in {:effect :fade :end 1 :time 400})
 
-(def fade-out {:effect :fade :start 1 :end 0 :time 400})
+(def fade-out {:effect :fade :end 0 :time 400})
 
 (defn label-move-down
   "Make the passed input field label visible and move it down into the
@@ -74,12 +76,12 @@
   "Move the form out of view and the greeting into view. Run when the
   submit button is clicked and the form has valid input."
   []
-  (let [e {:effect :fade :start 1 :end 0 :time 500}]
-    (play-animation (parallel (bind form e)
-                              (bind label e) ; Since the label won't fade in IE
-                              (bind cloud
-                                    {:effect :color :time 500} ; Dummy animation for delay purposes
-                                    {:effect :fade-in-and-show :time 600}))
+  (let [e {:effect :fade :end 0 :time 500}]
+    (play-animation #(parallel (bind form e)
+                               (bind label e) ; Since the label won't fade in IE
+                               (bind cloud
+                                     {:effect :color :time 500} ; Dummy animation for delay purposes
+                                     {:effect :fade-in-and-show :time 600}))
                     {:before #(gforms/setDisabled (by-id "name-input") true)
                      ;; We need this next one because IE8 won't hide the button
                      :after #(set-styles! (by-id "greet-button") {:display "none"})})))
