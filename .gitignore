@@ -6,3 +6,4 @@ docs
 /wiki
 /.lein-deps-sum
 *~
+/.lein-failures
