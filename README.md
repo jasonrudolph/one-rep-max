@@ -80,8 +80,15 @@ more information.
 
 The best place to get help is on the
 [Clojure Mailing List](https://groups.google.com/group/clojure). You
-can also log issues in the
-[project issue tracker](https://github.com/brentonashworth/one/issues).
+can also log issues in the [project issue tracker][issues].
+
+# Contributing
+
+ClojureScript One welcomes help from the community in the form of pull
+requests, [bug reports][issues], [wiki][wiki] updates, and hugs. If
+you wish to contribute code, please read [How We Work][how-we-work].
+In particular, note that pull requests should target the
+`pull-requests` branch, not `master`.
 
 # Known Issues
 
@@ -127,3 +134,5 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [lein]: https://github.com/technomancy/leiningen
 [wiki]: https://github.com/brentonashworth/one/wiki
 [website]: http://clojurescriptone.com
+[how-we-work]: https://github.com/brentonashworth/one/wiki/HowWeWork
+[issues]: https://github.com/brentonashworth/one/issues
