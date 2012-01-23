@@ -1,9 +1,14 @@
 (ns script.build
+  "Contains a -main function which builds the production artifacts for
+  the project."
   (:require [clojure.java.io :as io]
             [one.tools :as tools]
             [one.sample.config :as config]))
 
-(defn -main []
+(defn -main
+  "Compile ClojureScript sources and output them as well as all static
+  resources to the out/public directory."
+  []
   (println "Creating out/public...")
   (.mkdir (io/file "out"))
   (tools/copy-recursive-into "public" "out")

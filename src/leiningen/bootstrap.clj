@@ -1,4 +1,5 @@
 (ns leiningen.bootstrap
+  "Bootstrap the project by running lein deps and lein git-deps."
   (:require leiningen.deps
             leiningen.git-deps))
 

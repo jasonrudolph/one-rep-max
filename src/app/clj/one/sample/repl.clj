@@ -1,8 +1,7 @@
 (ns one.sample.repl
   "The starting namespace for the project. This is the namespace that
-  users will land in when they start a Clojure REPL. It exists both to
-  process commands passed on the command line (such as 'build') and to
-  provide convenience functions like 'go'."
+  users will land in when they start a Clojure REPL. It exists to
+  provide convenience functions like 'go' and 'dev-server'."
   (:use [clojure.repl])
   (:require [one.tools :as tools]
             [one.sample.dev-server :as dev]

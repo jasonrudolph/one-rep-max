@@ -12,11 +12,6 @@
   [dir]
   (.isDirectory (io/file dir)))
 
-(defn- penultimate
-  "Return the second-to-last element of a collection."
-  [coll]
-  (last (butlast coll)))
-
 (defn- default-clone-dir
   "Given a git URL, return the directory it would clone into by default."
   [uri]
@@ -28,7 +23,7 @@
 
 (defn- exec
   "Run a command, throwing an exception if it fails, returning the
-result as with clojure.java.shell/sh."
+  result as with clojure.java.shell/sh."
   [& args]
   (let [{:keys [exit out err] :as result} (apply sh/sh args)]
     (if (zero? exit)
@@ -43,12 +38,12 @@ result as with clojure.java.shell/sh."
 
 (defn- git-clone
   "Clone the git repository at url into dir-name while working in
-directory working-dir."
+  directory working-dir."
   [url dir-name working-dir]
   (apply exec (remove nil? ["git" "clone" url (str dir-name) :dir working-dir])))
 
 (defn- git-checkout
-  "Check out the specified commit in dir"
+  "Check out the specified commit in dir."
   [commit dir]
   (println "Running git checkout " commit " in " (str dir))
   (exec "git" "checkout" commit :dir dir))
@@ -65,7 +60,7 @@ directory working-dir."
 
 (defn- git-pull
   "Run 'git-pull' in directory dir, but only if we're on a branch. If
-HEAD is detached, we only do a fetch, not a full pull."
+  HEAD is detached, we only do a fetch, not a full pull."
   [dir]
   (println "Running git pull on " (str dir))
   (if (detached-head? dir)
@@ -77,32 +72,31 @@ HEAD is detached, we only do a fetch, not a full pull."
 (defn git-deps
   "A leiningen task that will pull dependencies in via git.
 
-Dependencies should be listed in project.clj under the
-:git-dependencies key in one of these three forms:
+  Dependencies should be listed in project.clj under the
+  :git-dependencies key in one of these three forms:
+  :git-dependencies [;; First form: just a URL.
+                     [\"https://github.com/foo/bar.git\"]
 
-:git-dependencies [;; First form: just a URL.
-[\"https://github.com/foo/bar.git\"]
+                     ;; Second form: A URL and a ref, which can be anything
+                     ;; you can specify for 'git checkout', like a commit ide
+                     ;; or a branch name.
+                     [\"https://github.com/foo/baz.git\"
+                      \"329708b\"]
 
-;; Second form: A URL and a ref, which can be anything
-;; you can specify for 'git checkout', like a commit ide
-;; or a branch name.
-[\"https://github.com/foo/baz.git\"
- \"329708b\"]
-
-;; Third form: A URL, a commit, and a map
-[\"https://github.com/foo/quux.git\"
- \"some-branch\"
- {:dir \"alternate-directory\"}]]"
-[project]
-(when-not (directory-exists? git-deps-dir)
-  (.mkdir (io/file git-deps-dir)))
-(doseq [dep (:git-dependencies project)]
-  (println "Setting up dependency for " dep)
-  (let [[dep-url commit {clone-dir-name :dir}] dep
-        commit (or commit "master")
-        clone-dir-name (or clone-dir-name (default-clone-dir dep-url))
-        clone-dir (io/file git-deps-dir clone-dir-name)]
-    (if (directory-exists? clone-dir)
-      (git-pull clone-dir)
-      (git-clone dep-url clone-dir-name git-deps-dir))
-    (git-checkout commit clone-dir))))
+                     ;; Third form: A URL, a commit, and a map
+                     [\"https://github.com/foo/quux.git\"
+                      \"some-branch\"
+                      {:dir \"alternate-directory\"}]]"
+  [project]
+  (when-not (directory-exists? git-deps-dir)
+    (.mkdir (io/file git-deps-dir)))
+  (doseq [dep (:git-dependencies project)]
+    (println "Setting up dependency for " dep)
+    (let [[dep-url commit {clone-dir-name :dir}] dep
+          commit (or commit "master")
+          clone-dir-name (or clone-dir-name (default-clone-dir dep-url))
+          clone-dir (io/file git-deps-dir clone-dir-name)]
+      (if (directory-exists? clone-dir)
+        (git-pull clone-dir)
+        (git-clone dep-url clone-dir-name git-deps-dir))
+      (git-checkout commit clone-dir))))
