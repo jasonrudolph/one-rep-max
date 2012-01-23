@@ -10,13 +10,15 @@
   :dev-dependencies [[jline "0.9.94"]
                      [marginalia "0.7.0-SNAPSHOT"]
                      [lein-marginalia "0.7.0-SNAPSHOT"]]
-  :repositories {"oss-sonatype-staging"
-                 "https://oss.sonatype.org/content/groups/staging/"}
-  :main ^:skip-aot one.sample.launchpad
+  :git-dependencies [["https://github.com/clojure/clojurescript.git"
+                      "329708bdd0f039241b187bc639836d9997d8fbd4"]
+                     ["https://github.com/levand/domina.git"
+                      "c0eb06f677e0f9f72537682e3c702dd27b03e2e4"]]
+  :repl-init one.sample.repl
   :source-path "src/app/clj"
-  :extra-classpath-dirs ["lib/clojurescript/src/clj"
-                         "lib/clojurescript/src/cljs"
-                         "lib/domina/src/cljs"
+  :extra-classpath-dirs [".lein-git-deps/clojurescript/src/clj"
+                         ".lein-git-deps/clojurescript/src/cljs"
+                         ".lein-git-deps/domina/src/cljs"
                          "src/app/cljs"
                          "src/app/cljs-macros"
                          "src/lib/clj"

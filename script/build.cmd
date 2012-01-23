@@ -1,3 +1,1 @@
-#!/bin/bash
-
 lein run -m script.build

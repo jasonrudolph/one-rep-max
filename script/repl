@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# This is here for convention. Many Emacs users have their
+# inferior-lisp-program set to script/repl.
+
+lein repl
