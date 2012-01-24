@@ -1,7 +1,8 @@
 (ns ^{:doc "Render the views for the application."}
   one.sample.view
-  (:use [domina :only (xpath set-html! set-styles! styles by-id set-style!
+  (:use [domina :only (set-html! set-styles! styles by-id set-style!
                        by-class value set-value! set-text! nodes single-node)]
+        [domina.xpath :only (xpath)]
         [one.browser.animation :only (play)])
   (:require-macros [one.sample.snippets :as snippets])
   (:require [goog.events.KeyCodes :as key-codes]

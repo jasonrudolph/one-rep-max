@@ -6,3 +6,5 @@ docs
 /wiki
 /.lein-deps-sum
 *~
+/.lein-failures
+/.lein-git-deps/
