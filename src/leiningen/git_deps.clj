@@ -5,7 +5,14 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
-(def ^:private git-deps-dir ".lein-git-deps")
+;; Why, you might ask, are we using str here instead of simply def'ing
+;; the var to a string directly? The answer is that we are working
+;; around a bug in marginalia where it can't tell the difference
+;; between the string that's the value for a def and a docstring. It
+;; will hopefully be fixed RSN, because this makes us feel dirty.
+(def ^{:private true
+       :doc "The directory into which dependencies will be cloned."}
+  git-deps-dir (str ".lein-git-deps"))
 
 (defn- directory-exists?
   "Return true if the specified directory exists."
@@ -74,19 +81,21 @@
 
   Dependencies should be listed in project.clj under the
   :git-dependencies key in one of these three forms:
-  :git-dependencies [;; First form: just a URL.
-                     [\"https://github.com/foo/bar.git\"]
 
-                     ;; Second form: A URL and a ref, which can be anything
-                     ;; you can specify for 'git checkout', like a commit ide
-                     ;; or a branch name.
-                     [\"https://github.com/foo/baz.git\"
-                      \"329708b\"]
+    :git-dependencies [;; First form: just a URL.
+                       [\"https://github.com/foo/bar.git\"]
 
-                     ;; Third form: A URL, a commit, and a map
-                     [\"https://github.com/foo/quux.git\"
-                      \"some-branch\"
-                      {:dir \"alternate-directory\"}]]"
+                       ;; Second form: A URL and a ref, which can be anything
+                       ;; you can specify for 'git checkout', like a commit id
+                       ;; or a branch name.
+                       [\"https://github.com/foo/baz.git\"
+                        \"329708b\"]
+
+                       ;; Third form: A URL, a commit, and a map
+                       [\"https://github.com/foo/quux.git\"
+                        \"some-branch\"
+                        {:dir \"alternate-directory\"}]]
+"
   [project]
   (when-not (directory-exists? git-deps-dir)
     (.mkdir (io/file git-deps-dir)))
