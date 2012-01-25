@@ -1,0 +1,9 @@
+#!/bin/bash
+
+lein marg
+
+echo "Merging marg docs into documentation.html..."
+
+lein run -m script.docs
+
+echo "Website documentation complete, please see docs/documentation.html"
