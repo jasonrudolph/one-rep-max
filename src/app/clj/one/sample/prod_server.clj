@@ -1,6 +1,6 @@
 (ns one.sample.prod-server
   "Production server serves the backend API. This is only required if
-  there is a back end API."
+  there is a backend API."
   (:use [ring.adapter.jetty :only (run-jetty)]
         [ring.middleware.file :only (wrap-file)]
         [ring.middleware.file-info :only (wrap-file-info)]
