@@ -47,9 +47,8 @@
 
 (defn- rewrite-design-uris [handler]
   (fn [{:keys [uri] :as request}]
-    (if (or (.startsWith uri "/design/css")
-            (.startsWith uri "/design/javascripts")
-            (.startsWith uri "/design/images"))
+    (if (some true? (map #(.startsWith uri (str "/design/" %))
+                         ["css" "javascripts" "images" "js" "favicon.ico"]))
       (handler (assoc request :uri (.substring uri 7)))
       (handler request))))
 
