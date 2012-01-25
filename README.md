@@ -67,11 +67,11 @@ following commands to install and run One:
 
     git clone https://github.com/brentonashworth/one.git
     cd one
-    script/deps
-    script/run
+    lein bootstrap
+    lein repl
 
-Open your browser and navigate to
-[http://localhost:8080](http://localhost:8080)
+At the REPL prompt which appears, type `(go)`. Your browser will
+launch and navigate to the running application.
 
 Once you have this running, see the [wiki][] and the [website][] for
 more information.
@@ -92,10 +92,9 @@ In particular, note that pull requests should target the
 
 # Known Issues
 
-* ClojureScript One does not currently support developing under
-  Windows. The included sample application, however, can be viewed in
-  IE9 and (with some degradation in behavior) in IE8. Versions of
-  Internet Explorer previous to 8 are not supported at this time.
+* ClojureScript One supports developing under Windows if you are using
+  Chrome, Firefox, or IE9. Versions of Internet Explorer previous to 9
+  are not supported at this time.
 * Everything on the
   [project issues list](https://github.com/brentonashworth/one/issues).
 
