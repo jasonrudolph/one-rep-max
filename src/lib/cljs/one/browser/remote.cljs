@@ -76,7 +76,7 @@
 
 (defn- response-received
   [f e]
-  (f {:id     (.id e)
+  (f {:id     (.-id e)
       :body   (. e/xhrIo (getResponseText))
       :status (. e/xhrIo (getStatus))
       :event  e}))

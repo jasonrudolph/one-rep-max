@@ -11,9 +11,9 @@
                      [marginalia "0.7.0-SNAPSHOT"]
                      [lein-marginalia "0.7.0-SNAPSHOT"]]
   :git-dependencies [["https://github.com/clojure/clojurescript.git"
-                      "329708bdd0f039241b187bc639836d9997d8fbd4"]
+                      "886d8dc81812962d30a741d6d05ce9d90975160f"]
                      ["https://github.com/levand/domina.git"
-                      "c0eb06f677e0f9f72537682e3c702dd27b03e2e4"]]
+                      "8933b2d12c44832c9bfaecf457a1bc5db251a774"]]
   :repl-init one.sample.repl
   :source-path "src/app/clj"
   :extra-classpath-dirs [".lein-git-deps/clojurescript/src/clj"

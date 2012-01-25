@@ -95,21 +95,3 @@
   "Start the development server on port 8080."
   []
   (run-jetty (var app) {:join? false :port 8080}))
-
-(defn cljs-repl
-  "Start a ClojureScript REPL which can connect to the development
-  version of the application. The REPL will not work until the
-  development page connects to it, so you will need to either open or
-  refresh the development page after calling this function."
-  []
-  (repl (repl-env)))
-
-(comment
-  ;; One.Sample.the server.
-  (use 'one.sample.dev-server :reload-all)
-  (run-server)
-  ;; Start a REPL.
-  (cljs-repl)
-  ;; Don't forget to open the development page, or refresh it if it's
-  ;; already open, or the REPL won't work
-  )
