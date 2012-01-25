@@ -31,7 +31,9 @@
   remote-routes
   (GET "/development" request (make-host-page request))
   (GET "/production" request (make-host-page request) )
-  (GET "/design*" {{file :*} :route-params} (load-html (.substring file 1)))
+  (GET "/design*" {{file :*} :route-params}
+       (when (.endsWith file ".html")
+         (load-html (.substring file 1))))
   (ANY "*" request (file-response "404.html" {:root "public"})))
 
 (defn- js-encoding [handler]
