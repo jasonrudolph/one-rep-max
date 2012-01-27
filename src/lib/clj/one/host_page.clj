@@ -46,4 +46,10 @@
        (tfn (apply application-view
                    (script (html/set-attr :src (str "javascripts/"
                                                     (:prod-js-file-name config))))
-                   (map #(script (html/content %)) (:prod-js config))))))))
+                   (map #(script (html/content %)) (:prod-js config)))))
+
+     :fresh
+     (apply application-view (script (html/set-attr :src "javascripts/out/goog/base.js"))
+            (script (html/set-attr :src "javascripts/fresh.js"))
+            (script (html/content "goog.require('one.browser.repl_client');"))
+            (script (html/content "one.browser.repl_client.repl();"))))))

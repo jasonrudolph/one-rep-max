@@ -19,7 +19,10 @@
   (:import java.io.File))
 
 (defn- environment [uri]
-  (if (= uri "/development") :development :production))
+  (case uri
+    "/development" :development
+    "/production" :production
+    "/fresh" :fresh))
 
 (defn- make-host-page [request]
   {:status 200
@@ -30,6 +33,7 @@
   (:api-routes config)
   (GET "/development" request (make-host-page request))
   (GET "/production" request (make-host-page request))
+  (GET "/fresh" request (make-host-page request))
   (GET "/design*" {{file :*} :route-params}
        (when (.endsWith file ".html")
          (load-html (.substring file 1))))

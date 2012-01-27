@@ -48,10 +48,12 @@
           (doseq [file (file-seq (io/file (str (:output-dir build-opts) "/"
                                                (:top-level-package config))))]
             (.setLastModified file 0))
-          (build (:app-root config) (if (= (:uri request) "/production")
-                                      (assoc build-opts :optimizations :advanced
-                                             :output-to (production-js config))
-                                      build-opts)))))
+          (build (:app-root config) (cond (= (:uri request) "/production")
+                                          (assoc build-opts :optimizations :advanced
+                                                 :output-to (production-js config))
+                                          (= (:uri request) "/fresh")
+                                          (assoc build-opts :output-to (str (:js config) "/fresh.js"))
+                                          :default build-opts)))))
     (handler request)))
 
 (defn- any-modified-clj
