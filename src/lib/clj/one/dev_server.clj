@@ -1,4 +1,4 @@
-(ns one.sample.dev-server
+(ns one.dev-server
   "Serve a friendly ClojureScript environment with code reloading and
    the ClojureScript application in both development and advanced
    compiled mode."
@@ -13,8 +13,7 @@
         [cljs.repl.browser :only (repl-env)]
         [one.templates :only (load-html apply-templates render)]
         [one.host-page :only (application-host)]
-        [one.sample.api :only (remote-routes)]
-        [one.sample.config])
+        [one.application])
   (:require [net.cgrand.enlive-html :as html]
             [one.reload :as reload])
   (:import java.io.File))
@@ -28,7 +27,7 @@
    :body (application-host config (environment (:uri request)))})
 
 (defroutes app-routes
-  remote-routes
+  (:api-routes config)
   (GET "/development" request (make-host-page request))
   (GET "/production" request (make-host-page request) )
   (GET "/design*" {{file :*} :route-params}

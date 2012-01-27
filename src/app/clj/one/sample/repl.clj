@@ -4,7 +4,7 @@
   provide convenience functions like 'go' and 'dev-server'."
   (:use [clojure.repl])
   (:require [one.tools :as tools]
-            [one.sample.dev-server :as dev]
+            [one.dev-server :as dev]
             [clojure.java.browse :as browse]))
 
 (defn go

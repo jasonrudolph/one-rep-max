@@ -1,5 +1,8 @@
-(ns one.sample.config
-  "Contains configuration for the sample application."
+(ns one.application
+  "This namespace contains the configuration for a ClojureScript One
+  application. Every 'One' application must have a `one.application`
+  namespace with a valid configuration."
+  (:use [one.sample.api :only (remote-routes)])
   (:require [net.cgrand.enlive-html :as html]))
 
 (defn- production-transform [h]
@@ -25,6 +28,7 @@
                        "/one/reload"
                        "/one/templates"
                        "/one/sample/api"
-                       "/one/sample/config"
-                       "/one/sample/dev_server"]
-          :prod-transform production-transform})
+                       "/one/application"
+                       "/one/dev_server"]
+          :prod-transform production-transform
+          :api-routes remote-routes})
