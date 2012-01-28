@@ -1,8 +1,12 @@
 (ns one.test
   "Support for evaluating ClojureScript code from Clojure tests."
   (:refer-clojure :exclude [load-file])
+  (:require [cljs.repl.browser :as browser])
   (:use [cljs.compiler :only (namespaces)]
-        [cljs.repl :only (evaluate-form load-file load-namespace)]))
+        [cljs.repl :only (evaluate-form load-file load-namespace)]
+        [clojure.java.browse :only (browse-url)]
+        [cljs.repl :only (-setup -tear-down)]
+        [one.dev-server :only (run-server)]))
 
 (def ^:dynamic *eval-env*)
 
@@ -80,4 +84,58 @@
      (ensure-ns-loaded *eval-env* (quote ~ns))
      ~@(map (fn [x] `(evaluate-cljs *eval-env* (quote ~ns) (quote ~x))) forms)))
 
+(defn within-browser-env
+  "Evaluate f with `one.test/*eval-env*` bound to a browser evaluation
+  environment. Opens a browser window and navigates to url which
+  defaults to 'http://localhost:8080/development'."
+  ([f] (within-browser-env "http://localhost:8080/development" nil f))
+  ([url init f]
+     (let [server (run-server)
+           eval-env (browser/repl-env)]
+       (-setup eval-env)
+       (browse-url url)
+       (binding [*eval-env* eval-env]
+         (when init (init))
+         (f))
+       (-tear-down eval-env)
+       (.stop server))))
 
+(defmacro js-ns
+  "Set up the ClojureScript testing namespace. This will arrange for
+  all tests to be run in the provided namespace within the provided
+  evaluation environment. This must appear only once per Clojure
+  namespace and before any calls to js-defn or js.
+
+  This macro will define the vars, js-test-namespace and js-functions,
+  in the calling namespace."
+  [ns env-fn url]
+  `(do (def ~'js-test-namespace (quote ~ns))
+       (def ~'js-functions (atom []))
+       (~'use-fixtures :once (partial ~env-fn ~url
+                                    (fn [] (do (cljs-eval cljs.user (~'load-namespace (quote ~ns)))
+                                              (doseq [f# @~'js-functions]
+                                                (f#))))))))
+
+(defn- test-namespace
+  "Get the symbol for the current testing namespace."
+  []
+  (let [test-ns-var (symbol (str *ns*) "js-test-namespace")]
+    (var-get (find-var test-ns-var))))
+
+(defmacro js-defn
+  "Define a ClojureScript function in the test namespace in the
+  current JavaScript evaluation environment.
+
+  All ClojureScript functions will be loaded before tests are run."
+  [name & body]
+  (let [[doc-string args & body] (if (string? (first body))
+                                   body
+                                   (conj body ""))]
+    `(swap! ~'js-functions conj
+          (fn [] (cljs-eval ~(test-namespace) (defn ~name ~args ~@body))))))
+
+(defmacro js
+  "Accepts a form and evaluates it in the current testing namespace
+  and evaluation environment."
+  [form]
+  `(cljs-eval ~(test-namespace) ~form))
