@@ -58,7 +58,7 @@
 (defn- detached-head?
   "Return true if the git repository in dir has HEAD detached."
   [dir]
-  (let [{out :out} (exec "git" "branch" "--color=never" :dir dir)
+  (let [{out :out} (exec "git" "branch" "--no-color" :dir dir)
         lines (string/split-lines out)
         current-branch (first (filter #(.startsWith % "*") lines))]
     (when-not current-branch

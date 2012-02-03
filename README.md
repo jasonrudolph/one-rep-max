@@ -76,6 +76,11 @@ launch and navigate to the running application.
 Once you have this running, see the [wiki][] and the [website][] for
 more information.
 
+### Getting an exception when you run `lein repl`?
+
+If you get an exception when you run `lein repl`, try 
+[this workaround](https://github.com/brentonashworth/one/wiki/lein-repl-Problem-Workaround).
+
 # Getting Help
 
 The best place to get help is on the
