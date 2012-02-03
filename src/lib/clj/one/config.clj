@@ -5,7 +5,10 @@
   "Given a configuration map, return output directory options."
   [config]
   {:output-to (str (:js config) "/" (:dev-js-file-name config))
-   :output-dir (str (:js config) "/out")})
+   :output-dir (str (:js config) "/out")
+   :libs (:libs config)
+   :externs (:externs config)
+   :foreign-libs (:foreign-libs config)})
 
 (defn production-js
   "Given a configuration map, return the path to the production
