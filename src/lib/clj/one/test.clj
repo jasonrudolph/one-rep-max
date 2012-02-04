@@ -2,13 +2,26 @@
   "Support for evaluating ClojureScript code from Clojure tests."
   (:refer-clojure :exclude [load-file])
   (:require [cljs.repl.browser :as browser])
-  (:use [cljs.compiler :only (namespaces)]
+  (:use [cljs.compiler :only (namespaces *cljs-ns*)]
         [cljs.repl :only (evaluate-form load-file load-namespace)]
         [clojure.java.browse :only (browse-url)]
         [cljs.repl :only (-setup -tear-down)]
         [one.dev-server :only (run-server)]))
 
 (def ^:dynamic *eval-env*)
+
+(defn- wrap-fn
+  "This function has been copied from cljs.repl in ClojureScript. If
+  that function were made public we wouldn't need to repeat this here."
+  [form]
+  (cond (and (seq? form) (= 'ns (first form))) identity
+        ('#{*1 *2 *3} form) (fn [x] `(cljs.core.pr-str ~x))
+        :else (fn [x] `(cljs.core.pr-str
+                       (let [ret# ~x]
+                         (do (set! *3 *2)
+                             (set! *2 *1)
+                             (set! *1 ret#)
+                             ret#))))))
 
 (defn evaluate-cljs
   "Evaluate a ClojureScript form within the given evaluation
@@ -17,25 +30,26 @@
   ([eval-env form]
      (evaluate-cljs eval-env 'cljs.user form))
   ([eval-env ns form]
-     (let [env {:context :statement :locals {}}]
-       (cond
-        (and (seq? form) ('#{load-file clojure.core/load-file} (first form)))
-        (load-file eval-env (second form))
-        
-        (and (seq? form) ('#{load-namespace} (first form)))
-        (load-namespace eval-env (second form))
-        
-        :else
-        (let [ret (evaluate-form eval-env
-                                 (assoc env :ns (@namespaces ns))
-                                 "<testing>"
-                                 form
-                                 (fn [x] `(cljs.core.pr-str ~x)))]
-          (try (read-string ret)
-               (catch Exception e
-                 (if (string? ret)
-                   ret
-                   nil))))))))
+     (binding [*cljs-ns* 'cljs.user]
+       (let [env {:context :statement :locals {}}]
+         (cond
+          (and (seq? form) ('#{load-file clojure.core/load-file} (first form)))
+          (load-file eval-env (second form))
+          
+          (and (seq? form) ('#{load-namespace} (first form)))
+          (load-namespace eval-env (second form))
+          
+          :else
+          (let [ret (evaluate-form eval-env
+                                   (assoc env :ns (@namespaces ns))
+                                   "<testing>"
+                                   form
+                                   (wrap-fn form))]
+            (try (read-string ret)
+                 (catch Exception e
+                   (if (string? ret)
+                     ret
+                     nil)))))))))
 
 (defn cljs-wait-for*
   "Using evaluation environment `eval-env` evaluate form in namespace
@@ -84,6 +98,14 @@
      (ensure-ns-loaded *eval-env* (quote ~ns))
      ~@(map (fn [x] `(evaluate-cljs *eval-env* (quote ~ns) (quote ~x))) forms)))
 
+(defn browser-eval-env
+  "Create and set up a browser evaluation environment. Open a browser
+  to connect to this client."
+  []
+  (let [eval-env (browser/repl-env)]
+    (-setup eval-env)
+    eval-env))
+
 (defn within-browser-env
   "Evaluate f with `one.test/*eval-env*` bound to a browser evaluation
   environment. Opens a browser window and navigates to url which
@@ -91,8 +113,7 @@
   ([f] (within-browser-env "http://localhost:8080/development" nil f))
   ([url init f]
      (let [server (run-server)
-           eval-env (browser/repl-env)]
-       (-setup eval-env)
+           eval-env (browser-eval-env)]
        (browse-url url)
        (binding [*eval-env* eval-env]
          (when init (init))
