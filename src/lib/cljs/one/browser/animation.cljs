@@ -788,3 +788,4 @@ function will be run before the delay."
   ([f delay]
      (play-animation (fn [] (goog.Timer. delay))
                      {:before f})))
+
