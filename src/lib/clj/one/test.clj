@@ -140,6 +140,14 @@
   [form]
   `(cljs-eval ~(test-namespace) ~form))
 
+(defn browser-eval-env
+  "Create and set up a browser evaluation environment. Open a browser
+  to connect to this client."
+  [& options]
+  (let [eval-env (apply browser/repl-env options)]
+    (-setup eval-env)
+    eval-env))
+
 (def ^:dynamic *eval-ns* 'cljs.user)
 
 (defn bep-setup
