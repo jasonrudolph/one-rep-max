@@ -139,3 +139,29 @@
   and evaluation environment."
   [form]
   `(cljs-eval ~(test-namespace) ~form))
+
+(def ^:dynamic *eval-ns* 'cljs.user)
+
+(defn bep-setup
+  "Create the environment and start a socket listener for the
+  BEP (Browser-Eval-Print).
+
+  Valid options are :port"
+  [& options]
+  (alter-var-root #'*eval-env* (constantly (apply browser-eval-env options))))
+
+(defn bep-teardown
+  "Shutdown socket listener for the BEP (Browser-Eval-Print)."
+  []
+  (alter-var-root #'*eval-env* -tear-down))
+
+(defn bep-in-ns
+  "Switch the BEP (Browser-Eval-Print) environment to the namespace
+  with the given name (a symbol)."
+  [ns-name]
+  (alter-var-root #'*eval-ns* (constantly ns-name)))
+
+(defmacro bep
+  "Evaluate forms in the browser."
+  [& forms]
+  `(evaluate-cljs *eval-env* *eval-ns* '(do ~@forms)))
