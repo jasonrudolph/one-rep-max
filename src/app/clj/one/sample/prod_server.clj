@@ -7,7 +7,7 @@
         [ring.middleware.params :only (wrap-params)]
         [ring.util.response :only (file-response)]
         [compojure.core :only (defroutes ANY)]
-        [one.sample.api :only (remote-routes)]))
+        [one.sample.api :only (api-routes)]))
 
 (def ^:private root "out/public")
 
@@ -16,13 +16,12 @@
 (.mkdirs (java.io.File. "out/public"))
 
 (defroutes app-routes
-  remote-routes
+  api-routes
   (-> (ANY "*" request (file-response "404.html" {:root root}))
       (wrap-file root)
       wrap-file-info))
 
-(def ^:private app (-> app-routes
-                       wrap-params))
+(def ^:private app app-routes)
 
 (defn run-server []
   (let [port (Integer/parseInt (get (System/getenv) "PORT" "8080"))]

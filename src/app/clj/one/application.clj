@@ -2,7 +2,7 @@
   "This namespace contains the configuration for a ClojureScript One
   application. Every 'One' application must have a `one.application`
   namespace with a valid configuration."
-  (:use [one.sample.api :only (remote-routes)])
+  (:use [one.sample.api :only (api-routes)])
   (:require [net.cgrand.enlive-html :as html]))
 
 (defn- production-transform [h]
@@ -31,4 +31,4 @@
                        "/one/application"
                        "/one/dev_server"]
           :prod-transform production-transform
-          :api-routes remote-routes})
+          :api-routes api-routes})

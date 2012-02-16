@@ -1,7 +1,8 @@
 (ns one.sample.api
   "The server side of the sample application. Provides a simple API for
   updating an in-memory database."
-  (:use [compojure.core :only (defroutes POST)]))
+  (:use [ring.middleware.params :only (wrap-params)]
+        [compojure.core :only (defroutes POST)]))
 
 (defonce ^:private next-id (atom 0))
 
@@ -31,3 +32,5 @@
          (remote
           (binding [*read-eval* false]
             (read-string data))))))
+
+(def api-routes (wrap-params remote-routes))

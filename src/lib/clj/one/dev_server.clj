@@ -5,7 +5,6 @@
   (:use [ring.adapter.jetty :only (run-jetty)]
         [ring.middleware.file :only (wrap-file)]
         [ring.middleware.file-info :only (wrap-file-info)]
-        [ring.middleware.params :only (wrap-params)]
         [ring.middleware.stacktrace :only (wrap-stacktrace)]
         [ring.util.response :only (file-response)]
         [compojure.core :only (defroutes GET POST ANY)]
@@ -90,7 +89,6 @@
                        wrap-file-info
                        apply-templates
                        js-encoding
-                       wrap-params
                        set-active-menu
                        wrap-stacktrace
                        (reload/reload-clj (:reload-clj config))))
