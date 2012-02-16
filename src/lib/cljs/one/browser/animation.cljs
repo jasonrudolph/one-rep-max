@@ -768,3 +768,23 @@
      (play-animation animation {}))
   ([animation opts]
      (play nil animation opts)))
+
+(extend-type goog.Timer
+  one.core/Startable
+  (start [this]
+    (event/listen-once this "tick"
+                       (fn [e] (.dispatchEvent this "finish")
+                         (dispose this)))
+    (.start this ()))
+  one.core/Disposable
+  (dispose [this]
+    (.dispose this ())))
+
+(defn play-fn
+  "Add a function to the animation queue with an optional delay. The
+function will be run before the delay."
+  ([f]
+     (play-fn f 1))
+  ([f delay]
+     (play-animation (fn [] (goog.Timer. delay))
+                     {:before f})))
