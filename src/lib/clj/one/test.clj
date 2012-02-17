@@ -6,7 +6,7 @@
         [cljs.repl :only (evaluate-form load-file load-namespace)]
         [clojure.java.browse :only (browse-url)]
         [cljs.repl :only (-setup -tear-down)]
-        [one.dev-server :only (run-server)]))
+        [one.sample.dev-server :only (run-server)]))
 
 (def ^:dynamic *eval-env*)
 

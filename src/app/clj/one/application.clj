@@ -29,6 +29,6 @@
                        "/one/templates"
                        "/one/sample/api"
                        "/one/application"
-                       "/one/dev_server"]
+                       "/one/sample/dev_server"]
           :prod-transform production-transform
           :api-routes api-routes})

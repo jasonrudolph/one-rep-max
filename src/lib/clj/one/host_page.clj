@@ -1,7 +1,9 @@
 (ns one.host-page
   "Functions to create an HTML page that hosts a ClojureScript
   application."
-  (:use [one.templates :only (construct-html render)])
+  (:use [one.templates :only (load-html construct-html render)]
+        [compojure.core :only (defroutes GET)]
+        [one.application :only (config)])
   (:require [net.cgrand.enlive-html :as html]))
 
 (def ^:private script-snippet
@@ -53,3 +55,24 @@
             (script (html/set-attr :src "javascripts/fresh.js"))
             (script (html/content "goog.require('one.browser.repl_client');"))
             (script (html/content "one.browser.repl_client.repl();"))))))
+
+(defn- environment [uri]
+  (case uri
+    "/development" :development
+    "/production" :production
+    "/fresh" :fresh))
+
+(defn make-host-page [config request]
+  {:status 200
+   :headers {"Content-Type" "text/html; charset=utf-8"}
+   :body (application-host config (environment (:uri request)))})
+
+(defn- serve-design-file [file-path]
+  (when (.endsWith file-path ".html")
+    (load-html (.substring file-path 1))))
+
+(defroutes default-one-routes
+  (GET "/development" request (make-host-page config request))
+  (GET "/production" request (make-host-page config request))
+  (GET "/fresh" request (make-host-page config request))
+  (GET "/design*" {{file :*} :route-params} (serve-design-file file)))
