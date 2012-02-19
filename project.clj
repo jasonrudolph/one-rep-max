@@ -20,6 +20,7 @@
                          ".lein-git-deps/clojurescript/src/cljs"
                          ".lein-git-deps/domina/src/cljs"
                          "src/app/cljs"
+                         "src/app/shared"
                          "src/app/cljs-macros"
                          "src/lib/clj"
                          "src/lib/cljs"
