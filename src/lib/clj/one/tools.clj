@@ -4,8 +4,10 @@
         [one.host-page :only (application-host)]
         [cljs.repl :only (repl)]
         [cljs.repl.browser :only (repl-env)]
-        [one.core :only (*configuration*)])
-  (:require [clojure.java.io :as io]))
+        [one.core :only (*configuration*)]
+        [one.test :only (*eval-env*)])
+  (:require [clojure.java.io :as io]
+            [clojure.test :as test]))
 
 (defn- cljs-build-opts
   "Return output directory options."
@@ -30,13 +32,27 @@
                                   :output-to (str "out/" (production-js))))
   (spit "out/public/index.html" (application-host :production)))
 
+(def ^{:private true
+       :doc "Special functions which may be run in Clojure from the
+  ClojureScript REPL."}
+  repl-special-fns
+  {'run-tests (fn [eval-env & nss]
+                (doseq [ns nss]
+                  (require (second ns) :reload))
+                (binding [*eval-env* eval-env]
+                  (apply test/run-tests (map second nss))))})
+
 (defn cljs-repl
   "Start a ClojureScript REPL which can connect to the development
   version of the application. The REPL will not work until the
   development page connects to it, so you will need to either open or
-  refresh the development page after calling this function."
+  refresh the development page after calling this function.
+
+  The REPL is configured to allow tests to be run by calling
+  `(run-tests 'some.test.ns)` where `some.test.ns` is a namespace
+  which contains tests that you would like to run."
   []
-  (repl (repl-env)))
+  (repl (repl-env) :special-fns repl-special-fns))
 
 (defn copy-recursive-into
   "Recursively copy the files in src to dest."

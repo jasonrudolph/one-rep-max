@@ -2,13 +2,21 @@
   "Support for evaluating ClojureScript code from Clojure tests."
   (:refer-clojure :exclude [load-file])
   (:require [cljs.repl.browser :as browser])
-  (:use [cljs.compiler :only (namespaces *cljs-ns*)]
+  (:use [clojure.java.browse :only (browse-url)]
+        [cljs.compiler :only (namespaces *cljs-ns*)]
         [cljs.repl :only (evaluate-form load-file load-namespace)]
-        [clojure.java.browse :only (browse-url)]
         [cljs.repl :only (-setup -tear-down)]
-        [one.sample.dev-server :only (run-server)]))
+        [one.fresh-server :only (start-fresh)]))
 
-(def ^:dynamic *eval-env*)
+(def ^{:dynamic true
+       :doc "The current JavaScript evaluation environment."}
+  *eval-env* nil)
+(def ^{:dynamic true
+       :doc "The current JavaScript evaluation namespace."}
+  *eval-ns* 'cljs.user)
+(def ^{:dynamic true
+       :doc "The current JavaScript evaluation namespace in which tests are running."}
+  *js-test-ns* 'cljs.user)
 
 (defn- wrap-fn
   "This function has been copied from cljs.repl in ClojureScript. If
@@ -94,9 +102,10 @@
   "Evaluate forms in namespace `ns` in the evaluation environment
   `*eval-env*`."
   [ns & forms]
-  `(do
-     (ensure-ns-loaded *eval-env* (quote ~ns))
-     ~@(map (fn [x] `(evaluate-cljs *eval-env* (quote ~ns) (quote ~x))) forms)))
+  (let [ns (if ('#{*js-test-ns* one.test/*js-test-ns*} ns) ns `(quote ~ns))]
+    `(do
+       (ensure-ns-loaded *eval-env* ~ns)
+       ~@(map (fn [x] `(evaluate-cljs *eval-env* ~ns (quote ~x))) forms))))
 
 (defn browser-eval-env
   "Create and set up a browser evaluation environment. Open a browser
@@ -108,58 +117,36 @@
 
 (defn within-browser-env
   "Evaluate f with `one.test/*eval-env*` bound to a browser evaluation
-  environment. Opens a browser window and navigates to url which
-  defaults to 'http://localhost:8080/development'."
-  ([f] (within-browser-env "http://localhost:8080/development" nil f))
-  ([url init f]
-     (let [server (run-server)
-           eval-env (browser-eval-env)]
-       (browse-url url)
-       (binding [*eval-env* eval-env]
-         (when init (init))
-         (f))
-       (-tear-down eval-env)
-       (.stop server))))
+  environment. If `one.test/*eval-env*` is not already bound then open
+  a browser window and navigate to `:url`. `:url` defaults to
+  'http://localhost:8080/fresh'.
 
-(defmacro js-ns
-  "Set up the ClojureScript testing namespace. This will arrange for
-  all tests to be run in the provided namespace within the provided
-  evaluation environment. This must appear only once per Clojure
-  namespace and before any calls to js-defn or js.
-
-  This macro will define the vars, js-test-namespace and js-functions,
-  in the calling namespace."
-  [ns env-fn url]
-  `(do (def ~'js-test-namespace (quote ~ns))
-       (def ~'js-functions (atom []))
-       (~'use-fixtures :once (partial ~env-fn ~url
-                                    (fn [] (do (cljs-eval cljs.user (~'load-namespace (quote ~ns)))
-                                              (doseq [f# @~'js-functions]
-                                                (f#))))))))
-
-(defn- test-namespace
-  "Get the symbol for the current testing namespace."
-  []
-  (let [test-ns-var (symbol (str *ns*) "js-test-namespace")]
-    (var-get (find-var test-ns-var))))
-
-(defmacro js-defn
-  "Define a ClojureScript function in the test namespace in the
-  current JavaScript evaluation environment.
-
-  All ClojureScript functions will be loaded before tests are run."
-  [name & body]
-  (let [[doc-string args & body] (if (string? (first body))
-                                   body
-                                   (conj body ""))]
-    `(swap! ~'js-functions conj
-          (fn [] (cljs-eval ~(test-namespace) (defn ~name ~args ~@body))))))
+  You may also pass the optional arguments: `:init` and
+  `:start-server`. `:init` is a function which will run before any
+  tests are run and can be used to setup the JavaScript environment
+  before the tests are run. `:start-server` is a function which will
+  start a test server. `:start-server` defaults to
+  `one.fresh-server/start-fresh`."
+  [f & {:keys [init url start-server] :or {init nil
+                                           url "http://localhost:8080/fresh"
+                                           start-server start-fresh}}]
+  (if *eval-env*
+    (do (when init (init))
+        (f))
+    (let [server (start-server)
+          eval-env (browser-eval-env)]
+      (browse-url url)
+      (binding [*eval-env* eval-env]
+        (when init (init))
+        (f))
+      (-tear-down eval-env)
+      (.stop server))))
 
 (defmacro js
   "Accepts a form and evaluates it in the current testing namespace
   and evaluation environment."
   [form]
-  `(cljs-eval ~(test-namespace) ~form))
+  `(cljs-eval *js-test-ns* ~form))
 
 (defn browser-eval-env
   "Create and set up a browser evaluation environment. Open a browser
@@ -168,8 +155,6 @@
   (let [eval-env (apply browser/repl-env options)]
     (-setup eval-env)
     eval-env))
-
-(def ^:dynamic *eval-ns* 'cljs.user)
 
 (defn bep-setup
   "Create the environment and start a socket listener for the

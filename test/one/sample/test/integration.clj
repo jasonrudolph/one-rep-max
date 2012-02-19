@@ -2,9 +2,12 @@
   "Tests which cross the client server boundary."
   (:use [clojure.test]
         [one.sample.api :only (*database*)]
-        [one.test :only (cljs-eval cljs-wait-for within-browser-env)]))
+        [one.test :only (cljs-eval cljs-wait-for within-browser-env)]
+        [one.sample.dev-server :only (run-server)]))
 
-(use-fixtures :once within-browser-env)
+(use-fixtures :once (fn [f] (within-browser-env f
+                                               :url "http://localhost:8080/development"
+                                               :start-server run-server)))
 
 (deftest test-enter-new-name
   (reset! *database* #{})
