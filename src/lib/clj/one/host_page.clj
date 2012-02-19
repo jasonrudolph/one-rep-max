@@ -62,6 +62,11 @@
     "/production" :production
     "/fresh" :fresh))
 
+(defn- make-bare-page [body]
+  {:status 200
+   :headers {"Content-Type" "text/html; charset=utf-8"}
+   :body body})
+
 (defn make-host-page [request]
   {:status 200
    :headers {"Content-Type" "text/html; charset=utf-8"}
@@ -69,7 +74,7 @@
 
 (defn- serve-design-file [file-path]
   (when (.endsWith file-path ".html")
-    (load-html (.substring file-path 1))))
+    (make-bare-page (load-html (.substring file-path 1)))))
 
 (defroutes default-one-routes
   (GET "/development" request (make-host-page request))
