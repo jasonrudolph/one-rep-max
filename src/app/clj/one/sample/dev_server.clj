@@ -22,6 +22,11 @@
 (defn- environment [uri]
   (if (= uri "/development") :development :production))
 
+(defn- make-bare-page [body]
+  {:status 200
+   :headers {"Content-Type" "text/html; charset=utf-8"}
+   :body body})
+
 (defn- make-host-page [request]
   {:status 200
    :headers {"Content-Type" "text/html; charset=utf-8"}
@@ -33,7 +38,7 @@
   (GET "/production" request (make-host-page request) )
   (GET "/design*" {{file :*} :route-params}
        (when (.endsWith file ".html")
-         (load-html (.substring file 1))))
+         (make-bare-page (load-html (.substring file 1)))))
   (ANY "*" request (file-response "404.html" {:root "public"})))
 
 (defn- js-encoding [handler]
