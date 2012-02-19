@@ -11,7 +11,10 @@
 (declare construct-html)
 
 (defn- html-body [name]
-  (:content (first (select (html-resource name) [:body]))))
+  (let [nodes (html-resource name)]
+    (or
+     (:content (first (select nodes [:body])))
+     nodes)))
 
 (defn- include-html [h]
   (let [includes (select h [:_include])]

@@ -1,7 +1,9 @@
 (ns one.sample.api
   "The server side of the sample application. Provides a simple API for
   updating an in-memory database."
-  (:use [compojure.core :only (defroutes POST)]))
+  (:use [ring.middleware.params :only (wrap-params)]
+        [compojure.core :only (defroutes POST)]
+        [one.sample.validation :only (validate)]))
 
 (defonce ^:private next-id (atom 0))
 
@@ -22,7 +24,8 @@
 (defmethod remote :add-name [data]
   (let [n (-> data :args :name)
         response {:exists (contains? @*database* n)}]
-    (swap! *database* conj n)
+    (when (= (validate "name-input" n) :valid)
+      (swap! *database* conj n))
     response))
 
 (defroutes remote-routes
@@ -31,3 +34,5 @@
          (remote
           (binding [*read-eval* false]
             (read-string data))))))
+
+(def api-routes (wrap-params remote-routes))

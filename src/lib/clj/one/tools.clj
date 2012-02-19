@@ -2,19 +2,33 @@
   "Support for building deployment artifacts for a project."
   (:use [cljs.closure :only (build)]
         [one.host-page :only (application-host)]
-        [one.config :only (cljs-build-opts production-js)]
         [cljs.repl :only (repl)]
-        [cljs.repl.browser :only (repl-env)])
+        [cljs.repl.browser :only (repl-env)]
+        [one.core :only (*configuration*)])
   (:require [clojure.java.io :as io]))
+
+(defn- cljs-build-opts
+  "Return output directory options."
+  []
+  {:output-to (str (:js *configuration*) "/" (:dev-js-file-name *configuration*))
+   :output-dir (str (:js *configuration*) "/out")
+   :libs (:libs *configuration*)
+   :externs (:externs *configuration*)
+   :foreign-libs (:foreign-libs *configuration*)})
+
+(defn- production-js
+  "Return the path to the production Javascript file."
+  []
+  (str (:js *configuration*) "/" (:prod-js-file-name *configuration*)))
 
 (defn build-project
   "Emit both a JavaScript file containing the compiled ClojureScript
   application and the host HTML page."
-  [config]
-  (build (:app-root config) (assoc (cljs-build-opts config)
-                              :optimizations :advanced
-                              :output-to (str "out/" (production-js config))))
-  (spit "out/public/index.html" (application-host config :production)))
+  []
+  (build (:cljs-sources *configuration*) (assoc (cljs-build-opts)
+                                  :optimizations :advanced
+                                  :output-to (str "out/" (production-js))))
+  (spit "out/public/index.html" (application-host :production)))
 
 (defn cljs-repl
   "Start a ClojureScript REPL which can connect to the development

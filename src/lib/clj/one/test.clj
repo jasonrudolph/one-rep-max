@@ -6,7 +6,7 @@
         [cljs.repl :only (evaluate-form load-file load-namespace)]
         [clojure.java.browse :only (browse-url)]
         [cljs.repl :only (-setup -tear-down)]
-        [one.dev-server :only (run-server)]))
+        [one.sample.dev-server :only (run-server)]))
 
 (def ^:dynamic *eval-env*)
 
@@ -160,3 +160,37 @@
   and evaluation environment."
   [form]
   `(cljs-eval ~(test-namespace) ~form))
+
+(defn browser-eval-env
+  "Create and set up a browser evaluation environment. Open a browser
+  to connect to this client."
+  [& options]
+  (let [eval-env (apply browser/repl-env options)]
+    (-setup eval-env)
+    eval-env))
+
+(def ^:dynamic *eval-ns* 'cljs.user)
+
+(defn bep-setup
+  "Create the environment and start a socket listener for the
+  BEP (Browser-Eval-Print).
+
+  Valid options are :port"
+  [& options]
+  (alter-var-root #'*eval-env* (constantly (apply browser-eval-env options))))
+
+(defn bep-teardown
+  "Shutdown socket listener for the BEP (Browser-Eval-Print)."
+  []
+  (alter-var-root #'*eval-env* -tear-down))
+
+(defn bep-in-ns
+  "Switch the BEP (Browser-Eval-Print) environment to the namespace
+  with the given name (a symbol)."
+  [ns-name]
+  (alter-var-root #'*eval-ns* (constantly ns-name)))
+
+(defmacro bep
+  "Evaluate forms in the browser."
+  [& forms]
+  `(evaluate-cljs *eval-env* *eval-ns* '(do ~@forms)))

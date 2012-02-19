@@ -5,14 +5,9 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
-;; Why, you might ask, are we using str here instead of simply def'ing
-;; the var to a string directly? The answer is that we are working
-;; around a bug in marginalia where it can't tell the difference
-;; between the string that's the value for a def and a docstring. It
-;; will hopefully be fixed RSN, because this makes us feel dirty.
 (def ^{:private true
        :doc "The directory into which dependencies will be cloned."}
-  git-deps-dir (str ".lein-git-deps"))
+  git-deps-dir ".lein-git-deps")
 
 (defn- directory-exists?
   "Return true if the specified directory exists."
