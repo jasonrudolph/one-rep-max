@@ -1,6 +1,7 @@
 (ns script.build
   "Contains a -main function which builds the production artifacts for
   the project."
+  (:use [one.core :only (*configuration*)])
   (:require [clojure.java.io :as io]
             [one.tools :as tools]
             [one.application :as config]))
@@ -17,4 +18,5 @@
                 "out/public/javascripts")
   (.mkdir (io/file "out/public/javascripts"))
   (println "Create advanced compiled JavaScript...")
-  (tools/build-project config/config))
+  (binding [*configuration* config/config]
+    (tools/build-project)))
