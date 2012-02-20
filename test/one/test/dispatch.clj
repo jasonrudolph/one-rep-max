@@ -33,9 +33,9 @@
 ;; ============
 
 (deftest create-reaction
-  (is (= [:max-count :event-pred :reactor]
+  (is (= #{:max-count :event-pred :reactor}
          (js (let [reaction (react-to #{:do-something} (constantly true))]
-               (keys reaction))))))
+               (set (keys reaction)))))))
 
 (deftest reaction-catches-event
   (is (= [[:do-something nil]]
