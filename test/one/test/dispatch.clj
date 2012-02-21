@@ -2,35 +2,21 @@
   "Event dispatching tests. All of the tests in the namespace are testing
   ClojureScript code which is being evaluated in the browser."
   (:use [clojure.test]
-        [one.test :only (cljs-eval within-browser-env js *eval-env* *js-test-ns*)]))
+        [one.test :only (in-javascript js)]))
 
-;; Setup the ClojureScript environment
-;; ===================================
-;; All of this, and the ns form above, could be replaced by a single
-;; macro.
+(in-javascript
 
-(defn setup-js-environment []
-  
-  (cljs-eval cljs.user
-             (ns one.test.dispatch
-               (:use [one.dispatch :only [fire react-to delete-reaction]])))
-  
-  (cljs-eval one.test.dispatch
-             (defn with-reaction [f]
-               (let [recorded-reactions (atom [])
-                     reaction (react-to #{:do-something}
-                                        (fn [t d] (swap! recorded-reactions conj [t d])))]
-                 (f reaction)
-                 (delete-reaction reaction)
-                 (deref recorded-reactions)))))
-
-(use-fixtures :once
-              (fn [f] (within-browser-env (fn [] (binding [*js-test-ns* 'one.test.dispatch]
-                                                 (f)))
-                                         :init setup-js-environment)))
-
-;; Define tests
-;; ============
+ (ns one.test.dispatch
+   (:use [one.dispatch :only [fire react-to delete-reaction]]))
+ 
+ (defn with-reaction [f]
+   (let [recorded-reactions (atom [])
+         reaction (react-to #{:do-something}
+                            (fn [t d] (swap! recorded-reactions conj [t d])))]
+     (f reaction)
+     (delete-reaction reaction)
+     (deref recorded-reactions)))
+ )
 
 (deftest create-reaction
   (is (= #{:max-count :event-pred :reactor}
@@ -81,7 +67,7 @@
   (dev-server)
   (require 'one.test)
   (require 'clojure.test)
-  (require 'one.test.dispatch)
+  (require 'one.test.dispatch :reload)
 
   (def ee (one.test/browser-eval-env))
 

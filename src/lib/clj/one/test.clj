@@ -2,7 +2,8 @@
   "Support for evaluating ClojureScript code from Clojure tests."
   (:refer-clojure :exclude [load-file])
   (:require [cljs.repl.browser :as browser])
-  (:use [clojure.java.browse :only (browse-url)]
+  (:use clojure.test
+        [clojure.java.browse :only (browse-url)]
         [cljs.compiler :only (namespaces *cljs-ns*)]
         [cljs.repl :only (evaluate-form load-file load-namespace)]
         [cljs.repl :only (-setup -tear-down)]
@@ -179,3 +180,17 @@
   "Evaluate forms in the browser."
   [& forms]
   `(evaluate-cljs *eval-env* *eval-ns* '(do ~@forms)))
+
+(defmacro in-javascript [ns & forms]
+  (let [[ns-name & deps] (rest ns)]
+    `(do
+       (defn setup# []
+
+         (cljs-eval cljs.user ~ns)
+
+         ~@(map (fn [f#] (list `cljs-eval ns-name f#)) forms))
+       
+       (use-fixtures :once
+                     (fn [f#] (within-browser-env (fn [] (binding [*js-test-ns* (quote ~ns-name)]
+                                                        (f#)))
+                                                :init setup#))))))
