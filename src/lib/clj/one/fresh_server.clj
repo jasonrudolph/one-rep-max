@@ -11,7 +11,7 @@
             [one.middleware :as middleware]))
 
 (defroutes app-routes
-  default-one-routes
+  (default-one-routes {})
   (ANY "*" request (file-response "404.html" {:root "public"})))
 
 (def ^:private app (-> app-routes

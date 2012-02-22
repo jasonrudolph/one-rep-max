@@ -128,20 +128,20 @@
   before the tests are run. `:start-server` is a function which will
   start a test server. `:start-server` defaults to
   `one.fresh-server/start-fresh`."
-  [f & {:keys [init url start-server] :or {init nil
-                                           url "http://localhost:8080/fresh"
-                                           start-server start-fresh}}]
-  (if *eval-env*
-    (do (when init (init))
-        (f))
-    (let [server (start-server)
-          eval-env (browser-eval-env)]
-      (browse-url url)
-      (binding [*eval-env* eval-env]
-        (when init (init))
-        (f))
-      (-tear-down eval-env)
-      (.stop server))))
+  [f & {:keys [init url start-server]}]
+  (let [url (or url "http://localhost:8080/fresh")
+        start-server (or start-server start-fresh)]
+    (if *eval-env*
+      (do (when init (init))
+          (f))
+      (let [server (start-server)
+            eval-env (browser-eval-env)]
+        (browse-url url)
+        (binding [*eval-env* eval-env]
+          (when init (init))
+          (f))
+        (-tear-down eval-env)
+        (.stop server)))))
 
 (defmacro js
   "Accepts a form and evaluates it in the current testing namespace
@@ -181,16 +181,21 @@
   [& forms]
   `(evaluate-cljs *eval-env* *eval-ns* '(do ~@forms)))
 
-(defmacro in-javascript [ns & forms]
-  (let [[ns-name & deps] (rest ns)]
+(defmacro in-javascript [& forms]
+  (let [[url forms] (if (string? (first forms)) [(first forms) (next forms)] [nil forms])
+        [start-server forms] (if (symbol? (first forms)) [(first forms) (next forms)] [nil forms])
+        [ns & forms] forms
+        options [:url url :start-server start-server]
+        [ns-name & deps] (rest ns)]
     `(do
        (defn setup# []
-
+         
          (cljs-eval cljs.user ~ns)
-
+         
          ~@(map (fn [f#] (list `cljs-eval ns-name f#)) forms))
        
        (use-fixtures :once
                      (fn [f#] (within-browser-env (fn [] (binding [*js-test-ns* (quote ~ns-name)]
-                                                        (f#)))
-                                                :init setup#))))))
+                                                         (f#)))
+                                                 :init setup#
+                                                 ~@options))))))
