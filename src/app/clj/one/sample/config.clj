@@ -1,7 +1,6 @@
-(ns one.application
+(ns one.sample.config
   "This namespace contains the configuration for a ClojureScript One
-  application. Every 'One' application must have a `one.application`
-  namespace with a valid configuration."
+  application."
   (:require [net.cgrand.enlive-html :as html]
             [one.reload :as reload]))
 

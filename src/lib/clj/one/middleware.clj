@@ -1,6 +1,5 @@
 (ns one.middleware
-  (:use [one.templates :only (render)]
-        [one.core :only (*configuration*)])
+  (:use [one.templates :only (render)])
   (:require [net.cgrand.enlive-html :as html])
   (:import java.io.File))
 
@@ -47,10 +46,3 @@
             (= uri "/development") (active-menu-transform :development response)
             (= uri "/production") (active-menu-transform :production response)
             :else response))))
-
-(defn wrap-config
-  "Wrap a request in a binding."
-  [handler c]
-  (fn [request]
-    (binding [*configuration* c]
-      (handler request))))

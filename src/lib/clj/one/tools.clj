@@ -4,33 +4,32 @@
         [one.host-page :only (application-host)]
         [cljs.repl :only (repl)]
         [cljs.repl.browser :only (repl-env)]
-        [one.core :only (*configuration*)]
         [one.test :only (*eval-env*)])
   (:require [clojure.java.io :as io]
             [clojure.test :as test]))
 
 (defn- cljs-build-opts
   "Return output directory options."
-  []
-  {:output-to (str (:js *configuration*) "/" (:dev-js-file-name *configuration*))
-   :output-dir (str (:js *configuration*) "/out")
-   :libs (:libs *configuration*)
-   :externs (:externs *configuration*)
-   :foreign-libs (:foreign-libs *configuration*)})
+  [config]
+  {:output-to (str (:js config) "/" (:dev-js-file-name config))
+   :output-dir (str (:js config) "/out")
+   :libs (:libs config)
+   :externs (:externs config)
+   :foreign-libs (:foreign-libs config)})
 
 (defn- production-js
   "Return the path to the production Javascript file."
-  []
-  (str (:js *configuration*) "/" (:prod-js-file-name *configuration*)))
+  [config]
+  (str (:js config) "/" (:prod-js-file-name config)))
 
 (defn build-project
   "Emit both a JavaScript file containing the compiled ClojureScript
   application and the host HTML page."
-  []
-  (build (:cljs-sources *configuration*) (assoc (cljs-build-opts)
+  [config]
+  (build (:cljs-sources config) (assoc (cljs-build-opts config)
                                   :optimizations :advanced
-                                  :output-to (str "out/" (production-js))))
-  (spit "out/public/index.html" (application-host :production)))
+                                  :output-to (str "out/" (production-js config))))
+  (spit "out/public/index.html" (application-host config :production)))
 
 (def ^{:private true
        :doc "Special functions which may be run in Clojure from the

@@ -11,13 +11,13 @@
         [one.templates :only (apply-templates)]
         [one.host-page :only (default-one-routes)]
         [one.sample.api :only (api-routes)]
-        [one.application :only (config)])
+        [one.sample.config :only (config)])
   (:require [one.reload :as reload]
             [one.middleware :as middleware]))
 
 (defroutes app-routes
   api-routes
-  default-one-routes
+  (default-one-routes config)
   (ANY "*" request (file-response "404.html" {:root "public"})))
 
 (def ^:private app (-> app-routes
@@ -29,7 +29,6 @@
                        apply-templates
                        middleware/js-encoding
                        middleware/set-active-menu
-                       (middleware/wrap-config config)
                        wrap-stacktrace))
 
 (defn run-server
