@@ -82,10 +82,10 @@
 ;; Implement ISources for multiple directores. The pred function is
 ;; used to filter the returned files.
 
-(defrecord Directories [dirs pred]
+(defrecord Directories [dirs pred order]
   ISources
   (files [this]
-    (filter-all-descendants dirs pred)))
+    (sort-by order (filter-all-descendants dirs pred))))
 
 ;; Implement ISources and Compilable for multiple ClojureScript source
 ;; directories. The directores may contain non-ClojureScript files,
@@ -134,7 +134,6 @@
   Compilable
   (-compile [this opts]
     (let [fs (files this)]
-      (reload-clj-seq fs)
       (let [d (io/file dir)]
         (flatten (map #(-compile % (assoc opts :output-file (js-file-name d %)))
                       fs))))))
@@ -236,8 +235,13 @@
 ;; Sugar
 ;; =====
 
-(defn clj-files-in [dirs & files]
-  (let [clj (->Directories dirs (by-file-name (vec files)))]
+(defn name-order [names]
+  (fn [file] (get (into {} (map-indexed (fn [i x] [x i]) names))
+                 (.getName file)
+                 0)))
+
+(defn clj-files-in [dirs & fs]
+  (let [clj (->Directories dirs (by-file-name (vec fs)) (name-order fs))]
     (->ClojureReloadable [clj])))
 
 (defn shared
@@ -255,7 +259,7 @@
        (->ClojureScriptReloadable opts sources pkgs))))
 
 (defn dir-trigger [dir reloadable]
-  (let [dir-source (->Directories [dir] (constantly true))]
+  (let [dir-source (->Directories [dir] (constantly true) identity)]
     (->DirDependency dir-source [reloadable])))
 
 ;; Examples
@@ -268,7 +272,8 @@
                                               "templates.clj"
                                               "api.clj"
                                               "application.clj"
-                                              "snippets.clj"])))
+                                              "snippets.clj"])
+                               identity))
   (files clj-dirs)
 
   (def clj-r (->ClojureReloadable [clj-dirs]))
