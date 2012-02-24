@@ -22,8 +22,10 @@
 (defprotocol ISources
   (files [this] "Returns a list of files."))
 
+(defprotocol IGroupable
+  (group-id [this request] "Returns the name of the group that this thing is in."))
+
 (defprotocol IReloadable
-  (group-id [this request] "Returns a unique group-id for this reloadable.")
   (reload [this request] "Reloads this kind of reloadable."))
 
 ;; Provided ISource Implementations
@@ -82,10 +84,11 @@
 ;; Implement ISources for multiple directores. The pred function is
 ;; used to filter the returned files.
 
-(defrecord Directories [dirs pred order]
+(defrecord Directories [dirs pred sort-fn]
   ISources
   (files [this]
-    (sort-by order (filter-all-descendants dirs pred))))
+    (let [sort-fn (or sort-fn identity)]
+      (sort-fn (filter-all-descendants dirs pred)))))
 
 ;; Implement ISources and Compilable for multiple ClojureScript source
 ;; directories. The directores may contain non-ClojureScript files,
@@ -144,8 +147,9 @@
 ;; Implement Clojure code reloading.
 
 (defrecord ClojureReloadable [sources]
+  IGroupable
+  (group-id [_ request] [::clj sources])
   IReloadable
-  (group-id [_ request] ::clj)
   (reload [_ _]
     (doseq [source sources]
       (reload-clj-seq (files source))))
@@ -205,8 +209,9 @@
 ;; Implement ClojureScript reloading.
 
 (defrecord ClojureScriptReloadable [opts sources top-level-pkgs]
-  IReloadable
+  IGroupable
   (group-id [_ request] [::cljs (:uri request)])
+  IReloadable
   (reload [this request]
     (let [build-opts (cljs-compilation-options opts request)]
       (doseq [pkg top-level-pkgs]
@@ -223,25 +228,133 @@
 ;; Create an IReloadabel which can trigger the reload of other
 ;; reloadables.
 
-(defrecord DirDependency [source reloadables]
-  IReloadable
+(defrecord Watch [source]
+  IGroupable
   (group-id [_ request] [::dir (:dirs source) (:uri request)])
-  (reload [_ request]
-    (doseq [reloadable reloadables]
-      (reload reloadable request)))
+  IReloadable
+  (reload [_ request] nil)
   ISources
   (files [_] (files source)))
 
-;; Sugar
-;; =====
+(defrecord Dependency [reloadable dependents]
+  IGroupable
+  (group-id [_ request] (group-id reloadable request))
+  IReloadable
+  (reload [_ request]
+    (reload reloadable request)
+    (doseq [r dependents]
+      (reload r request)))
+  ISources
+  (files [_] (files reloadable)))
+
+(defrecord ReloadFns [fns]
+  IReloadable
+  (reload [_ request]
+    (doseq [f fns]
+      (f request))))
 
 (defn name-order [names]
   (fn [file] (get (into {} (map-indexed (fn [i x] [x i]) names))
                  (.getName file)
                  0)))
 
-(defn clj-files-in [dirs & fs]
-  (let [clj (->Directories dirs (by-file-name (vec fs)) (name-order fs))]
+;; Examples
+;; ========
+
+(comment
+
+  ;; Create a group of Clojure files
+  
+  (def clojure-files ["host_page.clj" "templates.clj" "api.clj" "config.clj"])
+  (def clj-dirs (->Directories ["src/app/clj" "src/lib/clj"]
+                               (by-file-name clojure-files)
+                               (fn [xs] (sort-by (name-order clojure-files) xs))))
+  (files clj-dirs)
+
+  ;; Make this group of files Reloadable
+
+  (def clj-r (->ClojureReloadable [clj-dirs]))
+  (group-id clj-r {})
+  (files clj-r)
+  (reload clj-r {})
+
+  ;; Create and group the macro files
+
+  (def macro-files ["snippets.clj"])
+  (def macro-dirs (->Directories ["src/app/cljs-macros"] identity identity))
+  (def macro-r (->ClojureReloadable [macro-dirs]))
+  (group-id macro-r {})
+  (files macro-r)
+  (reload macro-r {})
+
+  ;; Create a group of Clojure files which can be compiled to
+  ;; JavaScript
+  
+  (def shared-dir (->Shared "src/app/shared" (constantly true)))
+  (files shared-dir)
+  (-compile shared-dir {})
+
+  ;; Create a group of ClojureScript files which can be compiled.
+
+  (def cljs-dirs (->ClojureScriptDirs ["src/app/cljs"]))
+  (files cljs-dirs)
+  (-compile cljs-dirs {})
+
+  ;; Make these files Reloadable - combines shared and ClojureScript
+
+  (def cljs-r (->ClojureScriptReloadable {:js "public/javascripts"}
+                                         ;; All of these things have
+                                         ;; to be Compilable
+                                         [shared-dir cljs-dirs]
+                                         ["one"]))
+  (group-id cljs-r {:uri "/development"})
+  (reload cljs-r {:uri "/development"})
+  (files cljs-r)
+  (-compile cljs-r {})
+
+  ;; If the macros change - reload the Clojure and ClojureFiles as well
+
+  (def macro-r (->Dependency macro-r [clj-r cljs-r]))
+  (group-id macro-r {})
+  (files macro-r)
+  (reload macro-r {})
+
+  ;; Make the set of template files
+  
+  (def templates-dir (->Directories ["templates"] (constantly true) reverse))
+  (files templates-dir)
+
+  ;; Watch template files
+
+  (def templates-r (->Watch templates-dir))
+  (group-id templates-r {:uri "/development"})
+  (reload templates-r {:uri "/development"})
+  (files templates-r)
+
+  ;; If template files change reload ClojureScript
+
+  (def dep (->Dependency templates-r [cljs-r]))
+  (group-id dep {:uri "/development"})
+  (files dep)
+  (reload dep {:uri "/development"})
+
+  ;; If ClojureFiles change run a function
+
+  (def example-fn (->ReloadFns [(fn [request] (prn "Example Function"))]))
+
+  (def clj-r (->Dependency clj-r [example-fn]))
+  (group-id clj-r {:uri "/development"})
+  (files clj-r)
+  (reload clj-r {:uri "/development"})
+  
+  )
+
+;; Sugar
+;; =====
+
+(defn clojure-reloads [dirs & files]
+  (let [sort-fn (fn [xs] (sort-by (name-order files) xs))
+        clj (->Directories dirs (by-file-name files) sort-fn)]
     (->ClojureReloadable [clj])))
 
 (defn shared
@@ -250,74 +363,50 @@
   ([dir pred]
      (->Shared dir pred)))
 
-(defn cljs
-  ([opts dirs pkgs]
-     (cljs opts dirs nil pkgs))
-  ([opts dirs shared pkgs]
-     (let [sources (->ClojureScriptDirs dirs)
-           sources (if shared (conj [shared] sources) [sources])]
-       (->ClojureScriptReloadable opts sources pkgs))))
+(defn clojurescript-reloads [dirs & {:keys [packages shared] :as opts}]
+  (let [opts (dissoc opts :packages :shared)
+        sources (->ClojureScriptDirs dirs)
+        sources (if shared (conj [shared] sources) [sources])]
+    (->ClojureScriptReloadable opts sources packages)))
 
-(defn dir-trigger [dir reloadable]
-  (let [dir-source (->Directories [dir] (constantly true) identity)]
-    (->DirDependency dir-source [reloadable])))
+(defn to-reloadable [x]
+  (if (fn? x)
+    (->ReloadFns [x])
+    x))
+
+(defn dependency [parent & children]
+  (let [children (map to-reloadable children)]
+    (->Dependency parent children)))
+
+(defn directory [dir]
+  (->Directories [dir] (constantly true) nil))
+
+(defn watched-directory [dir & children]
+  (apply dependency (->Watch (directory dir)) children))
 
 ;; Examples
 ;; ========
 
 (comment
-
-  (def clj-dirs (->Directories ["src/app/cljs-macros" "src/app/clj" "src/lib/clj"]
-                               (by-file-name ["host_page.clj"
-                                              "templates.clj"
-                                              "api.clj"
-                                              "application.clj"
-                                              "snippets.clj"])
-                               identity))
-  (files clj-dirs)
-
-  (def clj-r (->ClojureReloadable [clj-dirs]))
-  (group-id clj-r {})
-  (reload clj-r {})
-  (files clj-r)
-
-  (def shared-dir (->Shared "src/app/shared" (constantly true)))
-  (files shared-dir)
-
-  (def cljs-dirs (->ClojureScriptDirs ["src/app/cljs"]))
-  (files cljs-dirs)
-
-  (def cljs-r (->ClojureScriptReloadable {:js "public/javascripts"}
-                                         [shared-dir cljs-dirs]
-                                         ["one"]))
-  (group-id cljs-r {:uri "/development"})
-  (reload cljs-r {:uri "/development"})
-  (files cljs-r)
-
-  (def templates-dir (->Directories ["templates"] (constantly true)))
-  (files templates-dir)
-
-  (def templates-r (->DirDependency templates [cljs-r]))
-  (group-id templates-r {:uri "/development"})
-  (reload templates-r {:uri "/development"})
-  (files templates-r)
-
-  ;; With Sugar
-
-  (def watch-clj (clj-files-in ["src/app/cljs-macros" "src/app/clj" "src/lib/clj"]
-                               "host_page.clj"
-                               "templates.clj"
-                               "api.clj"
-                               "application.clj"
-                               "snippets.clj"))
-  (def watch-cljs (cljs {:js "public/javascripts"}
-                        ["src/app/cljs"]
-                        (shared "src/app/shared")
-                        ["one"]))
-  (-compile watch-cljs {:output-dir "public/javascripts/out"
-                        :output-to "public/javascripts/test.js"})
-  (def watch-templates (dir-trigger "templates" watch-cljs))
-
+  
+  (def clj-reloads (dependency (clojure-reloads ["src/app/clj" "src/lib/clj"]
+                                                "host_page.clj"
+                                                "templates.clj"
+                                                "api.clj"
+                                                "config.clj")
+                               (fn [request] (prn "Example Function"))))
+  
+  (def cljs-reloads (clojurescript-reloads ["src/app/cljs"]
+                                           :packages ["one"]
+                                           :shared (shared "src/app/shared")
+                                           :js "public/javascripts"))
+  
+  (def macro-reloads (dependency (clojure-reloads ["src/app/cljs-macros"]
+                                                  "snippets.clj")
+                                 clj-reloads
+                                 cljs-reloads))
+  
+  (def templates (watched-directory "templates" cljs-r))
   )
 
 ;; Wrap-reload Middleware
@@ -373,7 +462,7 @@
 
   (def handler (wrap-reload (constantly {})
                             (by-uri "/development" "/production" "/fresh")
-                            [watch-clj watch-cljs watch-templates]))
+                            [clj-reloads cljs-reloads macro-reloads templates]))
   ;; after touching one the watched files this will do nothing
   (handler {:uri "/home"})
   ;; after touching one the watched files this will trigger a reload

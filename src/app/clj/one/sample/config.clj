@@ -1,6 +1,7 @@
 (ns one.sample.config
   "This namespace contains the configuration for a ClojureScript One
   application."
+  (:use [one.reload :only [dependency clojure-reloads clojurescript-reloads watched-directory shared]])
   (:require [net.cgrand.enlive-html :as html]
             [one.reload :as reload]))
 
@@ -19,26 +20,30 @@
 ;; Configure code reloading for Clojure, ClojureScript and shared
 ;; code.
 
-(def watch-clj (reload/clj-files-in ["src/app/cljs-macros" "src/app/clj" "src/lib/clj"]
-                                    "host_page.clj"
-                                    "templates.clj"
-                                    "api.clj"
-                                    "application.clj"
-                                    "snippets.clj"))
+(def clj-reloads (clojure-reloads ["src/app/clj" "src/lib/clj"]
+                                  "host_page.clj"
+                                  "templates.clj"
+                                  "api.clj"
+                                  "config.clj"))
 
-(def watch-cljs (reload/cljs {:js public-js}
-                             ["src/app/cljs"]
-                             (reload/shared "src/app/shared")
-                             ["one"]))
+(def cljs-reloads (clojurescript-reloads ["src/app/cljs"]
+                                         :packages ["one"]
+                                         :shared (shared "src/app/shared")
+                                         :js "public/javascripts"))
 
-(def watch-templates (reload/dir-trigger "templates" watch-cljs))
+(def macro-reloads (dependency (clojure-reloads ["src/app/cljs-macros"]
+                                                "snippets.clj")
+                               clj-reloads
+                               cljs-reloads))
+
+(def templates (watched-directory "templates" cljs-reloads))
 
 ;; Application configuration.
 
 (def ^{:doc "Configuration for the sample application."}
   config {;; Something which implements the Compilable protocol. Used
           ;; by one.tools to build the production application.
-          :cljs-sources watch-cljs
+          :cljs-sources cljs-reloads
           ;; The location where all generated JavaScript will be
           ;; stored. Use in one.tools to determine where to output
           ;; compiled JavaScript.
@@ -53,4 +58,4 @@
                    "one.sample.core.start();one.sample.core.repl();"]
           :prod-js ["one.sample.core.start();"]
           :prod-transform production-transform
-          :reloadables [watch-clj watch-cljs watch-templates]})
+          :reloadables [clj-reloads cljs-reloads macro-reloads templates]})
