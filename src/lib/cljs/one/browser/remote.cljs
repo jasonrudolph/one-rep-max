@@ -24,8 +24,8 @@
   (>= status 400))
 
 (defn- handle-response
-  [on-success on-error e]
-  (let [response {:id     (.-id e)
+  [on-success on-error id e]
+  (let [response {:id     id
                   :body   (. e/currentTarget (getResponseText))
                   :status (. e/currentTarget (getStatus))
                   :event  e}
@@ -44,7 +44,9 @@
 
   Other allowable keyword arguments are `:method`, `:content`, `:headers`,
   `:priority`, and `:retries`. `:method` defaults to \"GET\" and `:retries`
-  defaults to `0`."
+  defaults to `0`.
+
+  `priority` defaults to 100. The lower the number the higher the priority."
   [id url & {:keys [method content headers priority retries
                     on-success on-error]
              :or   {method   "GET"
@@ -57,7 +59,7 @@
            content
            (when headers (.-strobj headers))
            priority
-           (partial handle-response on-success on-error)
+           (partial handle-response on-success on-error id)
            retries)
     (catch js/Error e
       nil)))
