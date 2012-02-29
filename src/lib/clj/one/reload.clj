@@ -12,7 +12,7 @@
 
   Reloading/Compilation or shared Clojure and ClojureScript files is
   also supported."
-  (:use [cljs.closure :only (build -compile Compilable)]
+  (:use [cljs.closure :only (build -compile dependency-order Compilable)]
         [cljs.compiler :only (to-target-file)])
   (:require [clojure.java.io :as io]))
 
@@ -112,7 +112,7 @@
     (all-descendants-ending-with dirs ".cljs"))
   Compilable
   (-compile [_ opts]
-    (flatten (map #(-compile % opts) dirs))))
+    (dependency-order (flatten (map #(-compile % opts) dirs)))))
 
 (defn rename-to-js
   "Rename any Clojure-based file to a JavaScript file."
@@ -148,10 +148,11 @@
     (filter-descendants dir pred))
   Compilable
   (-compile [this opts]
-    (let [fs (files this)]
-      (let [d (io/file dir)]
-        (flatten (map #(-compile % (assoc opts :output-file (js-file-name d %)))
-                      fs))))))
+    (dependency-order
+     (let [fs (files this)]
+       (let [d (io/file dir)]
+         (flatten (map #(-compile % (assoc opts :output-file (js-file-name d %)))
+                       fs)))))))
 
 ;; Provided IReloadable Implementations
 ;; ====================================
@@ -237,7 +238,7 @@
     (flatten (map files sources)))
   Compilable
   (-compile [_ opts]
-    (flatten (map #(-compile % opts) sources))))
+    (dependency-order (flatten (map #(-compile % opts) sources)))))
 
 ;; Create an IReloadabel which can trigger the reload of other
 ;; reloadables.
