@@ -2,7 +2,8 @@
   one.repmax.core
   (:require [goog.uri.utils :as uri]
             [clojure.browser.repl :as repl]
-            [one.dispatch :as dispatch]))
+            [one.dispatch :as dispatch]
+            [one.repmax.view :as view]))
 
 (defn- server
   "Return a string which is the scheme and domain portion of the URL
@@ -26,5 +27,4 @@
   This function must be called from the host HTML page to start the
   application."
   []
-  ;(dispatch/fire :init))
-  (js/alert "Hello! Replace me with an initialization event."))
+  (dispatch/fire :init))

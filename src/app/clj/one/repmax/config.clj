@@ -15,7 +15,9 @@
           :dev-js-file-name "main.js"
           :prod-js-file-name "mainp.js"
           :dev-js ["goog.require('one.repmax.core');"
+                   "goog.require('one.repmax.model');"
                    "goog.require('one.repmax.controller');"
+                   "goog.require('one.repmax.logging');"
                    "one.repmax.core.start();one.repmax.core.repl();"]
           :prod-js ["one.repmax.core.start();"]
           :reload-clj ["/one/host_page"

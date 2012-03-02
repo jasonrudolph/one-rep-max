@@ -6,7 +6,7 @@ to `(log/console-output)` to this namespace or evaluate this from the
 REPL.
 
 For more information see library.logging."}
-  one.sample.logging
+  one.repmax.logging
   (:require [one.dispatch :as dispatch]
             [one.logging :as log]))
 
@@ -16,11 +16,5 @@ For more information see library.logging."}
 (dispatch/react-to (constantly true)
                    (fn [t d] (log/info logger (str (pr-str t) " - " (pr-str d)))))
 
-(comment
-  ;; log to the console
-  (log/start-display (log/console-output))
-  ;; log to to the "fancy" window
-  (log/start-display (log/fancy-output "main"))
-  ;; change the logging level
-  (log/set-level logger :fine)
-  )
+;; log to the console
+(log/start-display (log/console-output))
