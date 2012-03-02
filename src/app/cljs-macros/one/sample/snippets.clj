@@ -11,5 +11,4 @@
   "Expands to a map of HTML snippets which are extracted from the
   design templates."
   []
-  {:form (snippet "form.html" [:div#form])
-   :greeting (snippet "greeting.html" [:div#greeting])})
+  {})

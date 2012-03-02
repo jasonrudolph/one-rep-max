@@ -4,7 +4,7 @@
 
 (defn- production-transform [h]
   (html/transform h
-                  [:ul#navigation]
+                  [:#dev-links]
                   (html/substitute (html/html-snippet ""))))
 
 (def ^{:doc "Configuration for the One Rep Max application."}

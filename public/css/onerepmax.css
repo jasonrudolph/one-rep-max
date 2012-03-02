@@ -1,0 +1,60 @@
+body {
+  font-family: Helvetica;
+}
+
+a, a:hover, a:active, a:visited {
+  color: #333;
+}
+
+#header {
+  width: 100%;
+  background: #111;
+}
+
+h1 {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  padding: 12px 9px;
+}
+
+#header-buttons .button-right {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+}
+
+#search-bar {
+  margin: 5px;
+}
+
+#exercise-list {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#exercise-list ol li {
+  border: 1px solid #CCC;
+}
+
+#exercise-list ol li .list-item-link {
+  text-decoration: none;
+  line-height: 40px;
+  padding: 10px;
+}
+
+/*********************************************************************
+ * Dev toobar
+ ********************************************************************/
+
+#dev-links {
+  border-top: 1px solid #CCC;
+  margin-top: 50px;
+  padding-top: 5px;
+  text-align: center;
+}
+
+#dev-links ul li {
+  display: inline;
+}
