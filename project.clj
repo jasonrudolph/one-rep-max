@@ -14,7 +14,7 @@
                       "886d8dc81812962d30a741d6d05ce9d90975160f"]
                      ["https://github.com/levand/domina.git"
                       "8933b2d12c44832c9bfaecf457a1bc5db251a774"]]
-  :repl-init one.sample.repl
+  :repl-init one.repmax.repl
   :source-path "src/app/clj"
   :extra-classpath-dirs [".lein-git-deps/clojurescript/src/clj"
                          ".lein-git-deps/clojurescript/src/cljs"
