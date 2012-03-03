@@ -1,5 +1,6 @@
 (ns ^{:doc "Render the views for the application."}
   one.repmax.view
+  (:use [domina :only (append! by-id set-html! swap-content!)])
   (:require-macros [one.repmax.snippets :as snippets])
   (:require [one.dispatch :as dispatch]))
 
@@ -13,6 +14,10 @@
   :state)
 
 (defmethod render :exercise-list [_]
-  (js/alert "Hello! Replace me with logic to render the initial view."))
+  (let [header (by-id "header")
+        content (by-id "content")]
+    (swap-content! header (:exercises-header snippets))
+    (set-html! content (:exercises-search snippets))
+    (append! content (:exercises-list snippets))))
 
 (dispatch/react-to #{:state-change} (fn [_ m] (render m)))
