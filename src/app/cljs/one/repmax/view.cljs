@@ -8,6 +8,13 @@
   when rendering views."}
   snippets (snippets/snippets))
 
+(defn render-exercise-list [exercises]
+  (js/alert "Hello! I have a list of exercises ready for you. Replace me with logic to render the list.")
+  (.log js/console exercises))
+
+(dispatch/react-to #{:exercise-search-results-ready}
+                   (fn [_ exercises] (render-exercise-list exercises)))
+
 (defmulti render
   "Accepts a map which represents the current state of the application
   and renders a view based on the value of the `:state` key."
