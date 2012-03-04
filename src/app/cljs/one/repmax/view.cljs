@@ -1,6 +1,7 @@
 (ns ^{:doc "Render the views for the application."}
   one.repmax.view
-  (:use [domina :only (append! by-id set-html! swap-content!)])
+  (:use [domina :only (append! by-id destroy-children! set-attr! set-html! set-text! swap-content!)]
+        [domina.xpath :only (xpath)])
   (:require-macros [one.repmax.snippets :as snippets])
   (:require [one.dispatch :as dispatch]))
 
@@ -8,9 +9,22 @@
   when rendering views."}
   snippets (snippets/snippets))
 
-(defn render-exercise-list [exercises]
-  (js/alert "Hello! I have a list of exercises ready for you. Replace me with logic to render the list.")
-  (.log js/console exercises))
+(defn- render-exercise-list [exercises]
+  (let [content (xpath "//div[@id='exercise-list']/ol")]
+    (destroy-children! content)
+    (doseq [e exercises]
+      (append! content (exercise-list-item e)))))
+
+(defn- exercise-list-item [exercise]
+  (let [li (domina/clone (:exercises-list-item snippets))
+        dom-id (str "exercise-" (:_id exercise))]
+    (-> li
+      (set-attr! "id" dom-id))
+    (-> li (xpath "a")
+      (set-attr! "href" (str "#")))
+    (-> li (xpath ".//span[@class='list-item-label']")
+      (set-text! (:name exercise)))
+    li))
 
 (dispatch/react-to #{:exercise-search-results-ready}
                    (fn [_ exercises] (render-exercise-list exercises)))
