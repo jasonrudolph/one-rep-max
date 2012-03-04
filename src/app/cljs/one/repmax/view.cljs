@@ -2,8 +2,9 @@
   one.repmax.view
   (:use [domina.xpath :only (xpath)])
   (:require-macros [one.repmax.snippets :as snippets])
-  (:require [one.dispatch :as dispatch]
-            [domina :as d]))
+  (:require [clojure.browser.event :as event]
+            [domina :as d]
+            [one.dispatch :as dispatch]))
 
 (def ^{:doc "A map which contains chunks of HTML which may be used
   when rendering views."}
@@ -26,6 +27,12 @@
       (d/set-text! (:name exercise)))
     li))
 
+(defn- add-exercise-search-event-listener []
+  (let [field (d/by-id "search-input")]
+    (event/listen field
+                  "keyup"
+                  #(dispatch/fire :exercise-search-field-changed (d/value field)))))
+
 (dispatch/react-to #{:exercise-search-results-ready}
                    (fn [_ exercises] (render-exercise-list exercises)))
 
@@ -39,6 +46,7 @@
         content (d/by-id "content")]
     (d/swap-content! header (:exercises-header snippets))
     (d/set-html! content (:exercises-search snippets))
-    (d/append! content (:exercises-list snippets))))
+    (d/append! content (:exercises-list snippets))
+    (add-exercise-search-event-listener)))
 
 (dispatch/react-to #{:state-change} (fn [_ m] (render m)))
