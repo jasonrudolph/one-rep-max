@@ -1,9 +1,9 @@
 (ns ^{:doc "Render the views for the application."}
   one.repmax.view
-  (:use [domina :only (append! by-id destroy-children! set-attr! set-html! set-text! swap-content!)]
-        [domina.xpath :only (xpath)])
+  (:use [domina.xpath :only (xpath)])
   (:require-macros [one.repmax.snippets :as snippets])
-  (:require [one.dispatch :as dispatch]))
+  (:require [one.dispatch :as dispatch]
+            [domina :as d]))
 
 (def ^{:doc "A map which contains chunks of HTML which may be used
   when rendering views."}
@@ -11,19 +11,19 @@
 
 (defn- render-exercise-list [exercises]
   (let [content (xpath "//div[@id='exercise-list']/ol")]
-    (destroy-children! content)
+    (d/destroy-children! content)
     (doseq [e exercises]
-      (append! content (exercise-list-item e)))))
+      (d/append! content (exercise-list-item e)))))
 
 (defn- exercise-list-item [exercise]
-  (let [li (domina/clone (:exercises-list-item snippets))
+  (let [li (d/clone (:exercises-list-item snippets))
         dom-id (str "exercise-" (:_id exercise))]
     (-> li
-      (set-attr! "id" dom-id))
+      (d/set-attr! "id" dom-id))
     (-> li (xpath "a")
-      (set-attr! "href" (str "#")))
+      (d/set-attr! "href" (str "#")))
     (-> li (xpath ".//span[@class='list-item-label']")
-      (set-text! (:name exercise)))
+      (d/set-text! (:name exercise)))
     li))
 
 (dispatch/react-to #{:exercise-search-results-ready}
@@ -35,10 +35,10 @@
   :state)
 
 (defmethod render :exercise-list [_]
-  (let [header (by-id "header")
-        content (by-id "content")]
-    (swap-content! header (:exercises-header snippets))
-    (set-html! content (:exercises-search snippets))
-    (append! content (:exercises-list snippets))))
+  (let [header (d/by-id "header")
+        content (d/by-id "content")]
+    (d/swap-content! header (:exercises-header snippets))
+    (d/set-html! content (:exercises-search snippets))
+    (d/append! content (:exercises-list snippets))))
 
 (dispatch/react-to #{:state-change} (fn [_ m] (render m)))
