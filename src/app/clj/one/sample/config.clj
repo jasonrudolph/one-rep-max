@@ -2,8 +2,7 @@
   "This namespace contains the configuration for a ClojureScript One
   application."
   (:use [one.reload :only [dependency clojure-reloads clojurescript-reloads watched-directory shared]])
-  (:require [net.cgrand.enlive-html :as html]
-            [one.reload :as reload]))
+  (:require [net.cgrand.enlive-html :as html]))
 
 ;; Set the location where all generated JavaScript will be stored.
 
