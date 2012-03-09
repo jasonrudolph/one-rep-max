@@ -15,7 +15,7 @@
 
 (def ^{:private true}
   exercises-list-item-template
-  (let [sample-list-item (html/select (html/html-resource "exercises.html") [:#exercise-list :ol :li] :first)
+  (let [sample-list-item (html/select (html/html-resource "exercises.html") [:#exercise-list :ol [:li html/first-of-type]])
         list-item-without-content (html/at sample-list-item [:.list-item-label] (html/content ""))]
     (render list-item-without-content)))
 
