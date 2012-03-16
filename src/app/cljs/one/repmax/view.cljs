@@ -35,9 +35,6 @@
                   "keyup"
                   #(dispatch/fire :exercise-search-field-changed (d/value field)))))
 
-(dispatch/react-to #{:exercise-search-results-ready}
-                   (fn [_ exercises] (render-exercise-list exercises)))
-
 (defmulti render
   "Accepts a map which represents the current state of the application
   and renders a view based on the value of the `:state` key."
@@ -51,4 +48,9 @@
     (d/append! content (:exercises-list snippets))
     (add-exercise-search-event-listener)))
 
+;; Register reactors
+
 (dispatch/react-to #{:state-change} (fn [_ m] (render m)))
+(dispatch/react-to #{:exercise-search-results-ready}
+                   (fn [_ exercises] (render-exercise-list exercises)))
+
