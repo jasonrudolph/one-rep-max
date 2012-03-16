@@ -10,6 +10,8 @@
   when rendering views."}
   snippets (snippets/snippets))
 
+;; TODO Time this approach (i.e., "Scorched Earth") versus hiding/showing
+;;      *existing* list items after a search
 (defn- render-exercise-list [exercises]
   (let [content (xpath "//div[@id='exercise-list']/ol")]
     (d/destroy-children! content)
