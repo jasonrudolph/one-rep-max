@@ -10,15 +10,15 @@
       To get started ...
       (TODO: Add instructions.)
     </p>
-    <form>
+    <div id="datastore-configuration-form">
       <label id="api-key-input-label" for="api-key-input">API Key</label>
       <input id="api-key-input" size="20" type="text"/>
-      <button>Let's Do This!</button>
-    </form>
+      <button id="datastore-configuration-form-button">Let's Do This!</button>
+    </div>
     <ul class="progress-list">
-      <li>Verify API key</li>
-      <li>Configure database</li>
-      <li>Initialize data</li>
+      <li id="step-verify-credentials" data-status="pending">Verify API key</li>
+      <li id="step-verify-database"    data-status="pending">Verify database</li>
+      <li id="step-verify-collections" data-status="pending">Verify or create collections</li>
     </ul>
   </div>
 </div>

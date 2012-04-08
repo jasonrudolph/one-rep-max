@@ -25,6 +25,30 @@ h1 {
   top: 12px;
 }
 
+/*********************************************************************
+ * Datastore configuration
+ ********************************************************************/
+
+#datastore-configuration .progress-list li[data-status=pending] {
+  color: #888;
+}
+
+#datastore-configuration .progress-list li[data-status=working] {
+  color: #000;
+}
+
+#datastore-configuration .progress-list li[data-status=success] {
+  color: green;
+}
+
+#datastore-configuration .progress-list li[data-status=failure] {
+  color: red;
+}
+
+/*********************************************************************
+ * Exercise list
+ ********************************************************************/
+
 #search-bar {
   margin: 5px;
 }

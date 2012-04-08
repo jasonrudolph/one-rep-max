@@ -1,50 +1,111 @@
 (ns one.repmax.model
-  (:require [one.dispatch :as dispatch]
-            [one.repmax.data :as data]))
+  (:require [clojure.string :as string]
+            [one.dispatch :as dispatch]
+            [one.repmax.cookies :as cookies]
+            [one.repmax.mongohq :as mongo]))
+
+(def initial-state {:state :start
+                    :datastore-configuration {:state :obtain-credentials, :api-key ""}
+                    :exercises nil
+                    :exercise-search {:query nil, :exercises nil}})
 
 (def ^{:doc "An atom containing a map which is the application's current state."}
-  state (atom {}))
+  state (atom initial-state))
 
 (add-watch state :state-change-key
-           (fn [k r o n]
-             (dispatch/fire :state-change n)))
+           (fn [_ _ o n]
+             (dispatch/fire :model-change {:old o, :new n, :message (:last-message n)})))
 
-(dispatch/react-to #{:init}
-  (fn [t d]
-    (initialize-exercise-list)))
+;;;; Receiving events that update state
+
+(dispatch/react-to #{:action}
+                   (fn [_ d] (receive-action-message d)))
+
+;; TODO Add docs => State only changes as the result of an action message
+(defn receive-action-message [message]
+  (swap! state apply-message message))
+
+(defn apply-message [state message]
+  (-> state
+    (update-model message)
+    (assoc :last-message message)))
+
+(defmulti update-model (fn [state message] (:action message)))
+
+;;;; Managing the Datastore Configuration
+
+; The :datastore-configuration map contains the following elements:
+;
+;    1. :api-key => the user-provided API key for use in accessing MongoHQ
+;    2. :state => the overall state of the datastore configuration (i.e.,
+;       the state of the datastore initialization/verification process)
+;    3. :error => a map containing a description of the error that occured
+;       during the initialization process (in the :text key) and the state
+;       in which the error occured (in the :occured-in-state key); this map
+;       is only present if an error has occured
+;
+;  In a successful progression through the initialization process, the
+;  atom will move through the following states:
+;
+;    :obtain-credentials ;; => the start state; waiting for API key
+;    :verify-credentials ;; => API key present; need to verify API key works
+;    :verify-database    ;; => API key verified; need to verify database exists
+;    :verify-collections ;; => database present; need to verify or create collections
+;    :ready              ;; => collections verified; datastore ready for use
+;
+;  If any step fails along the way, the state changes to :initialization-failed.
+
+(defmethod update-model :datastore-configuration/initialize [state message]
+  (-> state
+    (assoc :state :datastore-configuration)
+    (assoc :datastore-configuration (datastore-configuration-from-cookies))))
+
+(defn datastore-configuration-from-cookies []
+  (let [api-key (cookies/get-cookie :api-key)]
+    (if (nil? api-key)
+      (:datastore-configuration initial-state)
+      (datastore-configuration-for-new-api-key api-key))))
+
+(defn datastore-configuration-for-new-api-key [api-key]
+  {:api-key api-key :state :verify-credentials})
+
+(defmethod update-model :datastore-configuration/update [state {:keys [api-key]}]
+  (assoc state :datastore-configuration (datastore-configuration-for-new-api-key api-key)))
+
+(defmethod update-model :datastore-configuration/credentials-verified [state _]
+  (assoc-in state [:datastore-configuration :state] :verify-database))
+
+(defmethod update-model :datastore-configuration/database-verified [state _]
+  (assoc-in state [:datastore-configuration :state] :verify-collections))
+
+(defmethod update-model :datastore-configuration/collections-verified [state _]
+  (assoc-in state [:datastore-configuration :state] :ready))
+
+(defmethod update-model :datastore-configuration/initialization-failed [state {:keys [error]}]
+  (let [previous-datastore-configuration-state (-> state :datastore-configuration :state)]
+    (-> state
+      (assoc-in [:datastore-configuration :state] :initialization-failed)
+      (assoc-in [:datastore-configuration :error] {:text error, :occured-in-state previous-datastore-configuration-state}))))
 
 ;;; Managing the Exercise List
 
-(def ^{:private true}
-  last-exercise-search-number (atom 0))
+(defmethod update-model :datastore-configuration/ready [state _]
+  (assoc state :state :exercise-list))
 
-(def ^{:private true}
-  exercise-search-results (atom {:search-number @last-exercise-search-number, :search-string nil, :exercises []}))
+(defmethod update-model :exercises/initialized-from-datastore [state {:keys [exercises]}]
+  (assoc state :exercises exercises))
 
-(add-watch exercise-search-results :exercise-search-results-change-key
-           (fn [_ _ old-results new-results]
-             (if-not (= old-results new-results)
-               (dispatch/fire :exercise-search-results-ready (:exercises new-results))))) ; TODO Consider renaming to :exercise-search-results-changed or :exercise-list-changed
+(defmethod update-model :exercises/search [state {:keys [name]}]
+  (let [search-results (find-exercises name (:exercises state))]
+    (assoc state :exercise-search {:query name, :exercises search-results})))
 
-(defn initialize-exercise-list []
-  (find-exercises))
+(defn find-exercises [name exercises]
+  (if (empty? name)
+    exercises
+    (filter-by-attribute exercises :name name)))
 
-(defn find-exercises
-  ([] (find-exercises nil))
-  ([name]
-   (let [search-number (swap! last-exercise-search-number inc)]
-     (data/find-exercises name
-       (fn [exercises]
-         (receive-exercise-search-results search-number name exercises))))))
-
-(defn- receive-exercise-search-results [search-number search-string exercises]
-  (swap! exercise-search-results
-         (fn [previous-search-results new-search-results]
-           (if (> (:search-number new-search-results) (:search-number previous-search-results))
-             new-search-results
-             previous-search-results))
-         {:search-number search-number, :search-string search-string, :exercises exercises}))
-
-(dispatch/react-to #{:exercise-search-field-changed}
-                   (fn [_ d] (find-exercises d)))
+(defn filter-by-attribute [s attribute-name value-like]
+  (let [normalize #(string/lower-case %)
+        pattern (re-pattern (str ".*" (normalize value-like) ".*"))]
+    (filter #(re-find pattern (normalize (attribute-name %))) s)))
 

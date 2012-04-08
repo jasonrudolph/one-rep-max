@@ -2,8 +2,7 @@
   one.repmax.core
   (:require [goog.uri.utils :as uri]
             [clojure.browser.repl :as repl]
-            [one.dispatch :as dispatch]
-            [one.repmax.view :as view]))
+            [one.dispatch :as dispatch]))
 
 (defn- server
   "Return a string which is the scheme and domain portion of the URL
@@ -22,9 +21,10 @@
   (repl/connect (str (server) ":9000/repl")))
 
 (defn ^:export start
-  "Start the application by firing an `:init` event.
+  "Start the application by firing an event to kick off the initialization
+  of the datastore.
 
   This function must be called from the host HTML page to start the
   application."
   []
-  (dispatch/fire :init))
+  (dispatch/fire :action {:action :datastore-configuration/initialize}))

@@ -23,7 +23,9 @@
   "Expands to a map of HTML snippets which are extracted from the
   design templates."
   []
-  {:exercises-header    (snippet "exercises.html" [:#header])
-   :exercises-search    (snippet "exercises.html" [:#search-bar])
-   :exercises-list      exercises-list-template
-   :exercises-list-item exercises-list-item-template})
+  {:datastore-configuration-header (snippet "datastore_configuration.html" [:#header])
+   :datastore-configuration-form   (snippet "datastore_configuration.html" [:#content])
+   :exercises-header               (snippet "exercises.html" [:#header])
+   :exercises-search               (snippet "exercises.html" [:#search-bar])
+   :exercises-list                 exercises-list-template
+   :exercises-list-item            exercises-list-item-template})

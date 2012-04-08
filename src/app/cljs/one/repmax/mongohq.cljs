@@ -1,9 +1,7 @@
 (ns one.repmax.mongohq
-  (:require [goog.net.Jsonp :as jsonp]
-            [clojure.walk :as walk]))
-
-; TODO Dynamically obtain user-provided API key
-(def ^:private *api-key* "SECRET")
+  (:require [clojure.walk :as walk]
+            [goog.json :as gjson]
+            [one.browser.remote :as remote]))
 
 ; clj->js is from Chris Granger's excellent fetch library
 ; https://github.com/ibdknox/fetch/blob/30e938c/src/fetch/util.cljs
@@ -20,17 +18,97 @@
     (coll? x) (apply array (map clj->js x))
     :else x))
 
-; TODO Add support for on-error callback
-(defn- jsonp-request [url params on-success]
-  (let [jsonp (goog.net.Jsonp. url)]
-    (.send jsonp
-           (clj->js params)
-           (fn [data] (on-success (js->clj data))))))
+;;; Plumbing for handling remote requests
 
-(def ^{:private true} root-url "https://api.mongohq.com/databases/one-rep-max")
+(def ^{:private true} request-id (atom 0))
+(defn- next-request-id [] (swap! request-id inc))
+
+(defn- map->query-string
+  "Returns a query string representation of the given map of query parameters.
+
+   For example, the following example map of parameters:
+
+     {:_apikey \"some-key\", :name \"some-name\"}
+
+   Produces the following query string:
+
+     \"_apikey=some-key&name=some-name\"
+  "
+  [params]
+  (.toString (.createFromMap goog.Uri.QueryData (clj->js params))))
+
+(defn- with-params [url params]
+  (str url "?" (map->query-string params)))
+
+(defn- request-headers [content-type]
+  (if (= content-type :json)
+    (goog.structs.Map. (clj->js {"Content-Type" "application/json"}))))
+
+(defn- request-content [content-type content]
+  (if (= content-type :json)
+    (gjson/serialize (clj->js content))
+    content))
+
+(defn- response-body->clj [response]
+  (js->clj (JSON/parse (:body response))))
+
+; TODO Log all requests
+(defn- request
+  [url & {:keys [method content content-type on-success on-error]
+          :or   {method     "GET"
+                 on-success (fn [data])
+                 on-error   (fn [data])}}]
+  (remote/request (next-request-id)
+                  url
+                  :method method
+                  :headers (request-headers content-type)
+                  :content (request-content content-type content)
+                  :on-success #(on-success (response-body->clj %))
+                  :on-error #(on-error ("error" (response-body->clj %)))))
+
+(def ^{:private true} root-url "https://api.mongohq.com")
+
+;;; Working with Databases
+
+(def database-name "one-rep-max")
+
+(def ^{:private true} root-databases-url (str root-url "/databases"))
+
+(def ^{:private true} root-database-url (str root-databases-url "/" database-name))
+
+(defn find-databases [api-key on-success on-error]
+  (request (with-params root-databases-url {:_apikey api-key})
+           :on-success on-success
+           :on-error on-error))
+
+(defn find-database [api-key on-success on-error]
+  (request (with-params root-database-url {:_apikey api-key})
+           :on-success on-success
+           :on-error on-error))
+
+;;; Working with Collections
+
+(def ^{:private true} root-collections-url (str root-database-url "/collections"))
+
+(defn- root-collection-url [collection-name]
+  (str root-collections-url "/" collection-name))
+
+(defn find-collections [api-key on-success on-error]
+  (request (with-params root-collections-url {:_apikey api-key})
+           :on-success on-success
+           :on-error on-error))
+
+(defn create-collection [api-key collection-name on-success on-error]
+  (request (with-params root-collections-url {:_apikey api-key})
+           :method "POST"
+           :content (str "name=" collection-name)
+           :on-success on-success
+           :on-error on-error))
+
+;;; Working with Documents
 
 (defn- root-documents-url [collection-name]
-  (str root-url "/collections/" collection-name "/documents"))
+  (str (root-collection-url collection-name) "/documents"))
 
 (defn- simplify-object-ids
   "Takes a seq of maps, where each map is a Mongo document in raw format as
@@ -64,41 +142,42 @@
    It will make as many requests as needed to fetch all the documents in the
    collection.
   "
-  [collection-name on-success]
+  [api-key collection-name on-success]
   (let [url (root-documents-url collection-name)]
-    (find-documents-request url :on-success on-success)))
+    (find-documents-request api-key url :on-success on-success)))
 
+; TODO Add support for on-error callback
 (defn- find-documents-request
-  "Issues a JSONP request to the given URL to find documents.
+  "Issues a request to the given URL to find documents.
 
    Optional keyword argments:
-   * :skip            Used for pagination in MongoHQ. Indicates the number of documents to
-                      'skip' over when determining which documents to return from a query.
-                      Defaults to 0.
-   * :limit           The maximum number of documents to return in this request.
-                      Defaults to 100 (i.e., the maximum limit supported by MongoHQ).
-   * previous-results A sequence of documents produced by previous calls to this same
-                      function. Since we may need to call MongoHQ multiple times to 'paginate'
-                      through the list of documents, we can pass the results from previous calls
-                      to subsequent calls. After the final request to MongoHQ, all results are
-                      combined and passed to the on-success function.
-                      Defaults to an empty Vector.
-   * on-success       The function that will be invoked upon successful completion of the
-                      request. The function must accept a single argument: a sequence of
-                      documents.
+   * :skip         Used for pagination in MongoHQ. Indicates the number of documents to
+                   'skip' over when determining which documents to return from a query.
+                   Defaults to 0.
+   * :limit        The maximum number of documents to return in this request.
+                   Defaults to 100 (i.e., the maximum limit supported by MongoHQ).
+   * previous-docs A sequence of documents produced by previous calls to this same
+                   function. Since we may need to call MongoHQ multiple times to 'paginate'
+                   through the list of documents, we can pass the results from previous calls
+                   to subsequent calls. After the final request to MongoHQ, all results are
+                   combined and passed to the on-success function.
+                   Defaults to an empty Vector.
+   * on-success    The function that will be invoked upon successful completion of the
+                   request. The function must accept a single argument: a sequence of
+                   documents.
   "
-  [url & {:keys [skip limit previous-results on-success]
-          :or   {skip 0
-                 limit 100
-                 previous-results []
-                 on-success (fn [data])}}]
-  (jsonp-request url
-                 {:_apikey *api-key* :skip skip :limit limit}
-                 (find-documents-callback url
-                                          skip
-                                          limit
-                                          previous-results
-                                          on-success)))
+  [api-key url & {:keys [skip limit previous-docs on-success]
+                  :or   {skip 0
+                         limit 100
+                         previous-docs []
+                         on-success (fn [data])}}]
+  (request (with-params url {:_apikey api-key, :skip skip, :limit limit})
+           :on-success (find-documents-callback api-key
+                                                url
+                                                skip
+                                                limit
+                                                previous-docs
+                                                on-success)))
 
 (defn- find-documents-callback
   "Returns a callback function to be invoked after a successful request to MongoHQ to find
@@ -119,14 +198,23 @@
    in this 'resultset'. We continue this pattern until we have fetched all documents in
    the collection.
   "
-  [url skip limit previous-results on-success]
-  (fn [new-results]
-    (let [all-results (apply conj previous-results new-results)]
-      (if (< (count new-results) limit)
-        (on-success (documents->maps all-results))
-        (find-documents-request url
+  [api-key url skip limit previous-docs on-success]
+  (fn [new-docs]
+    (let [all-docs (apply conj previous-docs new-docs)]
+      (if (< (count new-docs) limit)
+        (on-success (documents->maps all-docs))
+        (find-documents-request api-key
+                                url
                                 :skip (+ skip limit)
                                 :limit limit
-                                :previous-results all-results
+                                :previous-docs all-docs
                                 :on-success on-success)))))
+
+(defn create-document [api-key collection-name document on-success on-error]
+  (request (with-params (root-documents-url collection-name) {:_apikey api-key})
+           :method "POST"
+           :content-type :json
+           :content {"document" document, "safe" true}
+           :on-success on-success
+           :on-error on-error))
 
