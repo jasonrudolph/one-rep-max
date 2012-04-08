@@ -25,7 +25,7 @@
 (defmethod render :exercises/search [{:keys [new]}]
   (render-exercise-list (-> new :exercise-search :exercises)))
 
-;; TODO Time this approach (i.e., rebuilding the whole list in a "scorched Earth" fasion)
+;; TODO Time this approach (i.e., rebuilding the whole list in a "scorched Earth" fashion)
 ;;      versus hiding/showing *existing* list items after a search.
 (defn- render-exercise-list [exercises]
   (let [content (xpath "//div[@id='exercise-list']/ol")]
