@@ -1,0 +1,21 @@
+#!/bin/sh
+
+[[ -n "$1" ]] || { echo "Usage: seed <api-key>"; exit 0 ; }
+
+echo "\n*** Creating 'exercises' collection"
+
+curl -X POST https://api.mongohq.com/databases/one-rep-max/collections?_apikey=$1 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"exercises"}'
+
+echo "\n*** Seeding 'exercises' collection"
+
+for name in "Barbell Row" "Bench Press" "Chin up" "Deadlift" "Press" "Pull up" "Squat"
+do
+  echo "\nAdding '$name' to 'exercises' collection"
+
+  curl -X POST https://api.mongohq.com/databases/one-rep-max/collections/exercises/documents?_apikey=$1 \
+    -H "Content-Type: application/json" \
+    -d "{\"document\" : {\"name\" : \"$name\"}, \"safe\" : true }"
+done
+

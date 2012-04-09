@@ -35,6 +35,10 @@ You will also need an API key and a database for MongoHQ:
    offers several options when creating a database. The free "Sandbox
    Database" will likely meet your needs for this app.)
 3. Find your API key in the "My Account" section of mongohq.com. 
+4. Until the UI supports the ability to create exercises, you can use
+   the `seed` script to create a few exercises for testing purposes:
+
+       ./script/seed <your-api-key>
 
 # Back up your data
 
