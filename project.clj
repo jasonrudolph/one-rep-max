@@ -14,7 +14,7 @@
   :git-dependencies [["https://github.com/jasonrudolph/clojurescript.git"
                       "559d1e1dd3a0ad9bb15075bb55591294c89bf1ee"]
                      ["https://github.com/levand/domina.git"
-                      "8933b2d12c44832c9bfaecf457a1bc5db251a774"]]
+                      "76d6448f4147dc299bca42b35d22a87e8af951c3"]]
   :repl-init one.repmax.repl
   :source-path "src/app/clj"
   :extra-classpath-dirs [".lein-git-deps/clojurescript/src/clj"
