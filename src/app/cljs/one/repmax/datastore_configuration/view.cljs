@@ -11,8 +11,7 @@
   (d/set-attr! (d/by-id id) "disabled" "disabled"))
 
 (defn enable [id]
-  ;; TODO Add a remove-attr! function to Domina
-  (.removeAttribute (.getElementById js/document id) "disabled"))
+  (d/remove-attr! (d/by-id id) "disabled"))
 
 (defmulti render (fn [{:keys [message]}] (:action message)))
 
