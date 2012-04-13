@@ -11,8 +11,8 @@
   :dev-dependencies [[jline "0.9.94"]
                      [marginalia "0.7.0-SNAPSHOT"]
                      [lein-marginalia "0.7.0-SNAPSHOT"]]
-  :git-dependencies [["https://github.com/jasonrudolph/clojurescript.git"
-                      "559d1e1dd3a0ad9bb15075bb55591294c89bf1ee"]
+  :git-dependencies [["https://github.com/clojure/clojurescript.git"
+                      "9319579acfc4fc9dbcf6e79f611afad707f97579"]
                      ["https://github.com/levand/domina.git"
                       "76d6448f4147dc299bca42b35d22a87e8af951c3"]]
   :repl-init one.repmax.repl
