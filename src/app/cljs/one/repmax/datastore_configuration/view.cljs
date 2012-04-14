@@ -3,6 +3,7 @@
   (:require-macros [one.repmax.snippets :as snippets])
   (:require [clojure.browser.event :as event]
             [domina :as d]
+            [domina.css :as css]
             [one.dispatch :as dispatch]))
 
 (def snippets (snippets/snippets))
@@ -50,7 +51,7 @@
   (fn [datastore-configuration] (:state datastore-configuration)))
 
 (defmethod render-datastore-configuration-state :obtain-credentials [config]
-  (let [steps (xpath "//ul[@class='progress-list']/li")]
+  (let [steps (css/sel "ul.progress-list > li")]
     (d/set-attr! steps "data-status" "pending")
     (enable-datastore-configuration-form)))
 

@@ -5,6 +5,7 @@
                  [compojure "0.6.4"]
                  [enlive "1.0.0"]
                  [org.mozilla/rhino "1.7R3"]
+                 [goog-jar "1.0.0"]
                  [com.google.javascript/closure-compiler "r1592"]
                  [org.clojure/google-closure-library "0.0-790"]
                  [org.clojars.gilbertl/vimclojure "2.1.2"]]

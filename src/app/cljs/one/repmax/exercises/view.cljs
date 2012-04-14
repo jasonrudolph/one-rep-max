@@ -1,8 +1,8 @@
 (ns one.repmax.exercises.view
-  (:use [domina.xpath :only (xpath)])
   (:require-macros [one.repmax.snippets :as snippets])
   (:require [clojure.browser.event :as event]
             [domina :as d]
+            [domina.css :as css]
             [one.dispatch :as dispatch]))
 
 (def snippets (snippets/snippets))
@@ -28,7 +28,7 @@
 ;; TODO Time this approach (i.e., rebuilding the whole list in a "scorched Earth" fashion)
 ;;      versus hiding/showing *existing* list items after a search.
 (defn- render-exercise-list [exercises]
-  (let [content (xpath "//div[@id='exercise-list']/ol")]
+  (let [content (css/sel "#exercise-list ol")]
     (d/destroy-children! content)
     (doseq [e exercises]
       (d/append! content (exercise-list-item e)))))
@@ -38,9 +38,9 @@
         dom-id (str "exercise-" (:_id exercise))]
     (-> li
       (d/set-attr! "id" dom-id))
-    (-> li (xpath "a")
+    (-> li (css/sel "a")
       (d/set-attr! "href" (str "#")))
-    (-> li (xpath ".//span[@class='list-item-label']")
+    (-> li (css/sel "span.list-item-label")
       (d/set-text! (:name exercise)))
     li))
 
