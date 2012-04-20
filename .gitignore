@@ -8,3 +8,4 @@
 *~
 /.lein-failures
 /.lein-git-deps/
+/.lein_repls
