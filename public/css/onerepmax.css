@@ -60,12 +60,9 @@ h1 {
 
 #exercise-list ol li {
   border: 1px solid #CCC;
-}
-
-#exercise-list ol li .list-item-link {
-  text-decoration: none;
-  line-height: 40px;
+  line-height: 20px;
   padding: 10px;
+  cursor: pointer;
 }
 
 /*********************************************************************

@@ -125,3 +125,9 @@
         pattern (re-pattern (str ".*" (normalize value-like) ".*"))]
     (filter #(re-find pattern (normalize (attribute-name %))) s)))
 
+;;; Managing the 'New Set' Form
+
+(defmethod update-model :new-set/new [state _]
+  (.log js/console "TODO - Add support for :new-set/new")
+  state)
+

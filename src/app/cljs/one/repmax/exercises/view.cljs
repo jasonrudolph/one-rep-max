@@ -33,14 +33,20 @@
       (d/append! content (exercise-list-item e)))))
 
 (defn- exercise-list-item [exercise]
-  (let [li (d/clone (:exercises-list-item snippets))]
+  (let [li (d/clone (:exercises-list-item snippets))
+        exercise-id (:_id exercise)]
     (-> li
-      (d/set-attr! "id" (exercise-dom-id (:_id exercise))))
-    (-> li (css/sel "a")
-      (d/set-attr! "href" (str "#")))
+      (d/set-attr! "id" (exercise-dom-id exercise-id)))
     (-> li (css/sel "span.list-item-label")
       (d/set-text! (:name exercise)))
+    (-> li (d/single-node)
+      (add-exercise-click-event-listener exercise-id))
     li))
+
+(defn- add-exercise-click-event-listener [node exercise-id]
+  (event/listen node
+                "click"
+                #(dispatch/fire :action {:action :new-set/new, :exercise-id exercise-id})))
 
 (defn- add-exercise-search-event-listener []
   (let [field (d/by-id "search-input")]
