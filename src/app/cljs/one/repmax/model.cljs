@@ -7,7 +7,7 @@
 (def initial-state {:state :start
                     :datastore-configuration {:state :obtain-credentials, :api-key ""}
                     :exercises nil
-                    :exercise-search {:query nil, :exercises nil}})
+                    :exercise-search {:query nil, :exercise-ids nil}})
 
 (def ^{:doc "An atom containing a map which is the application's current state."}
   state (atom initial-state))
@@ -111,8 +111,9 @@
   (assoc state :exercises exercises))
 
 (defmethod update-model :exercises/search [state {:keys [name]}]
-  (let [search-results (find-exercises name (:exercises state))]
-    (assoc state :exercise-search {:query name, :exercises search-results})))
+  (let [search-results (find-exercises name (:exercises state))
+        exercise-ids (map #(:_id %) search-results)]
+    (assoc state :exercise-search {:query name, :exercise-ids exercise-ids})))
 
 (defn find-exercises [name exercises]
   (if (empty? name)

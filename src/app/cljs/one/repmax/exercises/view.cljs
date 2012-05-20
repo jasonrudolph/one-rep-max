@@ -3,6 +3,7 @@
   (:require [clojure.browser.event :as event]
             [domina :as d]
             [domina.css :as css]
+            [goog.style :as style]
             [one.dispatch :as dispatch]))
 
 (def snippets (snippets/snippets))
@@ -23,7 +24,7 @@
   (render-exercise-list (:exercises message)))
 
 (defmethod render :exercises/search [{:keys [new]}]
-  (render-exercise-list (-> new :exercise-search :exercises)))
+  (render-filtered-exercise-list (-> new :exercise-search :exercise-ids)))
 
 ;; TODO Time this approach (i.e., rebuilding the whole list in a "scorched Earth" fashion)
 ;;      versus hiding/showing *existing* list items after a search.
@@ -34,10 +35,9 @@
       (d/append! content (exercise-list-item e)))))
 
 (defn- exercise-list-item [exercise]
-  (let [li (d/clone (:exercises-list-item snippets))
-        dom-id (str "exercise-" (:_id exercise))]
+  (let [li (d/clone (:exercises-list-item snippets))]
     (-> li
-      (d/set-attr! "id" dom-id))
+      (d/set-attr! "id" (exercise-dom-id (:_id exercise))))
     (-> li (css/sel "a")
       (d/set-attr! "href" (str "#")))
     (-> li (css/sel "span.list-item-label")
@@ -49,6 +49,14 @@
     (event/listen field
                   "keyup"
                   #(dispatch/fire :action {:action :exercises/search, :name (d/value field)}))))
+
+(defn- render-filtered-exercise-list [exercise-ids]
+  (d/set-style! (css/sel "#exercise-list ol li") "display" "none")
+  (doseq [id exercise-ids]
+    (d/set-style! (d/by-id (exercise-dom-id id)) "display" nil)))
+
+(defn- exercise-dom-id [exercise-id]
+  (str "exercise-" exercise-id))
 
 ;;; Register reactors
 
