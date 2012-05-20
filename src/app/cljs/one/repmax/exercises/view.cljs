@@ -19,8 +19,8 @@
     (d/append! content (:exercises-list snippets))
     (add-exercise-search-event-listener)))
 
-(defmethod render :exercises/initialized-from-datastore [{:keys [new]}]
-  (render-exercise-list (:exercises new)))
+(defmethod render :exercises/initialized-from-datastore [{:keys [message]}]
+  (render-exercise-list (:exercises message)))
 
 (defmethod render :exercises/search [{:keys [new]}]
   (render-exercise-list (-> new :exercise-search :exercises)))
