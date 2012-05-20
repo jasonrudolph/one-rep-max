@@ -26,8 +26,6 @@
 (defmethod render :exercises/search [{:keys [new]}]
   (render-filtered-exercise-list (-> new :exercise-search :exercise-ids)))
 
-;; TODO Time this approach (i.e., rebuilding the whole list in a "scorched Earth" fashion)
-;;      versus hiding/showing *existing* list items after a search.
 (defn- render-exercise-list [exercises]
   (let [content (css/sel "#exercise-list ol")]
     (d/destroy-children! content)
