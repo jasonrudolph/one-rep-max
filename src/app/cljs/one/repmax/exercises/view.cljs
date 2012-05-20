@@ -3,8 +3,8 @@
   (:require [clojure.browser.event :as event]
             [domina :as d]
             [domina.css :as css]
-            [goog.style :as style]
-            [one.dispatch :as dispatch]))
+            [one.dispatch :as dispatch]
+            [one.repmax.fx :as fx]))
 
 (def snippets (snippets/snippets))
 
@@ -51,9 +51,9 @@
                   #(dispatch/fire :action {:action :exercises/search, :name (d/value field)}))))
 
 (defn- render-filtered-exercise-list [exercise-ids]
-  (d/set-style! (css/sel "#exercise-list ol li") "display" "none")
+  (fx/hide (css/sel "#exercise-list ol li"))
   (doseq [id exercise-ids]
-    (d/set-style! (d/by-id (exercise-dom-id id)) "display" nil)))
+    (fx/show (d/by-id (exercise-dom-id id)))))
 
 (defn- exercise-dom-id [exercise-id]
   (str "exercise-" exercise-id))
