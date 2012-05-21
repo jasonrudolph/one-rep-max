@@ -136,6 +136,17 @@
       (assoc :state :new-set)
       (assoc :new-set {:exercise exercise}))))
 
-(defmethod update-model :new-set/create [state _]
-  (.log js/console "TODO update-model :new-set/create")
+(defmethod update-model :new-set/create [state {:keys [weight reps]}]
+  (-> state
+    (assoc-in [:new-set :weight] weight)
+    (assoc-in [:new-set :reps] reps)
+    (assoc-in [:new-set :state] :ready-to-persist)))
+
+(defmethod update-model :new-set/persisted [state _]
+  (.log js/console "TODO update-model :new-set/persisted")
   state)
+
+(defmethod update-model :new-set/create-failed [state _]
+  (.log js/console "TODO update-model :new-set/create-failed")
+  state)
+

@@ -215,6 +215,6 @@
            :method "POST"
            :content-type :json
            :content {"document" document, "safe" true}
-           :on-success on-success
+           :on-success #(on-success (walk/keywordize-keys %))
            :on-error on-error))
 
