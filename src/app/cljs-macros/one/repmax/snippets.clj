@@ -28,4 +28,6 @@
    :exercises-header               (snippet "exercises.html" [:#header])
    :exercises-search               (snippet "exercises.html" [:#search-bar])
    :exercises-list                 exercises-list-template
-   :exercises-list-item            exercises-list-item-template})
+   :exercises-list-item            exercises-list-item-template
+   :new-set-header                 (snippet "new_set.html" [:#header])
+   :new-set-form                   (snippet "new_set.html" [:#content])})

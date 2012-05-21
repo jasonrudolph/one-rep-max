@@ -120,6 +120,9 @@
     exercises
     (filter-by-attribute exercises :name name)))
 
+(defn find-exercise [id exercises]
+  (first (filter #(= id (:_id %)) exercises)))
+
 (defn filter-by-attribute [s attribute-name value-like]
   (let [normalize #(string/lower-case %)
         pattern (re-pattern (str ".*" (normalize value-like) ".*"))]
@@ -127,7 +130,12 @@
 
 ;;; Managing the 'New Set' Form
 
-(defmethod update-model :new-set/new [state _]
-  (.log js/console "TODO - Add support for :new-set/new")
-  state)
+(defmethod update-model :new-set/new [state {:keys [exercise-id]}]
+  (let [exercise (find-exercise exercise-id (:exercises state))]
+    (-> state
+      (assoc :state :new-set)
+      (assoc :new-set {:exercise exercise}))))
 
+(defmethod update-model :new-set/create [state _]
+  (.log js/console "TODO update-model :new-set/create")
+  state)

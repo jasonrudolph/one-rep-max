@@ -20,6 +20,7 @@
                    "goog.require('one.repmax.datastore_configuration.view');"
                    "goog.require('one.repmax.exercises.observer');"
                    "goog.require('one.repmax.exercises.view');"
+                   "goog.require('one.repmax.sets.view');"
                    "goog.require('one.repmax.logging');"
                    "one.repmax.core.start();one.repmax.core.repl();"]
           :prod-js ["one.repmax.core.start();"]
