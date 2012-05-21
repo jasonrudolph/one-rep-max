@@ -134,7 +134,7 @@
   (let [exercise (find-exercise exercise-id (:exercises state))]
     (-> state
       (assoc :state :new-set)
-      (assoc :new-set {:exercise exercise}))))
+      (assoc :new-set {:exercise exercise, :history []}))))
 
 (defmethod update-model :new-set/create [state {:keys [weight reps]}]
   (-> state
@@ -142,11 +142,27 @@
     (assoc-in [:new-set :reps] reps)
     (assoc-in [:new-set :state] :ready-to-persist)))
 
-(defmethod update-model :new-set/persisted [state _]
-  (.log js/console "TODO update-model :new-set/persisted")
-  state)
+(defmethod update-model :new-set/persisted [state message]
+  (let [exercise-set (set-map-for-exercise-history (:set message))]
+    (-> state
+      (update-in [:new-set :history] #(conj % exercise-set))
+      (assoc-in [:new-set :weight] nil)
+      (assoc-in [:new-set :reps] nil)
+      (assoc-in [:new-set :state] :ready-for-new-set))))
 
 (defmethod update-model :new-set/create-failed [state _]
   (.log js/console "TODO update-model :new-set/create-failed")
   state)
+
+(defn set-map-for-exercise-history
+  "Given a map that represents all data for a single exercise set, return a map
+  containing the data that we want to store in the state atom when this
+  exercise set is added to the list of historical sets for this exercise.
+
+  Since we always know that we are viewing the set history for a specific
+  exercise, it is both unnecessary and inefficient to store the exercise ID
+  inside the map that describes the set. So, do not include the :exercise-id
+  entry in the returned map."
+  [m]
+  (dissoc m :exercise-id))
 
