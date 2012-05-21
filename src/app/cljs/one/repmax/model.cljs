@@ -70,7 +70,7 @@
 ;
 ;  If any step fails along the way, the state changes to :initialization-failed.
 
-(defmethod update-model :datastore-configuration/initialize [state message]
+(defmethod update-model :datastore-configuration/initialize [state _]
   (-> state
     (assoc :state :datastore-configuration)
     (assoc :datastore-configuration (datastore-configuration-from-cookies))))
