@@ -150,9 +150,10 @@
       (assoc-in [:new-set :reps] nil)
       (assoc-in [:new-set :state] :ready-for-new-set))))
 
-(defmethod update-model :new-set/create-failed [state _]
-  (.log js/console "TODO update-model :new-set/create-failed")
-  state)
+(defmethod update-model :new-set/create-failed [state {:keys [error]}]
+  (-> state
+    (assoc-in [:new-set :state] :create-failed)
+    (assoc-in [:new-set :error] error)))
 
 (defn set-map-for-exercise-history
   "Given a map that represents all data for a single exercise set, return a map
