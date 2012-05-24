@@ -30,4 +30,4 @@
    :exercises-list                 exercises-list-template
    :exercises-list-item            exercises-list-item-template
    :new-set-header                 (snippet "new_set.html" [:#header])
-   :new-set-form                   (snippet "new_set.html" [:#content])})
+   :new-set-form                   (snippet "new_set.html" [:#new-set-form])})

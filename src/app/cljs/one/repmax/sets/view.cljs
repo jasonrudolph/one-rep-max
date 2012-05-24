@@ -17,7 +17,7 @@
         content (d/by-id "content")]
     (d/swap-content! header (:new-set-header snippets))
     (d/set-text! (css/sel "#header h1") (:name exercise))
-    (d/swap-content! content (:new-set-form snippets))
+    (d/set-html! content (:new-set-form snippets))
     (d/set-value! (css/sel "#exercise-id") (:_id exercise))
     (add-event-listener-for-persisting-set)))
 
