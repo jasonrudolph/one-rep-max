@@ -19,6 +19,21 @@
         list-item-without-content (html/at sample-list-item [:.list-item-label] (html/content ""))]
     (render list-item-without-content)))
 
+(def ^{:private true}
+  recent-set-history-list-template
+  (let [list-with-sample-items (html/select (html/html-resource "new_set.html") [:#recent-set-history])
+      empty-list (html/at list-with-sample-items [:ol] (html/content ""))]
+  (render empty-list)))
+
+(def ^{:private true}
+  recent-set-history-list-item-template
+  (let [sample-list-item (html/select (html/html-resource "new_set.html") [:#recent-set-history :ol [:li html/first-of-type]])]
+    (-> sample-list-item
+      (html/at [:p.one-rep-max] (html/substitute "")) ; TODO Add support for this field in the UI
+      (html/at [:p.created-at] (html/substitute ""))  ; TODO Add support for this field in the UI
+      (html/at [:p.note] (html/substitute ""))        ; TODO Add support for this field in the UI
+      (render))))
+
 (defmacro snippets
   "Expands to a map of HTML snippets which are extracted from the
   design templates."
@@ -30,4 +45,7 @@
    :exercises-list                 exercises-list-template
    :exercises-list-item            exercises-list-item-template
    :new-set-header                 (snippet "new_set.html" [:#header])
-   :new-set-form                   (snippet "new_set.html" [:#new-set-form])})
+   :new-set-form                   (snippet "new_set.html" [:#new-set-form])
+   :recent-set-history-list        recent-set-history-list-template
+   :recent-set-history-list-item   recent-set-history-list-item-template})
+
