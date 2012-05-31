@@ -27,7 +27,7 @@
         set-list (css/sel "#recent-set-history ol")
         set-number (-> set-list (css/sel "li") d/nodes count inc)
         new-list-item (set-list-item (assoc exercise-set :number set-number))]
-    (d/append! set-list new-list-item)))
+    (d/prepend! set-list new-list-item)))
 
 (defn- set-list-item [exercise-set]
   (let [li (d/clone (:recent-set-history-list-item snippets))]
