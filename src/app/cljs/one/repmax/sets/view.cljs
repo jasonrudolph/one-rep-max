@@ -19,7 +19,19 @@
     (d/set-text! (css/sel "#header h1") (:name exercise))
     (d/set-html! content (:new-set-form snippets))
     (d/set-value! (css/sel "#exercise-id") (:_id exercise))
+    (d/append! content (:recent-set-history-list snippets))
     (add-event-listener-for-persisting-set)))
+
+(defmethod render :new-set/persisted [{:keys [message]}]
+  (let [set-list (css/sel "#recent-set-history ol")
+        new-list-item (set-list-item (:set message))]
+    (d/append! set-list new-list-item)))
+
+(defn- set-list-item [exercise-set]
+  (let [li (d/clone (:recent-set-history-list-item snippets))]
+    (-> li (css/sel ".value.weight") (d/set-text! (:weight exercise-set)))
+    (-> li (css/sel ".value.reps") (d/set-text! (:reps exercise-set)))
+    li))
 
 (defn- add-event-listener-for-persisting-set []
   (event/listen (d/by-id "new-set-form-button")
