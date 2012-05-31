@@ -23,14 +23,17 @@
     (add-event-listener-for-persisting-set)))
 
 (defmethod render :new-set/persisted [{:keys [message]}]
-  (let [set-list (css/sel "#recent-set-history ol")
-        new-list-item (set-list-item (:set message))]
+  (let [exercise-set (:set message)
+        set-list (css/sel "#recent-set-history ol")
+        set-number (-> set-list (css/sel "li") d/nodes count inc)
+        new-list-item (set-list-item (assoc exercise-set :number set-number))]
     (d/append! set-list new-list-item)))
 
 (defn- set-list-item [exercise-set]
   (let [li (d/clone (:recent-set-history-list-item snippets))]
     (-> li (css/sel ".value.weight") (d/set-text! (:weight exercise-set)))
     (-> li (css/sel ".value.reps") (d/set-text! (:reps exercise-set)))
+    (-> li (css/sel ".set-number .value") (d/set-text! (:number exercise-set)))
     li))
 
 (defn- add-event-listener-for-persisting-set []
