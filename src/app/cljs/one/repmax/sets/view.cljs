@@ -20,18 +20,18 @@
     (d/add-class! content "inset")
     (d/set-html! content (:new-set-form snippets))
     (d/set-value! (css/sel "#exercise-id") (:_id exercise))
-    (d/append! content (:recent-set-history-list snippets))
+    (d/append! content (:set-history-list snippets))
     (add-event-listener-for-persisting-set)))
 
 (defmethod render :new-set/persisted [{:keys [message]}]
   (let [exercise-set (:set message)
-        set-list (css/sel "#recent-set-history ol")
+        set-list (css/sel ".set-history ol")
         set-number (-> set-list (css/sel "li") d/nodes count inc)
         new-list-item (set-list-item (assoc exercise-set :number set-number))]
     (d/prepend! set-list new-list-item)))
 
 (defn- set-list-item [exercise-set]
-  (let [li (d/clone (:recent-set-history-list-item snippets))]
+  (let [li (d/clone (:set-history-list-item snippets))]
     (-> li (css/sel ".value.weight") (d/set-text! (:weight exercise-set)))
     (-> li (css/sel ".value.reps") (d/set-text! (:reps exercise-set)))
     (-> li (css/sel ".set-number .value") (d/set-text! (:number exercise-set)))
