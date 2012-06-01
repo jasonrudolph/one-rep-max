@@ -17,6 +17,7 @@
         content (d/by-id "content")]
     (d/swap-content! header (:new-set-header snippets))
     (d/set-text! (css/sel "#header h1") (:name exercise))
+    (d/add-class! content "inset")
     (d/set-html! content (:new-set-form snippets))
     (d/set-value! (css/sel "#exercise-id") (:_id exercise))
     (d/append! content (:recent-set-history-list snippets))
