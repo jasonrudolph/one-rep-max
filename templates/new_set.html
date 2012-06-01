@@ -4,23 +4,41 @@
   <h1>Bench Press</h1>
 </div>
 
-<div id="content">
+<div id="content" class="set-form">
   <div id="new-set-form">
     <input id="exercise-id" type="hidden" />
-    <label id="weight-input-label" for="weight-input">lbs</label>
-    <input id="weight-input" size="3" type="number" required />
-    <label id="reps-input-label" for="reps-input">reps</label>
-    <input id="reps-input" size="3" type="number" required />
-    <button id="new-set-form-button">Add Set</button>
+    <div class="clearfix trailer">
+      <div class="field-container">
+        <input id="weight-input" size="3" type="number" required />
+        <label id="weight-input-label" for="weight-input">lbs</label>
+      </div>
+      <div class="field-container">
+        <input id="reps-input" size="3" type="number" required />
+        <label id="reps-input-label" for="reps-input">reps</label>
+      </div>
+      <div class="button-container">
+        <button class='button'>n</button>
+      </div>
+    </div>
+    <button id="new-set-form-button" class='button'>Add Set</button>
   </div>
 
-  <section id="recent-set-history">
+  <section class='set-history clearfix' id="recent-set-history">
+    <header>
+      <h1>
+        <time datetime="2012-05-23">May 23, 2012</time>
+      </h1>
+    </header>
     <ol>
       <li>
-        <p class="weight-and-reps"><span class="weight value">195</span> lbs x <span class="reps value">5</span> reps</p>
-        <p class="set-number">Set <span class="value">3</span></p>
-        <p class="one-rep-max">1RM: <span class="value">219</span> lbs</p>
-        <p class="created-at"><time datetime="2012-05-23T06:27:02-06:00">6:27:02 am</time></p>
+        <div class='clearfix'>
+          <p class="weight-and-reps"><span class="weight value">195</span> lbs x <span class="reps value">5</span> reps</p>
+          <p class="set-number">Set <span class="value">3</span></p>
+        </div>
+        <div class='clearfix'>
+          <p class="one-rep-max">1RM: <span class="value">219</span> lbs</p>
+          <p class="created-at"><time datetime="2012-05-23T06:27:02-06:00">6:27:02 am</time></p>
+        </div>
         <p class="note">Feelin' good. Today's gonna be a strong day!</p>
       </li>
       <li>

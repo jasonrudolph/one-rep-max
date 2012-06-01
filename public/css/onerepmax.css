@@ -11,7 +11,7 @@ a, a:hover, a:active, a:visited {
   background: #111;
 }
 
-h1 {
+#header h1 {
   text-align: center;
   font-size: 16px;
   font-weight: bold;
@@ -78,4 +78,134 @@ h1 {
 
 #dev-links ul li {
   display: inline;
+}
+
+/*********************************************************************
+ * New Set Form
+ ********************************************************************/
+
+.button-container {
+  width: 15%;
+  float: left;
+}
+
+.field-container {
+  width: 42.5%;
+  float: left;
+}
+
+.field-container input {
+  width: 80%;
+  font-size:15px;
+  margin: 0 auto;
+  padding: 6px 10px;
+}
+
+.field-container label {
+  text-align: center;
+  display: block;
+}
+
+.set-form {
+  padding: 0.5em;
+}
+
+.trailer {
+  margin-bottom: 1em;
+}
+
+.button {
+  -moz-box-shadow:inset -1px 1px 0px -7px #ffffff;
+  -webkit-box-shadow:inset -1px 1px 0px -7px #ffffff;
+  box-shadow:inset -1px 1px 0px -7px #ffffff;
+  background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+  background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+  background-color:#ededed;
+  -moz-border-radius:8px;
+  -webkit-border-radius:8px;
+  border-radius:8px;
+  border:1px solid #dcdcdc;
+  display:inline-block;
+  color:#777777;
+  font-size:15px;
+  font-weight:bold;
+  padding:6px 10px;
+  text-decoration:none;
+  text-shadow:1px 1px 0px #ffffff;
+  width: 100%;
+}
+
+.button:hover {
+  background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+  background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+  background-color:#dfdfdf;
+}
+
+.button:active {
+  position:relative;
+  top:1px;
+}
+
+/*********************************************************************
+ * Set History
+ ********************************************************************/
+
+.set-history {
+  -moz-border-radius:8px;
+  -webkit-border-radius:8px;
+  border-radius:8px;
+  border: 1px solid #ccc;
+  margin-top: 1em;
+}
+
+.set-history h1 {
+  -webkit-border-top-left-radius:8px;
+  -webkit-border-top-right-radius:8px;
+  background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ddd), color-stop(1, #dedede) );
+  background:-moz-linear-gradient( center top, #ddd 5%, #dedede 100% );
+  filter:progid:DXImageTransform.Microsoft.gradient(start,WColorstr='#ddd', endColorstr='#dedede');
+  background-color:#ddd;
+  padding: 0.5em;
+}
+
+.set-history .weight-and-reps,
+.set-history .set-number {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.set-history .note,
+.set-history .one-rep-max,
+.set-history .created-at {
+  font-size: 12px;
+  color: #666;
+  padding-top: 0.5em;
+}
+
+.set-history .weight-and-reps,
+.set-history .one-rep-max,
+.set-history .set-number,
+.set-history .created-at {
+  width: 50%;
+  float: left;
+}
+
+.set-history .set-number,
+.set-history .created-at {
+  text-align: right;
+}
+
+.set-history ol {
+  list-style-type: none;
+}
+
+.set-history li {
+  border-top: 1px solid #ccc;
+  padding: 0.5em;
+}
+
+.set-history li:first-child {
+  border-top: 0 none;
 }

@@ -120,9 +120,10 @@ button {width: auto; overflow: visible;}
 .ie6 html {filter: expression(document.execCommand("BackgroundImageCache", false, true));}
 
 /* let's clear some floats */
-.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
-.clearfix:after { clear: both; }
-.clearfix { zoom: 1; }
+.clearfix:before, .clearfix:after,
+.set-history li:before, .set-history li:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+.clearfix:after, .set-history li:after { clear: both; }
+.clearfix, .set-history li { zoom: 1; }
 
 
 
