@@ -31,17 +31,26 @@
     (d/prepend! (css/sel set-list-section "ol")  new-list-item)))
 
 (defn- set-history-list-for [date]
-  (let [date-string (re-find #"\d{4}\-\d{2}\-\d{2}" (.toISOString date))
-        set-list-id (str "set-history-for-" date-string)
+  (let [set-list-id (set-history-list-id-for date)
         existing-set-list (d/by-id set-list-id)]
-    (or existing-set-list (create-set-list set-list-id))))
+    (or existing-set-list (create-set-list date))))
 
-(defn- create-set-list [id]
+(defn- create-set-list [date]
   (let [content (d/by-id "content")
-        set-list (d/clone (:set-history-list snippets))]
-    (d/set-attr! set-list :id id)
+        set-list (d/clone (:set-history-list snippets))
+        set-list-id (set-history-list-id-for date)
+        set-list-date (css/sel set-list "header time")]
+    (d/set-attr! set-list :id set-list-id)
+    (d/set-attr! set-list-date "datetime" (iso-date-string date))
+    (d/set-text! set-list-date (.toDateString date))
     (d/append! content set-list)
     set-list))
+
+(defn- iso-date-string [date]
+  (re-find #"\d{4}\-\d{2}\-\d{2}" (.toISOString date)))
+
+(defn- set-history-list-id-for [date]
+    (str "set-history-for-" (iso-date-string date)))
 
 (defn- set-list-item [exercise-set]
   (let [li (d/clone (:set-history-list-item snippets))]
