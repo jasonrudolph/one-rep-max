@@ -20,15 +20,28 @@
     (d/add-class! content "inset")
     (d/set-html! content (:new-set-form snippets))
     (d/set-value! (css/sel "#exercise-id") (:_id exercise))
-    (d/append! content (:set-history-list snippets))
     (add-event-listener-for-persisting-set)))
 
 (defmethod render :new-set/persisted [{:keys [message]}]
   (let [exercise-set (:set message)
-        set-list (css/sel ".set-history ol")
-        set-number (-> set-list (css/sel "li") d/nodes count inc)
+        date (js/Date.) ; TODO Determine/use the :created-at value from the exercise set
+        set-list-section (set-history-list-for date)
+        set-number (-> set-list-section (css/sel "li") d/nodes count inc)
         new-list-item (set-list-item (assoc exercise-set :number set-number))]
-    (d/prepend! set-list new-list-item)))
+    (d/prepend! (css/sel set-list-section "ol")  new-list-item)))
+
+(defn- set-history-list-for [date]
+  (let [date-string (re-find #"\d{4}\-\d{2}\-\d{2}" (.toISOString date))
+        set-list-id (str "set-history-for-" date-string)
+        existing-set-list (d/by-id set-list-id)]
+    (or existing-set-list (create-set-list set-list-id))))
+
+(defn- create-set-list [id]
+  (let [content (d/by-id "content")
+        set-list (d/clone (:set-history-list snippets))]
+    (d/set-attr! set-list :id id)
+    (d/append! content set-list)
+    set-list))
 
 (defn- set-list-item [exercise-set]
   (let [li (d/clone (:set-history-list-item snippets))]
