@@ -25,11 +25,17 @@
 
 (defmethod render :new-set/persisted [{:keys [message]}]
   (let [set (:set message)
-        date (js/Date.) ; TODO Determine/use the :created-at value from the set
+        date (object-id->creation-ts (:_id set))
         set-list-section (set-history-list-for date)
         set-number (-> set-list-section (css/sel "li") d/nodes count inc)
         new-list-item (set-list-item (assoc set :number set-number))]
     (d/prepend! (css/sel set-list-section "ol")  new-list-item)))
+
+(defn- object-id->creation-ts [oid]
+  (let [timestamp-as-hex (subs oid 0 8)
+        timestamp-in-seconds (js/parseInt timestamp-as-hex 16)
+        timestamp-in-milliseconds (* 1000 timestamp-in-seconds)]
+    (js/Date. timestamp-in-milliseconds)))
 
 (defn- set-history-list-for [date]
   (let [set-list-id (set-history-list-id-for date)
