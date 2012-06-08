@@ -1,5 +1,6 @@
 (ns one.repmax.sets.view
   (:require-macros [one.repmax.snippets :as snippets])
+  (:refer-clojure :exclude [set])
   (:require [clojure.browser.event :as event]
             [domina :as d]
             [domina.css :as css]
@@ -23,11 +24,11 @@
     (add-event-listener-for-persisting-set)))
 
 (defmethod render :new-set/persisted [{:keys [message]}]
-  (let [exercise-set (:set message)
-        date (js/Date.) ; TODO Determine/use the :created-at value from the exercise set
+  (let [set (:set message)
+        date (js/Date.) ; TODO Determine/use the :created-at value from the set
         set-list-section (set-history-list-for date)
         set-number (-> set-list-section (css/sel "li") d/nodes count inc)
-        new-list-item (set-list-item (assoc exercise-set :number set-number))]
+        new-list-item (set-list-item (assoc set :number set-number))]
     (d/prepend! (css/sel set-list-section "ol")  new-list-item)))
 
 (defn- set-history-list-for [date]
@@ -52,11 +53,11 @@
 (defn- set-history-list-id-for [date]
     (str "set-history-for-" (iso-date-string date)))
 
-(defn- set-list-item [exercise-set]
+(defn- set-list-item [set]
   (let [li (d/clone (:set-history-list-item snippets))]
-    (-> li (css/sel ".value.weight") (d/set-text! (:weight exercise-set)))
-    (-> li (css/sel ".value.reps") (d/set-text! (:reps exercise-set)))
-    (-> li (css/sel ".set-number .value") (d/set-text! (:number exercise-set)))
+    (-> li (css/sel ".value.weight") (d/set-text! (:weight set)))
+    (-> li (css/sel ".value.reps") (d/set-text! (:reps set)))
+    (-> li (css/sel ".set-number .value") (d/set-text! (:number set)))
     li))
 
 (defn- add-event-listener-for-persisting-set []

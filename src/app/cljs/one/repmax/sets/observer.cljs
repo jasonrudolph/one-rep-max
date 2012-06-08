@@ -1,6 +1,7 @@
 (ns ^{:doc "Observe model changes involving sets and trigger
            side effects as appropriate."}
   one.repmax.sets.observer
+  (:refer-clojure :exclude [set])
   (:require [one.dispatch :as dispatch]
             [one.repmax.mongohq :as mongo]))
 
@@ -20,8 +21,8 @@
 
 (defn create-set-success-callback [document response]
   (let [set-id (:_id response)
-        exercise-set (assoc document :_id set-id)]
-    (dispatch/fire :action {:action :new-set/persisted, :set exercise-set})))
+        set (assoc document :_id set-id)]
+    (dispatch/fire :action {:action :new-set/persisted, :set set})))
 
 (defn create-set-error-callback [document response]
   (dispatch/fire :action {:action :new-set/create-failed, :set document, :error response}))

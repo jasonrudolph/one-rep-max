@@ -1,4 +1,5 @@
 (ns one.repmax.model
+  (:refer-clojure :exclude [set])
   (:require [clojure.string :as string]
             [one.dispatch :as dispatch]
             [one.repmax.cookies :as cookies]
@@ -143,9 +144,9 @@
     (assoc-in [:new-set :state] :ready-to-persist)))
 
 (defmethod update-model :new-set/persisted [state message]
-  (let [exercise-set (set-map-for-exercise-history (:set message))]
+  (let [set (set-map-for-exercise-history (:set message))]
     (-> state
-      (update-in [:new-set :history] #(conj % exercise-set))
+      (update-in [:new-set :history] #(conj % set))
       (assoc-in [:new-set :weight] nil)
       (assoc-in [:new-set :reps] nil)
       (assoc-in [:new-set :state] :ready-for-new-set))))
