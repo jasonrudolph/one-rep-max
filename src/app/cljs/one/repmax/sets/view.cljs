@@ -53,11 +53,11 @@
 (defn- set-history-list-id-for [date]
     (str "set-history-for-" (iso-date-string date)))
 
-(defn- set-list-item [set]
+(defn- set-list-item [{:keys [weight reps number]}]
   (let [li (d/clone (:set-history-list-item snippets))]
-    (-> li (css/sel ".value.weight") (d/set-text! (:weight set)))
-    (-> li (css/sel ".value.reps") (d/set-text! (:reps set)))
-    (-> li (css/sel ".set-number .value") (d/set-text! (:number set)))
+    (-> li (css/sel ".value.weight") (d/set-text! weight))
+    (-> li (css/sel ".value.reps") (d/set-text! reps))
+    (-> li (css/sel ".set-number .value") (d/set-text! number))
     li))
 
 (defn- add-event-listener-for-persisting-set []
