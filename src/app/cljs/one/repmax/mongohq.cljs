@@ -151,20 +151,20 @@
   "Issues a request to the given URL to find documents.
 
    Optional keyword argments:
-   * :skip         Used for pagination in MongoHQ. Indicates the number of documents to
-                   'skip' over when determining which documents to return from a query.
-                   Defaults to 0.
-   * :limit        The maximum number of documents to return in this request.
-                   Defaults to 100 (i.e., the maximum limit supported by MongoHQ).
-   * previous-docs A sequence of documents produced by previous calls to this same
-                   function. Since we may need to call MongoHQ multiple times to 'paginate'
-                   through the list of documents, we can pass the results from previous calls
-                   to subsequent calls. After the final request to MongoHQ, all results are
-                   combined and passed to the on-success function.
-                   Defaults to an empty Vector.
-   * on-success    The function that will be invoked upon successful completion of the
-                   request. The function must accept a single argument: a sequence of
-                   documents.
+   * :skip          Used for pagination in MongoHQ. Indicates the number of documents to
+                    'skip' over when determining which documents to return from a query.
+                    Defaults to 0.
+   * :limit         The maximum number of documents to return in this request.
+                    Defaults to 100 (i.e., the maximum limit supported by MongoHQ).
+   * :previous-docs A sequence of documents produced by previous calls to this same
+                    function. Since we may need to call MongoHQ multiple times to 'paginate'
+                    through the list of documents, we can pass the results from previous calls
+                    to subsequent calls. After the final request to MongoHQ, all results are
+                    combined and passed to the on-success function.
+                    Defaults to an empty Vector.
+   * :on-success    The function that will be invoked upon successful completion of the
+                    request. The function must accept a single argument: a sequence of
+                    documents.
   "
   [api-key url & {:keys [skip limit previous-docs on-success]
                   :or   {skip 0
