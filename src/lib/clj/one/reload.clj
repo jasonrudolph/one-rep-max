@@ -12,10 +12,15 @@
 
   Reloading/Compilation or shared Clojure and ClojureScript files is
   also supported."
-  (:use [cljs.closure :only (build -compile Compilable)]
+  (:use [cljs.closure :only (build -compile dependency-order Compilable)]
         [cljs.compiler :only (to-target-file)])
   (:require [clojure.java.io :as io]
             [lazytest.tracker :as lt]))
+
+(def ^:dynamic *logging* false)
+
+(defn log [& s]
+  (when *logging* (apply prn s)))
 
 ;; Reloading Protocols
 ;; ===================
@@ -44,6 +49,7 @@
   "Reload a sequence of Clojure files."
   [files]
   (doseq [f files]
+    (log "Reloading file :: " f)
     (reload-clj f)))
 
 (defn- by-extension
@@ -86,6 +92,8 @@
 ;; used to filter the returned files.
 
 (defrecord Directories [dirs pred sort-fn]
+  IGroupable
+  (group-id [_ _] dirs)
   ISources
   (files [this]
     (let [sort-fn (or sort-fn identity)]
@@ -98,12 +106,14 @@
 ;; be compiled as one unit.
 
 (defrecord ClojureScriptDirs [dirs]
+  IGroupable
+  (group-id [_ _] dirs)
   ISources
   (files [this]
     (all-descendants-ending-with dirs ".cljs"))
   Compilable
   (-compile [_ opts]
-    (flatten (map #(-compile % opts) dirs))))
+    (dependency-order (flatten (map #(-compile % opts) dirs)))))
 
 (defn rename-to-js
   "Rename any Clojure-based file to a JavaScript file."
@@ -132,15 +142,18 @@
 ;; ClojureScript and for this to work with code reloading.
 
 (defrecord Shared [dir pred]
+  IGroupable
+  (group-id [_ request] dir)
   ISources
   (files [this]
     (filter-descendants dir pred))
   Compilable
   (-compile [this opts]
-    (let [fs (files this)]
-      (let [d (io/file dir)]
-        (flatten (map #(-compile % (assoc opts :output-file (js-file-name d %)))
-                      fs))))))
+    (dependency-order
+     (let [fs (files this)]
+       (let [d (io/file dir)]
+         (flatten (map #(-compile % (assoc opts :output-file (js-file-name d %)))
+                       fs)))))))
 
 ;; Provided IReloadable Implementations
 ;; ====================================
@@ -149,9 +162,10 @@
 
 (defrecord ClojureReloadable [sources]
   IGroupable
-  (group-id [_ request] [::clj sources])
+  (group-id [_ request] [::clj (map #(group-id % request) sources)])
   IReloadable
   (reload [_ _]
+    (log "ClojureReloadable :: " sources)
     (doseq [source sources]
       (reload-clj-seq (files source))))
   ISources
@@ -211,9 +225,10 @@
 
 (defrecord ClojureScriptReloadable [opts sources top-level-pkgs]
   IGroupable
-  (group-id [_ request] [::cljs (:uri request)])
+  (group-id [_ request] [::cljs (map #(group-id % request) sources) (:uri request)])
   IReloadable
   (reload [this request]
+    (log "ClojureScriptReloadable :: " sources)
     (let [build-opts (cljs-compilation-options opts request)]
       (doseq [pkg top-level-pkgs]
         (doseq [file (files-in-dir (jstr opts "/out/" pkg))]
@@ -224,16 +239,18 @@
     (flatten (map files sources)))
   Compilable
   (-compile [_ opts]
-    (flatten (map #(-compile % opts) sources))))
+    (dependency-order (flatten (map #(-compile % opts) sources)))))
 
 ;; Create an IReloadabel which can trigger the reload of other
 ;; reloadables.
 
 (defrecord Watch [source]
   IGroupable
-  (group-id [_ request] [::dir (:dirs source) (:uri request)])
+  (group-id [_ request] [::dir (group-id source request) (:uri request)])
   IReloadable
-  (reload [_ request] nil)
+  (reload [_ request]
+    (log "Watch :: " source)
+    nil)
   ISources
   (files [_] (files source)))
 
@@ -270,6 +287,7 @@
   (def clj-dirs (->Directories ["src/app/clj" "src/lib/clj"]
                                (by-file-name clojure-files)
                                (fn [xs] (sort-by (name-order clojure-files) xs))))
+  (group-id clj-dirs {})
   (files clj-dirs)
 
   ;; Make this group of files Reloadable
