@@ -1,10 +1,10 @@
 (ns ^{:doc "Defines animations which are used in the sample
   application."}
   one.sample.animation
-  (:use [one.core :only (start)]
-        [one.browser.animation :only (bind parallel serial play play-animation)]
-        [domina :only (by-id set-html! set-styles! destroy-children! append! single-node)]
-        [domina.xpath :only (xpath)])
+  (:use [one.core :only [start]]
+        [one.browser.animation :only [bind parallel serial play play-animation]]
+        [domina :only [by-id set-html! set-styles! destroy-children! append! single-node]]
+        [domina.xpath :only [xpath]])
   (:require [goog.dom.forms :as gforms]
             [goog.style :as style]))
 

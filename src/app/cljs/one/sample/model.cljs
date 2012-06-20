@@ -99,8 +99,7 @@
   [field-id type value]
   (swap! greeting-form
          (fn [old]
-           (let [field (get (:fields old) field-id {})
-                 field-status (assoc (new-status (-> old :fields field-id :status)
+           (let [field-status (assoc (new-status (get-in old [:fields field-id :status])
                                                  type
                                                  (validation/validate field-id value))
                                 :value value)
@@ -113,7 +112,7 @@
   [id]
   (swap! greeting-form
          (fn [old]
-           (let [field-map (-> old :fields id)
+           (let [field-map (or (get-in old [:fields id]) {})
                  status (or (:status field-map) :empty)
                  field-status (new-status status
                                           :focus

@@ -1,9 +1,9 @@
 (ns ^{:doc "Render the views for the application."}
   one.sample.view
-  (:use [domina :only (set-html! set-styles! styles by-id set-style!
-                       by-class value set-value! set-text! nodes single-node)]
-        [domina.xpath :only (xpath)]
-        [one.browser.animation :only (play)])
+  (:use [domina :only [set-html! set-styles! styles by-id set-style!
+                       by-class value set-value! set-text! nodes single-node]]
+        [domina.xpath :only [xpath]]
+        [one.browser.animation :only [play]])
   (:require-macros [one.sample.snippets :as snippets])
   (:require [goog.events.KeyCodes :as key-codes]
             [goog.events.KeyHandler :as key-handler]
@@ -137,14 +137,14 @@
   `render-form-field`."
   [m]
   (map #(hash-map :id %
-                  :transition [(or (-> m :old :fields % :status) :empty)
-                               (-> m :new :fields % :status)]
-                  :error (-> m :new :fields % :error))
-       (keys (-> m :new :fields))))
+                  :transition [(or (get-in m [:old :fields % :status]) :empty)
+                               (get-in m [:new :fields % :status])]
+                  :error (get-in m [:new :fields % :error]))
+       (keys (get-in m [:new :fields]))))
 
 (dispatch/react-to #{:form-change}
                    (fn [_ m]
                      (doseq [s (form-fields-status m)]
                        (render-form-field s))
-                     (render-button [(-> m :old :status)
-                                     (-> m :new :status)] )))
+                     (render-button [(get-in m [:old :status])
+                                     (get-in m [:new :status])] )))

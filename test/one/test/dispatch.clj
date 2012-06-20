@@ -1,6 +1,12 @@
 (ns one.test.dispatch
+  
   "Event dispatching tests. All of the tests in the namespace are testing
-  ClojureScript code which is being evaluated in the browser."
+  ClojureScript code which is being evaluated in the browser.
+
+  If these tests do not run, the most likely reason is that you have not visited
+  the page http://localhost:8080/frash. Currently the client code for this page
+  does not get compiled until you visit the page."
+  
   (:use [clojure.test]
         [one.test :only (in-javascript js)]))
 
@@ -78,5 +84,5 @@
 
   ;; From a ClojureScript REPL, you may run these tests with:
 
-  (run-tests 'one.test.dispatch)
+  (clojure.test/run-tests 'one.test.dispatch)
   )

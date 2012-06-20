@@ -4,7 +4,7 @@
   (:require [cljs.repl.browser :as browser])
   (:use clojure.test
         [clojure.java.browse :only (browse-url)]
-        [cljs.compiler :only (namespaces *cljs-ns*)]
+        [cljs.analyzer :only (namespaces *cljs-ns*)]
         [cljs.repl :only (evaluate-form load-file load-namespace)]
         [cljs.repl :only (-setup -tear-down)]
         [one.fresh-server :only (start-fresh)]))

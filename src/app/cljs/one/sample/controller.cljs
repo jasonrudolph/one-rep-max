@@ -1,8 +1,8 @@
 (ns ^{:doc "Respond to user actions by updating local and remote
   application state."}
   one.sample.controller
-  (:use [one.browser.remote :only (request)]
-        [one.sample.model :only (state)])
+  (:use [one.browser.remote :only [request]]
+        [one.sample.model :only [state]])
   (:require [cljs.reader :as reader]
             [clojure.browser.event :as event]
             [one.dispatch :as dispatch]
