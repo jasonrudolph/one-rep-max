@@ -14,8 +14,7 @@
   also supported."
   (:use [cljs.closure :only (build -compile dependency-order Compilable)]
         [cljs.compiler :only (to-target-file)])
-  (:require [clojure.java.io :as io]
-            [lazytest.tracker :as lt]))
+  (:require [clojure.java.io :as io]))
 
 (def ^:dynamic *logging* false)
 
@@ -488,35 +487,3 @@
   (handler {:uri "/development"})
 
   )
-
-;; New Reloading Code
-;; ==================
-
-;; New requirements
-;;
-;; We need to have a dependency graph of all namespaces in the
-;; project. This will need to include both Clojure and ClojureScript
-;; dependencies.
-;;
-;; 1) Watch
-;;
-;; Watch for something to change. Return a data structure which
-;; describes what has changed.
-;;
-;; Multiple watchers can be called returning multiple update events.
-;;
-;; 2) Analysis
-;;
-;; Transform update events into actions which need to be performed.
-;;
-;; 3) Perform actions
-;;
-;; Perform each action described in the previous step.
-
-(comment
-
-  (def watch (lt/tracker [(io/file "src")] 0))
-  (watch)
-
-  )
-
