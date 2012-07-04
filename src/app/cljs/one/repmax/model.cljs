@@ -137,6 +137,10 @@
       (assoc :state :new-set)
       (assoc :new-set {:exercise exercise, :history []}))))
 
+(defmethod update-model :new-set/history-initialized [state {:keys [set-history]}]
+  (-> state
+    (assoc-in [:new-set :history] set-history)))
+
 (defmethod update-model :new-set/create [state {:keys [weight reps]}]
   (-> state
     (assoc-in [:new-set :weight] weight)

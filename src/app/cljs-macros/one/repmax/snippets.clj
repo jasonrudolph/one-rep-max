@@ -20,6 +20,12 @@
     (render list-item-without-content)))
 
 (def ^{:private true}
+  set-history-div-template
+  (let [div-with-sample-content (html/select (html/html-resource "new_set.html") [:#recent-sets-by-day])
+        empty-div (html/at div-with-sample-content [:#recent-sets-by-day] (html/content ""))]
+    (render empty-div)))
+
+(def ^{:private true}
   set-history-list-template
   (let [list-with-sample-items (html/select (html/html-resource "new_set.html") [:.set-history])
       empty-list (html/at list-with-sample-items [:ol] (html/content ""))]
@@ -46,6 +52,7 @@
    :exercises-list-item            exercises-list-item-template
    :new-set-header                 (snippet "new_set.html" [:#header])
    :new-set-form                   (snippet "new_set.html" [:#new-set-form])
+   :set-history-div                set-history-div-template
    :set-history-list               set-history-list-template
    :set-history-list-item          set-history-list-item-template})
 

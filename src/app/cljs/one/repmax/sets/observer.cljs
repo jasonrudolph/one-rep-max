@@ -9,6 +9,20 @@
 
 (defmethod do-after :default [event])
 
+(defmethod do-after :new-set/new [{:keys [new]}]
+  (let [exercise-id (-> new :new-set :exercise :_id)]
+    (mongo/find-documents (-> new :datastore-configuration :api-key)
+                          "sets"
+                          #(find-recent-sets-on-success-callback exercise-id %)
+                          :limit 50
+                          :query {:exercise-id exercise-id}
+                          :sort  {:_id -1})))
+
+(defn find-recent-sets-on-success-callback [exercise-id sets]
+  (dispatch/fire :action {:action :new-set/history-initialized,
+                          :exercise-id exercise-id,
+                          :set-history sets}))
+
 (defmethod do-after :new-set/create [{:keys [new]}]
   (let [document {:exercise-id (-> new :new-set :exercise :_id)
                   :weight      (-> new :new-set :weight)

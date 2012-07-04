@@ -8,8 +8,8 @@
 
 (def snippets (snippets/snippets))
 
-; TODO #disable and #enable are very general purpose DOM manipulation functions.
-;      Move them to a more general purpose namespace.
+; TODO #disable and #enable are very general-purpose DOM manipulation functions.
+;      Move them to a more general-purpose namespace.
 (defn disable [id]
   (d/set-attr! (d/by-id id) "disabled" "disabled"))
 

@@ -1,4 +1,5 @@
 (ns one.repmax.mongohq
+  (:refer-clojure :exclude [sort])
   (:require [clojure.walk :as walk]
             [goog.json :as gjson]
             [one.browser.remote :as remote]))
@@ -17,6 +18,12 @@
                                  (assoc m (clj->js k) (clj->js v))) {} x))
     (coll? x) (apply array (map clj->js x))
     :else x))
+
+(defn- clj->json
+  "Returns a JSON string representing the given ClojureScript data structure.
+   See also: clj->js"
+  [x]
+  (.stringify js/JSON (clj->js x)))
 
 ;;; Plumbing for handling remote requests
 
@@ -137,31 +144,64 @@
   "Finds all documents in the given collection. Invokes the given callback,
    passing in a sequence of documents (as Clojure maps).
 
-   Optional keyword argument:
-   * :limit The total number of documents to fetch. Defaults to infinity (i.e.,
-            fetches all documents in this collection).
+   Optional keyword arguments:
+   * :limit The total number of documents to fetch.
+            (Defaults to infinity, which tells the function to fetch *all*
+            documents in this collection.)
+   * :query A Clojure map representing your MongoDB query. Uses the same
+            structure as native MongoDB queries using MongoDB's 'find' comamnd.
+            (Defaults to nil.)
+   * :sort  A Clojure map describing how to sort the results. Uses the same
+            structure as native MongoDB queries using MongoDB's 'sort' command.
+            (Defaults to nil.)
 
-   MongoHQ returns a maximum of 100 documents per request. If the given collection
-   has more than 100 documents, this function makes multiple requests to MongoHQ.
-   It will make as many requests as needed to fetch all the documents in the
-   collection.
+   MongoHQ returns a maximum of 100 documents per request. If the given
+   collection has more than 100 documents that match the given :query, and the
+   given :limit is greater than 100, this function makes multiple requests to
+   MongoHQ. It will make as many requests as needed to fetch the requested
+   number of documents, or all documents that match the given :query,
+   whichever comes first.
   "
-  [api-key collection-name on-success & {:keys [limit]
+  [api-key collection-name on-success & {:keys [limit query sort]
                                          :or   {limit js/Infinity}}]
-  (let [url (root-documents-url collection-name)]
-    (find-documents-request api-key
-                            url
+  (let [url (root-documents-url collection-name)
+        url-params {:_apikey api-key
+                    :q       (clj->json query)
+                    :sort    (clj->json sort)}
+        url-fn (with-partial-params url url-params)]
+    (find-documents-request url-fn
                             :limit-overall limit
                             :on-success on-success)))
 
-(def ^{:doc "The maximim number of documents that MongoHQ will return in a given request.
-             When querying for documents, MongoHQ uses this value as the default value
-             (and the maximum allowed value) for the 'limit' parameter."}
+(defn- with-partial-params
+  "Takes a base URL string and a Clojure map of request parameters.
+
+   Returns a function that takes a Clojure map of additional request parameters
+   and returns a URL (as a string) containing the combined set of request
+   parameters.
+
+   For example:
+
+    ((with-partial-params \"http://google.com\" {:q \"clojure\"}) {:hl :en})
+
+   Produces the following URL string:
+
+     \"http://google.com?q=clojure&hl=en\"
+  "
+  [url params]
+  #(with-params url (conj params %)))
+
+(def ^{:doc "The maximum number of documents that MongoHQ will return for a
+             single request (i.e., the maximum allowed value for the 'limit'
+             parameter)."}
   max-docs-per-request 100)
 
 ; TODO Add support for on-error callback
 (defn- find-documents-request
-  "Issues a request to the given URL to find documents.
+  "Issues a request to the given URL (provided via the url-fn argument) to find documents.
+
+   * url-fn             A function that takes a map of query parameters and returns the target
+                        URL with the given query parameters. (See also: with-partial-params.)
 
    Optional keyword argments:
    * :skip              Used for pagination in MongoHQ. Indicates the number of documents to
@@ -180,15 +220,14 @@
                         request. The function must accept a single argument: a sequence of
                         documents.
   "
-  [api-key url & {:keys [skip limit-per-request limit-overall previous-docs on-success]
-                  :or   {skip 0
-                         limit-per-request max-docs-per-request
-                         limit-overall js/Infinity
-                         previous-docs []
-                         on-success (fn [data])}}]
-  (request (with-params url {:_apikey api-key, :skip skip, :limit limit-per-request})
-           :on-success (find-documents-callback api-key
-                                                url
+  [url-fn & {:keys [skip limit-per-request limit-overall previous-docs on-success]
+             :or   {skip 0
+                    limit-per-request max-docs-per-request
+                    limit-overall js/Infinity
+                    previous-docs []
+                    on-success (fn [data])}}]
+  (request (url-fn {:skip skip, :limit limit-per-request})
+           :on-success (find-documents-callback url-fn
                                                 skip
                                                 limit-per-request
                                                 limit-overall
@@ -219,16 +258,15 @@
    continue this pattern until we have fetched the requested number of documents
    (limit-overall) or all documents in the collection (whichever is smaller).
   "
-  [api-key url skip limit-per-request limit-overall previous-docs on-success]
+  [url-fn skip limit-per-request limit-overall previous-docs on-success]
   (fn [new-docs]
-    (let [docs (apply conj previous-docs new-docs)
+    (let [docs (concat previous-docs new-docs)
           fetched-all-docs? (or
                               (>= (count docs) limit-overall)
                               (< (count new-docs) limit-per-request))]
       (if fetched-all-docs?
         (on-success (take limit-overall (documents->maps docs)))
-        (find-documents-request api-key
-                                url
+        (find-documents-request url-fn
                                 :skip (+ skip limit-per-request)
                                 :limit-per-request limit-per-request
                                 :limit-overall limit-overall
