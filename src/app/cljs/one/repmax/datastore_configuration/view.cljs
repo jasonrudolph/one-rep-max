@@ -4,6 +4,7 @@
   (:require [clojure.browser.event :as event]
             [domina :as d]
             [domina.css :as css]
+            [goog.events.EventType :as event-type]
             [one.dispatch :as dispatch]))
 
 (def snippets (snippets/snippets))
@@ -44,7 +45,7 @@
     (d/swap-content! content (:datastore-configuration-form snippets))
     (d/set-value! (d/by-id "api-key-input") (:api-key datastore-configuration))
     (event/listen (d/by-id "datastore-configuration-form-button")
-                  "click"
+                  event-type/CLICK
                   #(dispatch/fire :action
                                   {:action :datastore-configuration/update
                                    :api-key (d/value (d/by-id "api-key-input"))}))))

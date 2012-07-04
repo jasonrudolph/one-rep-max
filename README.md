@@ -77,7 +77,9 @@ evaluating *ClojureScript* code from within Vim.)
 # Credits
 
 * Thanks to @brentonashworth and others at @relevance for ClojureScript
-  One and for entertaining countless questions as I explored the
+  One
+* Thanks to @brentonashworth and @stuartsierra for entertaining
+  countless questions and providing valuable feedback as I explored the
   ClojureScript landscape.
 * Thanks to @jgkite for lending a hand with styling the UI.
 * Thanks to @relevance for [Fridays], where much of this work took

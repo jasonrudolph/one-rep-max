@@ -3,6 +3,7 @@
   (:require [clojure.browser.event :as event]
             [domina :as d]
             [domina.css :as css]
+            [goog.events.EventType :as event-type]
             [one.dispatch :as dispatch]
             [one.repmax.fx :as fx]))
 
@@ -45,13 +46,13 @@
 
 (defn- add-exercise-click-event-listener [node exercise-id]
   (event/listen node
-                "click"
+                event-type/CLICK
                 #(dispatch/fire :action {:action :new-set/new, :exercise-id exercise-id})))
 
 (defn- add-exercise-search-event-listener []
   (let [field (d/by-id "search-input")]
     (event/listen field
-                  "keyup"
+                  event-type/KEYUP
                   #(dispatch/fire :action {:action :exercises/search, :name (d/value field)}))))
 
 (defn- render-filtered-exercise-list [exercise-ids]

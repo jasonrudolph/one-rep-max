@@ -4,6 +4,7 @@
   (:require [clojure.browser.event :as event]
             [domina :as d]
             [domina.css :as css]
+            [goog.events.EventType :as event-type]
             [goog.i18n.DateTimeFormat :as date-time-format]
             [one.dispatch :as dispatch]))
 
@@ -114,7 +115,7 @@
 
 (defn- add-event-listener-for-persisting-set []
   (event/listen (d/by-id "new-set-form-button")
-                "click"
+                event-type/CLICK
                 #(dispatch/fire :action {:action :new-set/create
                                          :exercise-id (d/value (d/by-id "exercise-id"))
                                          :weight (d/value (d/by-id "weight-input"))
