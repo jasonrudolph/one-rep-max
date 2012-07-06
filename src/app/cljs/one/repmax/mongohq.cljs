@@ -49,7 +49,7 @@
 
 (defn- request-headers [content-type]
   (if (= content-type :json)
-    (goog.structs.Map. (clj->js {"Content-Type" "application/json"}))))
+    {"Content-Type" "application/json"}))
 
 (defn- request-content [content-type content]
   (if (= content-type :json)
