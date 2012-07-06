@@ -1,8 +1,8 @@
 (ns ^{:doc "Provides support for basic animations. Allows effects to be
   represented as Clojure data."}
   one.browser.animation
-  (:use [one.color :only (color bg-color rgb IColorSource)]
-        [one.core :only (start dispose get-style)])
+  (:use [one.color :only [color bg-color rgb IColorSource]]
+        [one.core :only [start dispose get-style]])
   (:require [goog.style :as style]
             [goog.string :as gstring]
             [goog.fx.AnimationQueue :as queue]
@@ -29,7 +29,7 @@
 
 (extend-protocol IPosition
 
-  cljs.core.Vector
+  cljs.core.PersistentVector
   (position [this] this)
 
   js/Array
@@ -37,18 +37,18 @@
 
   js/Element
   (position [this]
-    (let [p (js->clj (style/getPosition this) :keywordize-keys true)]
-      [(:x p) (:y p)])))
+    (let [p (style/getPosition this)]
+      [(.-x p) (.-y p)])))
 
 (defprotocol IScroll
   (scroll [this] "Return the scroll position of an element as `[X Y]`."))
 
 (extend-protocol IScroll
 
-  js/Number
+  number
   (scroll [this] [0 this])
 
-  cljs.core.Vector
+  cljs.core.PersistentVector
   (scroll [this] this)
 
   js/Element
@@ -62,21 +62,20 @@
 
 (extend-protocol ISize
 
-  js/Number
+  number
   (size [this] [this this])
   (width [this] this)
   (height [this] this)
-
-  cljs.core.Vector
+  
+  cljs.core.PersistentVector
   (size [this] this)
   (width [this] (first this))
   (height [this] (second this))
 
   js/Element
   (size [this]
-    (let [s (js->clj (style/getSize this)
-                     :keywordize-keys true)]
-      [(:width s) (:height s)]))
+    (let [s (style/getSize this)]
+      [(.-width s) (.-height s)]))
   (width [this]
     (width (size this)))
   (height [this]
@@ -87,6 +86,13 @@
 
 (extend-protocol IOpacity
 
+  string
+  (opacity [this]
+    (js/parseFloat this))
+
+  number
+  (opacity [this] this)
+  
   js/String
   (opacity [this]
     (js/parseFloat this))
@@ -99,7 +105,7 @@
     (let [op (style/getComputedStyle this "opacity")]
       (if (= op "")
         (opacity (style/getOpacity this))
-        op))))
+        (opacity op)))))
 
 (extend-type goog.fx.AnimationQueue
   
@@ -340,8 +346,8 @@
   "Calculate the end of a slide based on the start value and the
   passed `:left`, `:right`, `:up` and `:down` values."
   [[x y] m]
-  (vector (+ (- x (:left m 0)) (:right m 0))
-          (+ (- y (:up m 0)) (:down m 0))))
+  (vector (+ (- x (get m :left 0)) (get m :right 0))
+          (+ (- y (get m :up 0)) (get m :down 0))))
 
 (defmethod standardize :slide [element m]
   (let [start (position (or (:start m) element))
@@ -768,3 +774,24 @@
      (play-animation animation {}))
   ([animation opts]
      (play nil animation opts)))
+
+(extend-type goog.Timer
+  one.core/Startable
+  (start [this]
+    (event/listen-once this "tick"
+                       (fn [e] (.dispatchEvent this "finish")
+                         (dispose this)))
+    (.start this ()))
+  one.core/Disposable
+  (dispose [this]
+    (.dispose this ())))
+
+(defn play-fn
+  "Add a function to the animation queue with an optional delay. The
+function will be run before the delay."
+  ([f]
+     (play-fn f 1))
+  ([f delay]
+     (play-animation (fn [] (goog.Timer. delay))
+                     {:before f})))
+

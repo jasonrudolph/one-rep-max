@@ -56,7 +56,7 @@
   (color [this] this)
   (bg-color [this] this)
 
-  cljs.core.Vector
+  cljs.core.PersistentVector
   (color [this] (apply make-color this))
   (bg-color [this] (apply make-color this))
 
@@ -76,8 +76,8 @@
                           (gstring/startsWith this "rgb(") (gcolor/parseRgb this))
                     :keywordize-keys true)))
   (bg-color [this] (color this))
-  
-  cljs.core.ObjMap
+
+  cljs.core.PersistentHashMap
   (color [this] (color (:hex this)))
   (bg-color [this] (color this))
   

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+lein clean
+rm -rf .repl public/javascripts/* .lein-git-deps lib .lein-deps-sum
