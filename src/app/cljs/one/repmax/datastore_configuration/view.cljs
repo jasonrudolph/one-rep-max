@@ -1,5 +1,5 @@
 (ns one.repmax.datastore-configuration.view
-  (:use [domina.xpath :only (xpath)])
+  (:use [domina.xpath :only [xpath]])
   (:require-macros [one.repmax.snippets :as snippets])
   (:require [clojure.browser.event :as event]
             [domina :as d]
