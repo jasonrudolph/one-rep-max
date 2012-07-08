@@ -8,10 +8,10 @@
   (render (html/select (construct-html (html/html-resource file)) id)))
 
 (def ^{:private true}
-  exercises-list-template
-  (let [list-with-sample-items (html/select (html/html-resource "exercises.html") [:#exercise-list])
-        empty-list (html/at list-with-sample-items [:div :ol] (html/content ""))]
-    (render empty-list)))
+  exercises-content-template
+  (let [content-with-sample-items (html/select (html/html-resource "exercises.html") [:#content])
+        content-with-empty-list (html/at content-with-sample-items [:exercise-list :div :ol] (html/content ""))]
+    (render content-with-empty-list)))
 
 (def ^{:private true}
   exercises-list-item-template
@@ -47,8 +47,7 @@
   {:datastore-configuration-header (snippet "datastore_configuration.html" [:#header])
    :datastore-configuration-form   (snippet "datastore_configuration.html" [:#content])
    :exercises-header               (snippet "exercises.html" [:#header])
-   :exercises-search               (snippet "exercises.html" [:#search-bar])
-   :exercises-list                 exercises-list-template
+   :exercises-content              exercises-content-template
    :exercises-list-item            exercises-list-item-template
    :new-set-header                 (snippet "new_set.html" [:#header])
    :new-set-form                   (snippet "new_set.html" [:#new-set-form])

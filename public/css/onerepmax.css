@@ -19,6 +19,12 @@ a, a:hover, a:active, a:visited {
   padding: 12px 9px;
 }
 
+#header-buttons .button-left {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+}
+
 #header-buttons .button-right {
   position: absolute;
   right: 10px;

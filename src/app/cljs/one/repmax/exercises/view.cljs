@@ -13,19 +13,30 @@
 
 (defmethod render :default [event])
 
+;; TODO Replace the multimethod for :datastore-configuration/ready and
+;; the multimethod for :new-set/back with a single fn that fires when
+;; the state changes to :exercises. In both cases, we render the
+;; "exercise list" view with the current contents of :exercises from the
+;; state atom.
 (defmethod render :datastore-configuration/ready [_]
-  (let [header (d/by-id "header")
-        content (d/by-id "content")]
-    (d/swap-content! header (:exercises-header snippets))
-    (d/set-html! content (:exercises-search snippets))
-    (d/append! content (:exercises-list snippets))
-    (add-exercise-search-event-listener)))
+  (render-view []))
 
 (defmethod render :exercises/initialized-from-datastore [{:keys [new]}]
   (render-exercise-list (:exercises new)))
 
 (defmethod render :exercises/search [{:keys [new]}]
   (render-filtered-exercise-list (-> new :exercise-search :exercise-ids)))
+
+(defmethod render :new-set/back [{:keys [new]}]
+  (render-view (:exercises new)))
+
+(defn- render-view [exercises]
+  (let [header (d/by-id "header")
+        content (d/by-id "content")]
+    (d/swap-content! header (:exercises-header snippets))
+    (d/swap-content! content (:exercises-content snippets))
+    (add-exercise-search-event-listener)
+    (render-exercise-list exercises)))
 
 (defn- render-exercise-list [exercises]
   (let [content (css/sel "#exercise-list ol")]

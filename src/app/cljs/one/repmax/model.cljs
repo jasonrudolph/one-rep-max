@@ -145,6 +145,9 @@
     (assoc-in [:new-set :state] :create-failed)
     (assoc-in [:new-set :error] error)))
 
+(defmethod update-model :new-set/back [state _]
+  (assoc state :state :exercise-list))
+
 (defn set-map-for-exercise-history
   "Given a map that represents all data for a single exercise set, return a map
   containing the data that we want to store in the state atom when this

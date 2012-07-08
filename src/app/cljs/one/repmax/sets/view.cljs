@@ -25,7 +25,8 @@
     (d/set-value! (css/sel "#exercise-id") (:_id exercise))
     (d/set-value! (css/sel "#exercise-id") (:_id exercise))
     (d/append! content (:set-history-div snippets))
-    (add-event-listener-for-persisting-set)))
+    (add-event-listener-for-persisting-set)
+    (add-event-listener-for-returning-to-exercise-list)))
 
 (defmethod render :new-set/history-initialized [{:keys [new]}]
   (let [recent-sets (-> new :new-set :history)
@@ -120,6 +121,11 @@
                                          :exercise-id (d/value (d/by-id "exercise-id"))
                                          :weight (d/value (d/by-id "weight-input"))
                                          :reps (d/value (d/by-id "reps-input"))})))
+
+(defn- add-event-listener-for-returning-to-exercise-list []
+  (event/listen (d/by-id "new-set-back-button")
+                event-type/CLICK
+                #(dispatch/fire :action {:action :new-set/back})))
 
 ;;; Register reactors
 
