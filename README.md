@@ -21,7 +21,7 @@ You will need to have Java, [lein][] and Git installed. Execute the
 following commands to install and run One Rep Max:
 
     git clone https://github.com/jasonrudolph/one-rep-max.git
-    cd one
+    cd one-rep-max
     lein plugin install lein-repls 1.9.7 # TODO Automate this in "lein bootstrap"
     lein bootstrap
     lein repl
@@ -39,7 +39,7 @@ You will also need an API key and a database for MongoHQ:
 4. Until the UI supports the ability to create exercises, you can use
    the `seed` script to create a few exercises for testing purposes:
 
-       ./script/seed <your-api-key>
+         ./script/seed <your-api-key>
 
 # Back up your data
 
