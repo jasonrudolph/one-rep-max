@@ -13,24 +13,9 @@
 (def ^{:doc "An atom containing a map which is the application's current state."}
   state (atom initial-state))
 
-(defn state-map-for-model-change-message
-  "Given a map that represents the application's state, return a map that is
-  customized for communicating the application state in a :model-change
-  message.
-
-  It is unnecessary for every model-change message to include the entire
-  collection of exercises. Doing so also results in enormous messages, which
-  noticably degrades application performance. So, for the purposes of the
-  :model-change message, we remove the :exercises from the state map."
-  [m]
-  (dissoc m :exercises))
-
 (add-watch state :state-change-key
            (fn [_ _ o n]
-             (dispatch/fire :model-change
-                            {:old (state-map-for-model-change-message o)
-                             :new (state-map-for-model-change-message n)
-                             :message (:last-message n)})))
+             (dispatch/fire :model-change {:old o, :new n, :message (:last-message n)})))
 
 ;;;; Receiving events that update state
 
