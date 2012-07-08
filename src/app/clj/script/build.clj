@@ -3,7 +3,7 @@
   the project."
   (:require [clojure.java.io :as io]
             [one.tools :as tools]
-            [one.sample.config :as config]))
+            [one.repmax.config :as config]))
 
 (defn -main
   "Compile ClojureScript sources and output them as well as all static
