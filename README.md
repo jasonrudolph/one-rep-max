@@ -74,6 +74,11 @@ For more info on working with Vim and ClojureScript, check out the
 subset of the steps described in the wiki, but this is all you need for
 evaluating *ClojureScript* code from within Vim.)
 
+# TODO
+
+* Support navigation with the browser's "back" button. See:
+  [one.sample.history][history-management].
+
 # Credits
 
 * Thanks to @brentonashworth and others at @relevance for ClojureScript
@@ -94,6 +99,7 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [clojurescript-one]: http://clojurescriptone.com
 [clojurescript-with-vim]: https://github.com/clojure/clojurescript/wiki/Vim
 [fridays]: http://thinkrelevance.com/how-we-work/dev_team#dev_team-fridays
+[history-management]: https://github.com/jasonrudolph/one-rep-max/blob/21099b6/src/app/cljs/one/sample/history.cljs
 [lein]: https://github.com/technomancy/leiningen
 [lein-repls]: https://github.com/franks42/lein-repls
 [mongohq-signup]: https://mongohq.com/signup
