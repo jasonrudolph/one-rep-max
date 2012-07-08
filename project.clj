@@ -1,5 +1,5 @@
-(defproject one "1.0.0-SNAPSHOT"
-  :description "Getting Started with ClojureScript."
+(defproject one-rep-max "0.0.1"
+  :description "Currently: Some dude on the internet trying his hand at ClojureScript. Maybe one day: A ClojureScript app for tracking workout data."
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [ring "1.0.0-RC1"]
                  [compojure "0.6.4"]
