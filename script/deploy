@@ -1,0 +1,12 @@
+#!/bin/bash
+
+function tag_deployment {
+  CURRENT_TIMESTAMP=`date "+%Y%m%d%H%M%S"`
+  TAG_NAME="deployed_$CURRENT_TIMESTAMP"
+  git tag -a -m "Tagging deployment at $CURRENT_TIMESTAMP" $TAG_NAME
+}
+
+./script/build && \
+  rsync -avz --delete out/public/ jasonrudolph.com:onerepmax.jasonrudolph.com && \
+  tag_deployment
+
