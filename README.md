@@ -41,6 +41,30 @@ You will also need an API key and a database for MongoHQ:
 
          ./script/seed <your-api-key>
 
+# Building and deploying
+
+ClojureScript One provides a [handy script for producing deployment
+artifacts][clojurescript-one-build-script].
+
+    ./script/build
+
+The output includes the application's JavaScript compiled in advanced
+mode, the host HTML page, and all of the resources in the `public`
+directory.
+
+The build script deposits the deployment artifacts in the `./out/public`
+directory. Inside you'll find `index.html`: the host page for the
+application. You can open `index.html` directly in a browser, and you're
+ready to rock.
+
+Since the deployment artifacts are just static content (i.e.,
+JavaScript, HTML, etc.), you can deploy the app just about anywhere.
+(Heck, you could even [host it on Dropbox][deploy-to-dropbox].)
+Personally, I host the app on a simple Apache server, and I use
+`./script/deploy` to build, deploy, and tag in one step. If you want to
+deploy the app to your own host, this script might serve as a starting
+point.
+
 # Back up your data
 
 If you use One Rep Max for real production data (i.e., you use it to
@@ -97,7 +121,9 @@ Copyright 2012 Jason Rudolph ([jasonrudolph.com](http://jasonrudolph.com)) and R
 Distributed under the Eclipse Public License, the same as Clojure uses. See the file COPYING.
 
 [clojurescript-one]: http://clojurescriptone.com
+[clojurescript-one-build-script]: https://github.com/brentonashworth/one/wiki/Building-deployment-artifacts
 [clojurescript-with-vim]: https://github.com/clojure/clojurescript/wiki/Vim
+[deploy-to-dropbox]: http://www.maclife.com/article/howtos/how_host_your_website_dropbox
 [fridays]: http://thinkrelevance.com/how-we-work/dev_team#dev_team-fridays
 [history-management]: https://github.com/jasonrudolph/one-rep-max/blob/21099b6/src/app/cljs/one/sample/history.cljs
 [lein]: https://github.com/technomancy/leiningen
