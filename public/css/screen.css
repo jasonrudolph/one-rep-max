@@ -1,0 +1,508 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+@font-face {
+  font-family: 'IconicFill';
+  src: url("../fonts/iconic_fill.eot");
+  src: url("../fonts/iconic_fill.eot?#iefix") format("embedded-opentype"), url("../fonts/iconic_fill.ttf") format("truetype"), url("../fonts/iconic_fill.svg#iconic") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* line 9, ../../src/sass/partials/_fonts.scss */
+body {
+  color: #555555;
+  font-family: Helvetica;
+}
+
+/* line 14, ../../src/sass/partials/_fonts.scss */
+p, div, h1 {
+  margin-bottom: 12px;
+}
+
+/* line 15, ../../src/sass/partials/_fonts.scss */
+input, li {
+  margin-bottom: 6px;
+}
+
+/* line 17, ../../src/sass/partials/_fonts.scss */
+a, a:hover, a:active, a:visited {
+  color: #555555;
+}
+
+/* line 19, ../../src/sass/partials/_fonts.scss */
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* line 47, ../../src/sass/partials/_fonts.scss */
+.icon-plus:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\2795';
+  color: white;
+  padding: 5px;
+}
+
+/* line 53, ../../src/sass/partials/_fonts.scss */
+.icon-arrow-right:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\2192';
+  color: #cccccc;
+  padding: 5px;
+}
+
+/* line 59, ../../src/sass/partials/_fonts.scss */
+.icon-arrow-left:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\2190';
+  color: #cccccc;
+  padding: 5px;
+}
+
+/* line 65, ../../src/sass/partials/_fonts.scss */
+.icon-pen:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\e006';
+  color: white;
+  padding: 5px;
+}
+
+/* line 5, ../../src/sass/partials/_forms.scss */
+input, button, input[type=text], .button {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  font-size: 18px;
+  height: 40px;
+  width: 100%;
+}
+
+/* line 12, ../../src/sass/partials/_forms.scss */
+input[type=text] {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  border: 1px solid #999999;
+  background: #fefefe;
+  padding: 5px;
+}
+
+/* line 20, ../../src/sass/partials/_forms.scss */
+button, .button {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 0 #ffa773;
+  -moz-box-shadow: inset 0 1px 0 #ffa773;
+  box-shadow: inset 0 1px 0 #ffa773;
+  border: 1px solid #ff5f00;
+  color: #7a3004;
+  background: #ff8740;
+  font-weight: bold;
+}
+
+/* line 29, ../../src/sass/partials/_forms.scss */
+#back-button {
+  -webkit-box-shadow: inset 0 1px 0 RGBA(255, 255, 255, 0.4);
+  -moz-box-shadow: inset 0 1px 0 RGBA(255, 255, 255, 0.4);
+  box-shadow: inset 0 1px 0 RGBA(255, 255, 255, 0.4);
+  border: 1px solid #666666;
+  color: white;
+  background: #999999;
+  padding: 5px;
+}
+/* line 59, ../../src/sass/partials/_fonts.scss */
+#back-button:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\2190';
+  color: white;
+  padding: 0 5px 0 0;
+}
+
+/* line 1, ../../src/sass/partials/_base.scss */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 3, ../../src/sass/partials/_base.scss */
+body {
+  background: #efefef;
+  font-size: 14px;
+}
+
+/* line 8, ../../src/sass/partials/_base.scss */
+#header {
+  background: #555555;
+  margin: 0 0 12px 0;
+  width: 100%;
+  position: relative;
+}
+
+/* line 15, ../../src/sass/partials/_base.scss */
+#header h1 {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  padding: 12px 9px;
+  margin: 0;
+}
+
+/* line 25, ../../src/sass/partials/_base.scss */
+.header-buttons.right, .header-buttons.left {
+  position: absolute;
+  top: 4px;
+}
+/* line 26, ../../src/sass/partials/_base.scss */
+.header-buttons.right {
+  right: 2px;
+}
+/* line 27, ../../src/sass/partials/_base.scss */
+.header-buttons.left {
+  left: 2px;
+}
+/* line 29, ../../src/sass/partials/_base.scss */
+.header-buttons button {
+  font-size: 14px;
+  padding: 0 10px;
+  height: 32px;
+}
+
+/* line 40, ../../src/sass/partials/_base.scss */
+#dev-links {
+  border-top: 1px solid #999999;
+  margin-top: 50px;
+  padding-top: 5px;
+  text-align: center;
+}
+/* line 46, ../../src/sass/partials/_base.scss */
+#dev-links ul li {
+  display: inline;
+}
+
+/* line 55, ../../src/sass/partials/_base.scss */
+#datastore-configuration, #datastore-configuration-form {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+/* line 57, ../../src/sass/partials/_base.scss */
+#datastore-configuration-form-button {
+  display: block;
+  width: 100%;
+}
+
+/* line 62, ../../src/sass/partials/_base.scss */
+.tell-me-more {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  display: block;
+  cursor: pointer;
+}
+/* line 43, ../../src/sass/partials/_fonts.scss */
+.tell-me-more:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\2139';
+  color: white;
+  padding: 0 5px 0 0;
+}
+/* line 67, ../../src/sass/partials/_base.scss */
+.tell-me-more:before {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  border-radius: 20px;
+  background: #5dcec6;
+  font-size: 12px;
+  padding: 2px 6px;
+  margin-right: 5px;
+}
+
+/* line 77, ../../src/sass/partials/_base.scss */
+.progress-list li {
+  color: #555555;
+  margin-left: 10px;
+}
+/* line 81, ../../src/sass/partials/_base.scss */
+.progress-list li[data-status=pending] {
+  color: #999999;
+}
+/* line 27, ../../src/sass/partials/_fonts.scss */
+.progress-list li[data-status=pending]:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\e079';
+  color: #999999;
+  padding: 0 5px 0 0;
+}
+/* line 31, ../../src/sass/partials/_fonts.scss */
+.progress-list li[data-status=working]:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\e036';
+  color: #ffa773;
+  padding: 0 5px 0 0;
+}
+/* line 35, ../../src/sass/partials/_fonts.scss */
+.progress-list li[data-status=success]:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\2717';
+  color: #00ae68;
+  padding: 0 5px 0 0;
+}
+/* line 84, ../../src/sass/partials/_base.scss */
+.progress-list li[data-status=failure] {
+  color: red;
+}
+/* line 39, ../../src/sass/partials/_fonts.scss */
+.progress-list li[data-status=failure]:before {
+  display: inline-block;
+  font-family: 'IconicFill';
+  content: '\26d4';
+  color: red;
+  padding: 0 5px 0 0;
+}
+
+/* line 91, ../../src/sass/partials/_base.scss */
+#exercise-list {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* line 96, ../../src/sass/partials/_base.scss */
+#exercise-list li {
+  -webkit-box-shadow: inset 0 1px 0 white;
+  -moz-box-shadow: inset 0 1px 0 white;
+  box-shadow: inset 0 1px 0 white;
+  background: #f7f7f7;
+  cursor: pointer;
+  border-bottom: 1px solid #cccccc;
+  line-height: 20px;
+  margin: 0;
+  padding: 10px 12px;
+  position: relative;
+}
+/* line 106, ../../src/sass/partials/_base.scss */
+#exercise-list li:first-child {
+  border-top: 1px solid #cccccc;
+}
+/* line 108, ../../src/sass/partials/_base.scss */
+#exercise-list li div {
+  position: absolute;
+  right: 0;
+  top: 6px;
+  font-size: 18px;
+}
+
+/* line 116, ../../src/sass/partials/_base.scss */
+#search-bar {
+  margin: 0 12px 6px;
+}
+
+/* line 124, ../../src/sass/partials/_base.scss */
+#new-set-form, #recent-sets-by-day {
+  margin: 0 6px 12px;
+}
+
+/* line 126, ../../src/sass/partials/_base.scss */
+#weight-input-label, #reps-input-label {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  color: #999999;
+  right: 8px;
+  bottom: 12px;
+  position: absolute;
+}
+
+/* line 135, ../../src/sass/partials/_base.scss */
+#weight-input, #reps-input {
+  margin: 0;
+}
+
+/* line 139, ../../src/sass/partials/_base.scss */
+.trailer {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: box;
+  overflow: hidden;
+  *zoom: 1;
+  width: 100%;
+}
+/* line 143, ../../src/sass/partials/_base.scss */
+.trailer li {
+  -webkit-box-flex: 50;
+  -moz-box-flex: 50;
+  -ms-box-flex: 50;
+  box-flex: 50;
+  margin-right: 5px;
+  position: relative;
+}
+/* line 149, ../../src/sass/partials/_base.scss */
+.trailer li:last-child {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+  margin: 0;
+}
+
+/* line 159, ../../src/sass/partials/_base.scss */
+.set-history {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  color: #666666;
+  margin-bottom: 6px;
+}
+/* line 166, ../../src/sass/partials/_base.scss */
+.set-history h1 {
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  -ms-border-radius: 4px 4px 0 0;
+  -o-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  background-color: #999999;
+  color: white;
+  font-weight: bold;
+  padding: 6px 10px;
+  margin: 0;
+}
+/* line 175, ../../src/sass/partials/_base.scss */
+.set-history h3, .set-history p {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+/* line 176, ../../src/sass/partials/_base.scss */
+.set-history p {
+  color: #999999;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+/* line 182, ../../src/sass/partials/_base.scss */
+.set-history div {
+  margin-bottom: 2px;
+}
+/* line 183, ../../src/sass/partials/_base.scss */
+.set-history .right {
+  float: right;
+}
+/* line 185, ../../src/sass/partials/_base.scss */
+.set-history li:first-child {
+  border-top: 0 none;
+}
+/* line 186, ../../src/sass/partials/_base.scss */
+.set-history li {
+  overflow: hidden;
+  *zoom: 1;
+  border-top: 1px solid #ccc;
+  display: block;
+  padding: 10px 10px 8px 10px;
+  margin: 0;
+}

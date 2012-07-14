@@ -10,3 +10,4 @@
 /.lein-failures
 /.lein-git-deps/
 /.lein_repls
+/.sass-cache/

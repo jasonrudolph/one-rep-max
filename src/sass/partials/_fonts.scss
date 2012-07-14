@@ -1,0 +1,68 @@
+@font-face {
+  font-family: 'IconicFill';
+  src: url('../fonts/iconic_fill.eot');
+  src: url('../fonts/iconic_fill.eot?#iefix') format('embedded-opentype'), url('../fonts/iconic_fill.ttf') format('truetype'), url('../fonts/iconic_fill.svg#iconic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  color: $dark-grey;
+  font-family: Helvetica;
+}
+
+p, div, h1 { margin-bottom: 12px; }
+input, li { margin-bottom: 6px; }
+
+a, a:hover, a:active, a:visited { color: $dark-grey; }
+
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+@mixin iconic { display:inline-block; font-family: 'IconicFill'; }
+
+@mixin icon-clock($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\e079'; color: $the-color; padding: #{$the-padding}; }
+}
+
+@mixin icon-spin($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\e036'; color: $the-color; padding: #{$the-padding}; }
+}
+
+@mixin icon-check($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\2717'; color: $the-color; padding: #{$the-padding}; }
+}
+
+@mixin icon-denied($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\26d4'; color: $the-color; padding: #{$the-padding}; }
+}
+
+@mixin icon-info($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\2139'; color: $the-color; padding: #{$the-padding}; }
+}
+
+@mixin icon-plus($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\2795'; color: $the-color; padding: #{$the-padding}; }
+}
+
+.icon-plus { @include icon-plus(#fff, 5px); }
+
+@mixin icon-arrow-right($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\2192'; color: $the-color; padding: #{$the-padding}; }
+}
+
+.icon-arrow-right { @include icon-arrow-right($really-light-grey, 5px); }
+
+@mixin icon-arrow-left($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\2190'; color: $the-color; padding: #{$the-padding}; }
+}
+
+.icon-arrow-left { @include icon-arrow-left($really-light-grey, 5px); }
+
+@mixin icon-pen($the-color: $light-grey, $the-padding: "0") {
+  &:before { @include iconic; content:'\e006'; color: $the-color; padding: #{$the-padding}; }
+}
+
+.icon-pen { @include icon-pen(#fff, 5px); }

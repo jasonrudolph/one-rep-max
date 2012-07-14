@@ -1,0 +1,36 @@
+@mixin container {
+  margin: 0 12px;
+}
+
+input, button, input[type=text], .button {
+  @include inline-block;
+  font-size: 18px;
+  height: 40px;
+  width: 100%;
+}
+
+input[type=text] {
+  @include border-radius(4px);
+  @include inline-block;
+  border: 1px solid $light-grey;
+  background: #fefefe;
+  padding: 5px;
+}
+
+button, .button {
+  @include border-radius(4px);
+  @include box-shadow(inset 0 1px 0 $light-orange);
+  border: 1px solid $dark-orange;
+  color: $dark-brown;
+  background: $orange;
+  font-weight: bold;
+}
+
+#back-button {
+  @include box-shadow(inset 0 1px 0 RGBA(255,255,255,.4));
+  @include icon-arrow-left(#fff, 0 5px 0 0);
+  border: 1px solid $grey;
+  color: white;
+  background: $light-grey;
+  padding: 5px;
+}

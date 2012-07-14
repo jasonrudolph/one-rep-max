@@ -1,29 +1,31 @@
 <_within file="application.html">
 
 <div id="header">
-  <div id="header-buttons">
-    <button type="button" id="new-set-back-button" class="button-left">Back</button>
-  </div>
   <h1>Bench Press</h1>
+  <div class="header-buttons left">
+    <button type="button" id="back-button" class="button-left">Back</button>
+  </div>
 </div>
 
-<div id="content" class="inset">
+<div id="content">
   <div id="new-set-form">
     <input id="exercise-id" type="hidden" />
-    <div class="clearfix trailer">
-      <div class="field-container">
-        <input id="weight-input" size="3" type="number" required />
+
+    <ul class="trailer">
+      <li>
+        <input id="weight-input" type="number" required />
         <label id="weight-input-label" for="weight-input">lbs</label>
-      </div>
-      <div class="field-container">
-        <input id="reps-input" size="3" type="number" required />
+      </li>
+      <li>
+        <input id="reps-input" type="number" required />
         <label id="reps-input-label" for="reps-input">reps</label>
-      </div>
-      <div class="button-container">
-        <button class='button'>n</button>
-      </div>
-    </div>
-    <button id="new-set-form-button" class='button'>Add Set</button>
+      </li>
+      <li>
+        <button type="button" class="icon-pen" />
+      </li>
+    </ul>
+
+    <button id="new-set-form-button">Add Set</button>
   </div>
 
   <div id="recent-sets-by-day">
@@ -35,27 +37,35 @@
       </header>
       <ol>
         <li>
-          <div class='clearfix'>
-            <p class="weight-and-reps"><span class="weight value">195</span> lbs x <span class="reps value">5</span> reps</p>
-            <p class="set-number">Set <span class="value">3</span></p>
+          <div>
+            <h3 class="weight-and-reps"><span class="weight value">195</span> lbs x <span class="reps value">5</span> reps</h3>
+            <h3 class="set-number right">Set <span class="value">3</span></h3>
           </div>
-          <div class='clearfix'>
+          <div>
             <p class="one-rep-max">1RM: <span class="value">219</span> lbs</p>
-            <p class="created-at"><time datetime="2012-05-23T06:27:02-06:00">6:27:02 am</time></p>
+            <p class="created-at right"><time datetime="2012-05-23T06:27:02-06:00">6:27:02 am</time></p>
           </div>
           <p class="note">Feelin' good. Today's gonna be a strong day!</p>
         </li>
         <li>
-          <p class="weight-and-reps"><span class="weight value">155</span> lbs x <span class="reps value">2</span> reps</p>
-          <p class="set-number">Set <span class="value">2</span></p>
-          <p class="one-rep-max">1RM: <span class="value">159</span> lbs</p>
-          <p class="created-at"><time datetime="2012-05-23T06:23:59-06:00">6:23:59 am</time></p>
+          <div>
+            <h3 class="weight-and-reps"><span class="weight value">155</span> lbs x <span class="reps value">2</span> reps</h3>
+            <h3 class="set-number right">Set <span class="value">2</span></h3>
+          </div>
+          <div>
+            <p class="one-rep-max">1RM: <span class="value">159</span> lbs</p>
+            <p class="created-at right"><time datetime="2012-05-23T06:23:59-06:00">6:23:59 am</time></p>
+          </div>
         </li>
         <li>
-          <p class="weight-and-reps"><span class="weight value">115</span> lbs x <span class="reps value">5</span> reps</p>
-          <p class="set-number">Set <span class="value">1</span></p>
-          <p class="one-rep-max">1RM: <span class="value">129</span> lbs</p>
-          <p class="created-at"><time datetime="2012-05-23T06:21:48-06:00">6:21:48 am</time></p>
+          <div>
+            <h3 class="weight-and-reps"><span class="weight value">115</span> lbs x <span class="reps value">5</span> reps</h3>
+            <h3 class="set-number right">Set <span class="value">1</span></h3>
+          </div>
+          <div>
+            <p class="one-rep-max">1RM: <span class="value">129</span> lbs</p>
+            <p class="created-at right"><time datetime="2012-05-23T06:21:48-06:00">6:21:48 am</time></p>
+          </div>
         </li>
       </ol>
     </section>

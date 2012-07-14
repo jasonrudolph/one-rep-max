@@ -123,7 +123,7 @@
                                          :reps (d/value (d/by-id "reps-input"))})))
 
 (defn- add-event-listener-for-returning-to-exercise-list []
-  (event/listen (d/by-id "new-set-back-button")
+  (event/listen (d/by-id "back-button")
                 event-type/CLICK
                 #(dispatch/fire :action {:action :new-set/back})))
 

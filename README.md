@@ -15,6 +15,19 @@ Alan Gutierrez
 
 [http://kiloblog.com/post/sharing-code-for-what-its-worth](http://kiloblog.com/post/sharing-code-for-what-its-worth "GitHub and Git: Sharing Your Code, for What It's Worth ...")
 
+# Dependencies
+
+One Rep Max is developed and tested with the following dependencies.
+
+  * Java 1.6
+  * Leiningen 1.7.1
+  * Git
+
+If you want to change the CSS, you'll also need Ruby and Compass.
+
+  * Ruby 1.9.3-p194
+  * Compass 0.12.2
+
 # Getting started
 
 You will need to have Java, [lein][] and Git installed. Execute the
@@ -41,6 +54,19 @@ You will also need an API key and a database for MongoHQ:
 
          ./script/seed <your-api-key>
 
+# SCSS, not CSS
+
+One Rep Max uses SCSS and [Compass] to generate the CSS used in the app.
+
+To make changes to the CSS, install Compass and tell it to watch for
+changes to the SCSS files:
+
+    gem install compass -v0.12.2
+    compass watch
+
+When you change any of the SCSS files (in `src/sass`), Compass will
+compile the CSS into the right spot.
+
 # Building and deploying
 
 ClojureScript One provides a [handy script for producing deployment
@@ -61,9 +87,9 @@ Since the deployment artifacts are just static content (i.e.,
 JavaScript, HTML, etc.), you can deploy the app just about anywhere.
 (Heck, you could even [host it on Dropbox][deploy-to-dropbox].)
 Personally, I host the app on a simple Apache server, and I use
-`./script/deploy` to build, deploy, and tag in one step. If you want to
-deploy the app to your own host, this script might serve as a starting
-point.
+`./script/deploy` to build the app, deploy it, and then tag the
+deployment. If you want to deploy the app to your own host, this script
+might serve as a starting point.
 
 # Back up your data
 
@@ -102,6 +128,9 @@ evaluating *ClojureScript* code from within Vim.)
 
 * Support navigation with the browser's "back" button. See:
   [one.sample.history][history-management].
+* Compile compressed CSS as part of the build (using
+  `compass compile --output-style=compressed`) and remove
+  the generated stylesheet from the repo (i.e., `screen.css`).
 
 # Credits
 
@@ -110,7 +139,11 @@ evaluating *ClojureScript* code from within Vim.)
 * Thanks to @brentonashworth and @stuartsierra for entertaining
   countless questions and providing valuable feedback as I explored the
   ClojureScript landscape.
-* Thanks to @jgkite for lending a hand with styling the UI.
+* Thanks to @itsthatguy and @jgkite for patiently donating their UI
+  design skills to the app.
+* Thanks to @somerandomdude for [Iconic], which provides the icons used
+  in One Rep Max. (Iconic is distributed under a [Creative Commons
+  license][iconic-license].)
 * Thanks to @relevance for [Fridays], where much of this work took
   place.
 
@@ -123,9 +156,12 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [clojurescript-one]: http://clojurescriptone.com
 [clojurescript-one-build-script]: https://github.com/brentonashworth/one/wiki/Building-deployment-artifacts
 [clojurescript-with-vim]: https://github.com/clojure/clojurescript/wiki/Vim
+[compass]: http://compass-style.org/
 [deploy-to-dropbox]: http://www.maclife.com/article/howtos/how_host_your_website_dropbox
 [fridays]: http://thinkrelevance.com/how-we-work/dev_team#dev_team-fridays
 [history-management]: https://github.com/jasonrudolph/one-rep-max/blob/21099b6/src/app/cljs/one/sample/history.cljs
+[iconic]: http://somerandomdude.com/work/iconic/
+[iconic-license]: https://github.com/jasonrudolph/one-rep-max/blob/master/public/fonts/iconic_license.txt
 [lein]: https://github.com/technomancy/leiningen
 [lein-repls]: https://github.com/franks42/lein-repls
 [mongohq-signup]: https://mongohq.com/signup
