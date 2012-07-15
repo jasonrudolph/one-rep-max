@@ -13,7 +13,8 @@
   (mongo/find-documents (-> new :datastore-configuration :api-key)
                         "exercises"
                         (fn [data]
-                          (dispatch/fire :action {:action :exercises/initialized-from-datastore, :exercises data}))))
+                          (dispatch/fire :action {:action :exercises/initialized-from-datastore, :exercises data}))
+                        :sort {:name 1}))
 
 ;;; Register reactors
 
