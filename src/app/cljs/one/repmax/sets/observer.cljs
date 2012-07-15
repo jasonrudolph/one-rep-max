@@ -24,9 +24,10 @@
                           :set-history sets}))
 
 (defmethod do-after :new-set/create [{:keys [new]}]
-  (let [document {:exercise-id (-> new :new-set :exercise :_id)
-                  :weight      (-> new :new-set :weight)
-                  :reps        (-> new :new-set :reps)}]
+  (let [weight (js/parseFloat (-> new :new-set :weight))
+        reps (js/parseInt (-> new :new-set :reps))
+        exercise-id (-> new :new-set :exercise :_id)
+        document {:exercise-id exercise-id, :weight weight, :reps reps}]
     (mongo/create-document (-> new :datastore-configuration :api-key)
                            "sets"
                            document
