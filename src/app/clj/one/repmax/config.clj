@@ -54,6 +54,7 @@
                    "goog.require('one.repmax.exercises.observer');"
                    "goog.require('one.repmax.exercises.view');"
                    "goog.require('one.repmax.sets.observer');"
+                   "goog.require('one.repmax.sets.statistics');"
                    "goog.require('one.repmax.sets.view');"
                    "goog.require('one.repmax.logging');"
                    "one.repmax.core.start();one.repmax.core.repl();"]

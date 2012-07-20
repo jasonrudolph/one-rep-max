@@ -6,6 +6,7 @@
             [domina.css :as css]
             [goog.events.EventType :as event-type]
             [goog.i18n.DateTimeFormat :as date-time-format]
+            [one.repmax.sets.statistics :as stats]
             [one.dispatch :as dispatch]))
 
 (def snippets (snippets/snippets))
@@ -106,13 +107,15 @@
 (defn- set-history-list-id-for [date]
   (str "set-history-for-" (->yyyy-mm-dd date)))
 
-(defn- set-list-item [{:keys [_id weight reps number]}]
-  (let [datetime (object-id->creation-ts _id)
+(defn- set-list-item [set]
+  (let [{:keys [_id weight reps number]} set
+        datetime (object-id->creation-ts _id)
         li (d/clone (:set-history-list-item snippets))]
     (-> li (css/sel ".value.weight") (d/set-text! weight))
     (-> li (css/sel ".value.reps") (d/set-text! reps))
     (-> li (css/sel ".created-at time") (d/set-attr! :datetime (.toISOString datetime)))
     (-> li (css/sel ".created-at time") (d/set-text! (format-date goog.i18n.DateTimeFormat.Format.MEDIUM_TIME datetime)))
+    (-> li (css/sel ".one-rep-max .value") (d/set-text! (stats/one-rep-max set)))
     (-> li (css/sel ".set-number .value") (d/set-text! number))
     (-> li (d/set-attr! :id (set-dom-id _id)))
     li))
