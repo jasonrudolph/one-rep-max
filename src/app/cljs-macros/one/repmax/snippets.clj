@@ -36,7 +36,6 @@
   (let [sample-list-item (html/select (html/html-resource "new_set.html") [:.set-history :ol [:li html/first-of-type]])]
     (-> sample-list-item
       (html/at [:p.one-rep-max] (html/substitute "")) ; TODO Add support for this field in the UI
-      (html/at [:p.created-at] (html/substitute ""))  ; TODO Add support for this field in the UI
       (html/at [:p.note] (html/substitute ""))        ; TODO Add support for this field in the UI
       (render))))
 

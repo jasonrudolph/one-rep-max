@@ -1,6 +1,6 @@
 (ns one.repmax.sets.view
   (:require-macros [one.repmax.snippets :as snippets])
-  (:refer-clojure :exclude [set])
+  (:refer-clojure :exclude [format set])
   (:require [clojure.browser.event :as event]
             [domina :as d]
             [domina.css :as css]
@@ -97,16 +97,22 @@
     set-list))
 
 (defn- ->yyyy-mm-dd [date]
-  (let [formatter (goog.i18n.DateTimeFormat. "yyyy-MM-dd")]
+  (format-date "yyyy-MM-dd" date))
+
+(defn- format-date [format date]
+  (let [formatter (goog.i18n.DateTimeFormat. format)]
     (.format formatter date)))
 
 (defn- set-history-list-id-for [date]
   (str "set-history-for-" (->yyyy-mm-dd date)))
 
 (defn- set-list-item [{:keys [_id weight reps number]}]
-  (let [li (d/clone (:set-history-list-item snippets))]
+  (let [datetime (object-id->creation-ts _id)
+        li (d/clone (:set-history-list-item snippets))]
     (-> li (css/sel ".value.weight") (d/set-text! weight))
     (-> li (css/sel ".value.reps") (d/set-text! reps))
+    (-> li (css/sel ".created-at time") (d/set-attr! :datetime (.toISOString datetime)))
+    (-> li (css/sel ".created-at time") (d/set-text! (format-date goog.i18n.DateTimeFormat.Format.MEDIUM_TIME datetime)))
     (-> li (css/sel ".set-number .value") (d/set-text! number))
     (-> li (d/set-attr! :id (set-dom-id _id)))
     li))
