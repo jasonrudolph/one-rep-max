@@ -11,10 +11,15 @@ body {
   font-family: Helvetica;
 }
 
+code {
+  color: $grey;
+  font-family: 'Bitstream Vera Sans Mono', 'Courier', monospace;
+}
+
 p, div, h1 { margin-bottom: 12px; }
 input, li { margin-bottom: 6px; }
 
-a, a:hover, a:active, a:visited { color: $dark-grey; }
+a, a:hover, a:active, a:visited { color: $dark-blue; }
 
 h3 {
   font-size: 18px;

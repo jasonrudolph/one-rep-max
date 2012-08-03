@@ -6,12 +6,33 @@
 
 <div id="content">
   <div id="datastore-configuration">
-    <div class="how-it-works"></div>
-      <p>
-        Welcome! Bacon ipsum dolor sit amet shoulder fatback venison, tongue spare ribs sausage cow swine bacon boudin tri-tip biltong bresaola shank. Sirloin chicken pork loin, spare ribs cow pancetta pastrami jowl beef beef ribs ball tip tongue pork belly turkey chuck. T-bone tenderloin beef, swine short ribs pork chop ribeye.
-      </p>
-      <p class="tell-me-more">Tell me more</p>
-      <p class="more-info">... Beef ribs salami pork belly, cow ground round flank venison ham sirloin jowl. Bacon shoulder short loin, chuck fatback corned beef pork belly pig. Ribeye swine strip steak jowl pork chop. Bacon tongue pork chop biltong.</p>
+    <div class="how-it-works">
+      <p>One Rep Max helps you track your weightlifting progress.</p>
+      <div>
+        <p class="tell-me-more">Cool. How do I get started?</p>
+        <div class="more-info">
+          <p>To get started, you'll need a place to store your data. For that, we turn to MongoHQ's hosted (and free) database offering:</p>
+          <ol>
+            <li>Sign up for a free account at <a href="https://mongohq.com/signup" target="mongohq">mongohq.com</a>.</li>
+            <li>Create a <a href="https://mongohq.com/databases/new" target="mongohq">free ("sandbox") database</a> to hold your data. Name it anything you like. We recommend <code>&lt;your-mongohq-username&gt;-one-rep-max</code>.</li>
+            <li>Find your API key on the "My Account" page on <a href="https://mongohq.com/" target="mongohq">mongohq.com.</li>
+          </ol>
+          <p>
+            Now you're ready to rock. Enter your API key and database name below, and start lifting.
+          </p>
+        </div>
+      </div>
+      <div>
+        <p class="tell-me-more">Wait. Is this thing secure?</p>
+        <div class="more-info">
+          <p>Well, it depends. Here's what you need to know:</p>
+          <ol>
+            <li>No data is ever sent to the One Rep Max servers. Your browser has downloaded the entire app, and from here on out, the app only sends data to MongoHQ.</li>
+            <li>All communication between your browser and mongohq.com is encrypted via HTTPS.</li>
+            <li>For convenience, One Rep Max stores your API key and database name in a cookie. If a nefarious soul gets access to your browser, he could obtain your API key, giving him full access to all your MongoHQ databases. Secure your device accordingly.</li>
+          </ol>
+        </div>
+      </div>
     </div>
     <div id="datastore-configuration-form">
       <input id="api-key-input" size="20" type="text" placeholder="API Key" required/>

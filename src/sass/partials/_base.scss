@@ -5,6 +5,8 @@ body {
   font-size: 14px;
 }
 
+a, a:hover, a:active, a:visited { text-decoration: none; }
+
 #header {
   background: $dark-grey;
   margin: 0 0 12px 0;
@@ -52,11 +54,16 @@ body {
 // Datastore configuration
 ////////////////////////////////////////////////////////////////////////////////
 
-#datastore-configuration, #datastore-configuration-form { margin-left: 6px; margin-right: 6px; }
+#datastore-configuration { margin-left: 6px; margin-right: 6px; }
 
 #datastore-configuration-form-button {
   display: block;
   width: 100%;
+}
+
+.how-it-works ol li {
+  list-style-type: decimal;
+  margin-left: 24px;
 }
 
 .tell-me-more {
@@ -64,9 +71,10 @@ body {
   @include icon-info(#fff, 0 5px 0 0);
   display: block;
   cursor: pointer;
+  color: $dark-blue;
   &:before {
     @include border-radius(20px);
-    background: $light-blue;
+    background: $dark-grey;
     font-size: 12px;
     padding: 2px 6px;
     margin-right: 5px;
