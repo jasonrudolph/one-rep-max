@@ -10,7 +10,7 @@
 
 ; TODO Add on-error callback
 (defmethod do-after :datastore-configuration/ready [{:keys [new]}]
-  (mongo/find-documents (-> new :datastore-configuration :api-key)
+  (mongo/find-documents (:datastore-configuration new)
                         "exercises"
                         (fn [data]
                           (dispatch/fire :action {:action :exercises/initialized-from-datastore, :exercises data}))

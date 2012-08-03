@@ -1,23 +1,11 @@
 (ns one.repmax.mongohq
   (:refer-clojure :exclude [sort])
+  (:use [one.repmax.url-blueprint :only [->url]]
+        [one.repmax.util :only [clj->js]])
   (:require [clojure.walk :as walk]
             [goog.json :as gjson]
-            [one.browser.remote :as remote]))
-
-; clj->js is from Chris Granger's excellent fetch library
-; https://github.com/ibdknox/fetch/blob/30e938c/src/fetch/util.cljs
-(defn- clj->js
-  "Recursively transforms ClojureScript maps into Javascript objects,
-   other ClojureScript colls into JavaScript arrays, and ClojureScript
-   keywords into JavaScript strings."
-  [x]
-  (cond
-    (string? x) x
-    (keyword? x) (name x)
-    (map? x) (.-strobj (reduce (fn [m [k v]]
-                                 (assoc m (clj->js k) (clj->js v))) {} x))
-    (coll? x) (apply array (map clj->js x))
-    :else x))
+            [one.browser.remote :as remote]
+            [one.repmax.url-blueprint :as url-blueprint]))
 
 (defn- clj->json
   "Returns a JSON string representing the given ClojureScript data structure.
@@ -29,23 +17,6 @@
 
 (def ^{:private true} request-id (atom 0))
 (defn- next-request-id [] (swap! request-id inc))
-
-(defn- map->query-string
-  "Returns a query string representation of the given map of query parameters.
-
-   For example, the following example map of parameters:
-
-     {:_apikey \"some-key\", :name \"some-name\"}
-
-   Produces the following query string:
-
-     \"_apikey=some-key&name=some-name\"
-  "
-  [params]
-  (.toString (.createFromMap goog.Uri.QueryData (clj->js params))))
-
-(defn- with-params [url params]
-  (str url "?" (map->query-string params)))
 
 (defn- request-headers [content-type]
   (if (= content-type :json)
@@ -73,49 +44,55 @@
                   :on-success #(on-success (response-body->clj %))
                   :on-error #(on-error ("error" (response-body->clj %)))))
 
-(def ^{:private true} root-url "https://api.mongohq.com")
+;;; URLs for API endpoints
+
+(def ^{:private true} root-url             "https://api.mongohq.com")
+(def ^{:private true} root-databases-url   (str root-url "/databases"))
+(def ^{:private true} root-database-url    (str root-databases-url "/:database"))
+(def ^{:private true} root-collections-url (str root-database-url "/collections"))
+(def ^{:private true} root-collection-url  (str root-collections-url "/:collection"))
+(def ^{:private true} root-documents-url   (str root-collection-url "/documents"))
+
+(defn- url-blueprint [base-url config]
+  {:base-url base-url
+   :segments {:database (:database config)}
+   :params   {:_apikey  (:api-key config)}})
+
+(defn- documents-url-blueprint [config collection-name]
+  (-> (url-blueprint root-documents-url config)
+    (assoc-in [:segments :collection] collection-name)))
 
 ;;; Working with Databases
 
-(def database-name "one-rep-max")
+(defn find-databases [config on-success on-error]
+  (let [url (->url (url-blueprint root-databases-url config))]
+    (request url
+             :on-success on-success
+             :on-error on-error)))
 
-(def ^{:private true} root-databases-url (str root-url "/databases"))
-
-(def ^{:private true} root-database-url (str root-databases-url "/" database-name))
-
-(defn find-databases [api-key on-success on-error]
-  (request (with-params root-databases-url {:_apikey api-key})
-           :on-success on-success
-           :on-error on-error))
-
-(defn find-database [api-key on-success on-error]
-  (request (with-params root-database-url {:_apikey api-key})
-           :on-success on-success
-           :on-error on-error))
+(defn find-database [config on-success on-error]
+  (let [url (->url (url-blueprint root-database-url config))]
+    (request url
+             :on-success on-success
+             :on-error on-error)))
 
 ;;; Working with Collections
 
-(def ^{:private true} root-collections-url (str root-database-url "/collections"))
+(defn find-collections [config on-success on-error]
+  (let [url (->url (url-blueprint root-collections-url config))]
+    (request url
+             :on-success on-success
+             :on-error on-error)))
 
-(defn- root-collection-url [collection-name]
-  (str root-collections-url "/" collection-name))
-
-(defn find-collections [api-key on-success on-error]
-  (request (with-params root-collections-url {:_apikey api-key})
-           :on-success on-success
-           :on-error on-error))
-
-(defn create-collection [api-key collection-name on-success on-error]
-  (request (with-params root-collections-url {:_apikey api-key})
-           :method "POST"
-           :content (str "name=" collection-name)
-           :on-success on-success
-           :on-error on-error))
+(defn create-collection [config collection-name on-success on-error]
+  (let [url (->url (url-blueprint root-collections-url config))]
+    (request url
+             :method "POST"
+             :content (str "name=" collection-name)
+             :on-success on-success
+             :on-error on-error)))
 
 ;;; Working with Documents
-
-(defn- root-documents-url [collection-name]
-  (str (root-collection-url collection-name) "/documents"))
 
 (defn- simplify-object-ids
   "Takes a seq of maps, where each map is a Mongo document in raw format as
@@ -162,34 +139,14 @@
    number of documents, or all documents that match the given :query,
    whichever comes first.
   "
-  [api-key collection-name on-success & {:keys [limit query sort]
-                                         :or   {limit js/Infinity}}]
-  (let [url (root-documents-url collection-name)
-        url-params {:_apikey api-key
-                    :q       (clj->json query)
-                    :sort    (clj->json sort)}
-        url-fn (with-partial-params url url-params)]
-    (find-documents-request url-fn
+  [config collection-name on-success & {:keys [limit query sort]
+                                         :or  {limit js/Infinity}}]
+  (let [url-blueprint (-> (documents-url-blueprint config collection-name)
+                        (assoc-in [:params :q] (clj->json query))
+                        (assoc-in [:params :sort] (clj->json sort)))]
+    (find-documents-request url-blueprint
                             :limit-overall limit
                             :on-success on-success)))
-
-(defn- with-partial-params
-  "Takes a base URL string and a Clojure map of request parameters.
-
-   Returns a function that takes a Clojure map of additional request parameters
-   and returns a URL (as a string) containing the combined set of request
-   parameters.
-
-   For example:
-
-    ((with-partial-params \"http://google.com\" {:q \"clojure\"}) {:hl :en})
-
-   Produces the following URL string:
-
-     \"http://google.com?q=clojure&hl=en\"
-  "
-  [url params]
-  #(with-params url (conj params %)))
 
 (def ^{:doc "The maximum number of documents that MongoHQ will return for a
              single request (i.e., the maximum allowed value for the 'limit'
@@ -200,8 +157,7 @@
 (defn- find-documents-request
   "Issues a request to the given URL (provided via the url-fn argument) to find documents.
 
-   * url-fn             A function that takes a map of query parameters and returns the target
-                        URL with the given query parameters. (See also: with-partial-params.)
+   * url-blueprint      A map containing a 'URL blueprint'. (See one.repmax.url-blueprint.)
 
    Optional keyword argments:
    * :skip              Used for pagination in MongoHQ. Indicates the number of documents to
@@ -220,19 +176,23 @@
                         request. The function must accept a single argument: a sequence of
                         documents.
   "
-  [url-fn & {:keys [skip limit-per-request limit-overall previous-docs on-success]
-             :or   {skip 0
-                    limit-per-request max-docs-per-request
-                    limit-overall js/Infinity
-                    previous-docs []
-                    on-success (fn [data])}}]
-  (request (url-fn {:skip skip, :limit limit-per-request})
-           :on-success (find-documents-callback url-fn
-                                                skip
-                                                limit-per-request
-                                                limit-overall
-                                                previous-docs
-                                                on-success)))
+  [url-blueprint & {:keys [skip limit-per-request limit-overall previous-docs on-success]
+                    :or   {skip 0
+                           limit-per-request max-docs-per-request
+                           limit-overall js/Infinity
+                           previous-docs []
+                           on-success (fn [data])}}]
+  (let [url (-> url-blueprint
+              (assoc-in [:params :skip] skip)
+              (assoc-in [:params :limit] limit-per-request)
+              ->url)]
+    (request url
+             :on-success (find-documents-callback url-blueprint
+                                                  skip
+                                                  limit-per-request
+                                                  limit-overall
+                                                  previous-docs
+                                                  on-success))))
 
 (defn- find-documents-callback
   "Returns a callback function to be invoked after a successful request to
@@ -258,7 +218,7 @@
    continue this pattern until we have fetched the requested number of documents
    (limit-overall) or all documents in the collection (whichever is smaller).
   "
-  [url-fn skip limit-per-request limit-overall previous-docs on-success]
+  [url-blueprint skip limit-per-request limit-overall previous-docs on-success]
   (fn [new-docs]
     (let [docs (concat previous-docs new-docs)
           fetched-all-docs? (or
@@ -266,18 +226,19 @@
                               (< (count new-docs) limit-per-request))]
       (if fetched-all-docs?
         (on-success (take limit-overall (documents->maps docs)))
-        (find-documents-request url-fn
+        (find-documents-request url-blueprint
                                 :skip (+ skip limit-per-request)
                                 :limit-per-request limit-per-request
                                 :limit-overall limit-overall
                                 :previous-docs docs
                                 :on-success on-success)))))
 
-(defn create-document [api-key collection-name document on-success on-error]
-  (request (with-params (root-documents-url collection-name) {:_apikey api-key})
-           :method "POST"
-           :content-type :json
-           :content {"document" document, "safe" true}
-           :on-success #(on-success (walk/keywordize-keys %))
-           :on-error on-error))
+(defn create-document [config collection-name document on-success on-error]
+  (let [url (->url (documents-url-blueprint config collection-name))]
+    (request url
+             :method "POST"
+             :content-type :json
+             :content {"document" document, "safe" true}
+             :on-success #(on-success (walk/keywordize-keys %))
+             :on-error on-error)))
 

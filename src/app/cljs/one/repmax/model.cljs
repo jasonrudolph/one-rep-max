@@ -6,7 +6,7 @@
             [one.repmax.mongohq :as mongo]))
 
 (def initial-state {:state :start
-                    :datastore-configuration {:state :obtain-credentials, :api-key ""}
+                    :datastore-configuration {:state :obtain-credentials, :api-key "", :database ""}
                     :exercises nil
                     :exercise-search {:query nil, :exercise-ids nil}})
 
@@ -38,9 +38,11 @@
 ; The :datastore-configuration map contains the following elements:
 ;
 ;    1. :api-key => the user-provided API key for use in accessing MongoHQ
-;    2. :state => the overall state of the datastore configuration (i.e.,
+;    2. :database => the user-provided MongoHQ database name, indicating
+;       the database from which the app will read/write its data
+;    3. :state => the overall state of the datastore configuration (i.e.,
 ;       the state of the datastore initialization/verification process)
-;    3. :error => a map containing a description of the error that occured
+;    4. :error => a map containing a description of the error that occured
 ;       during the initialization process (in the :text key) and the state
 ;       in which the error occured (in the :occured-in-state key); this map
 ;       is only present if an error has occured
@@ -62,16 +64,17 @@
     (assoc :datastore-configuration (datastore-configuration-from-cookies))))
 
 (defn datastore-configuration-from-cookies []
-  (let [api-key (cookies/get-cookie :api-key)]
-    (if (nil? api-key)
-      (:datastore-configuration initial-state)
-      (datastore-configuration-for-new-api-key api-key))))
+  (let [api-key (cookies/get-cookie :api-key)
+        database (cookies/get-cookie :database)]
+    (new-datastore-configuration api-key database)))
 
-(defn datastore-configuration-for-new-api-key [api-key]
-  {:api-key api-key :state :verify-credentials})
+(defn new-datastore-configuration [api-key database]
+  (if (or (nil? api-key) (nil? database))
+    (:datastore-configuration initial-state)
+    {:state :verify-credentials :api-key api-key :database database}))
 
-(defmethod update-model :datastore-configuration/update [state {:keys [api-key]}]
-  (assoc state :datastore-configuration (datastore-configuration-for-new-api-key api-key)))
+(defmethod update-model :datastore-configuration/update [state {:keys [api-key database]}]
+  (assoc state :datastore-configuration (new-datastore-configuration api-key database)))
 
 (defmethod update-model :datastore-configuration/credentials-verified [state _]
   (assoc-in state [:datastore-configuration :state] :verify-database))

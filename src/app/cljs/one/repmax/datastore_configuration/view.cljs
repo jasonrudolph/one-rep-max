@@ -44,11 +44,13 @@
     (d/swap-content! header (:datastore-configuration-header snippets))
     (d/swap-content! content (:datastore-configuration-form snippets))
     (d/set-value! (d/by-id "api-key-input") (:api-key datastore-configuration))
+    (d/set-value! (d/by-id "database-input") (:database datastore-configuration))
     (event/listen (d/by-id "datastore-configuration-form-button")
                   event-type/CLICK
                   #(dispatch/fire :action
-                                  {:action :datastore-configuration/update
-                                   :api-key (d/value (d/by-id "api-key-input"))}))))
+                                  {:action   :datastore-configuration/update
+                                   :api-key  (d/value (d/by-id "api-key-input"))
+                                   :database (d/value (d/by-id "database-input"))}))))
 
 (defmulti render-datastore-configuration-state
   (fn [datastore-configuration] (:state datastore-configuration)))
@@ -100,10 +102,12 @@
 
 (defn disable-datastore-configuration-form []
   (disable "api-key-input")
+  (disable "database-input")
   (disable "datastore-configuration-form-button"))
 
 (defn enable-datastore-configuration-form []
   (enable "api-key-input")
+  (enable "database-input")
   (enable "datastore-configuration-form-button"))
 
 ;;; Register reactors

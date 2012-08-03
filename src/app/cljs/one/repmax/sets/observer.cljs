@@ -11,7 +11,7 @@
 
 (defmethod do-after :new-set/new [{:keys [new]}]
   (let [exercise-id (-> new :new-set :exercise :_id)]
-    (mongo/find-documents (-> new :datastore-configuration :api-key)
+    (mongo/find-documents (:datastore-configuration new)
                           "sets"
                           #(find-recent-sets-on-success-callback exercise-id %)
                           :limit 50
@@ -28,7 +28,7 @@
         reps (js/parseInt (-> new :new-set :reps))
         exercise-id (-> new :new-set :exercise :_id)
         document {:exercise-id exercise-id, :weight weight, :reps reps}]
-    (mongo/create-document (-> new :datastore-configuration :api-key)
+    (mongo/create-document (:datastore-configuration new)
                            "sets"
                            document
                            #(create-set-success-callback document %)

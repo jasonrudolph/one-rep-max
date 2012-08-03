@@ -8,24 +8,25 @@
 (defmulti do-initialization-step
   (fn [& args] (first args)))
 
-(defmethod do-initialization-step :verify-credentials [_ api-key]
-  (mongo/find-databases api-key
+(defmethod do-initialization-step :verify-credentials [_ config]
+  (mongo/find-databases config
                         #(do
-                           (cookies/set-cookie :api-key api-key)
-                           (dispatch/fire :action {:action :datastore-configuration/credentials-verified, :api-key api-key}))
-                        #(initialization-error-callback api-key %)))
+                           (cookies/set-cookie :api-key (:api-key config))
+                           (cookies/set-cookie :database (:database config))
+                           (dispatch/fire :action {:action :datastore-configuration/credentials-verified, :configuration config}))
+                        #(initialization-error-callback config %)))
 
-(defmethod do-initialization-step :verify-database [_ api-key]
-  (mongo/find-database api-key
-                       #(dispatch/fire :action {:action :datastore-configuration/database-verified, :api-key api-key})
-                       #(initialization-error-callback api-key %)))
+(defmethod do-initialization-step :verify-database [_ config]
+  (mongo/find-database config
+                       #(dispatch/fire :action {:action :datastore-configuration/database-verified, :configuration config})
+                       #(initialization-error-callback config %)))
 
-(defmethod do-initialization-step :verify-collections [_ api-key]
-  (mongo/find-collections api-key
-                          #(find-collections-success-callback api-key %)
-                          #(initialization-error-callback api-key %)))
+(defmethod do-initialization-step :verify-collections [_ config]
+  (mongo/find-collections config
+                          #(find-collections-success-callback config %)
+                          #(initialization-error-callback config %)))
 
-(defmethod do-initialization-step :ready [_ api-key]
+(defmethod do-initialization-step :ready [_ _]
   (dispatch/fire :action {:action :datastore-configuration/ready}))
 
 ;; No-op. No action necessary when we transition to the :initialization-failed state.
@@ -33,19 +34,19 @@
 
 ;; TODO Enhance function to recurse through the list of necessary collections
 ;;      and create each one. Fire action :datastore-configuration/collections-verified.
-(defn find-collections-success-callback [api-key collections]
+(defn find-collections-success-callback [config collections]
   (if (contains-collection? collections "exercises") ;; TODO Get collection name from elsewhere
-    (dispatch/fire :action {:action :datastore-configuration/collections-verified, :api-key api-key})
-    (mongo/create-collection api-key "exercises" ;; TODO Get collection name from elsewhere
-                             #(dispatch/fire :action {:action :datastore-configuration/collections-verified, :api-key api-key})
-                             #(dispatch/fire :action {:action :datastore-configuration/initialization-failed, :api-key api-key}))))
+    (dispatch/fire :action {:action :datastore-configuration/collections-verified, :configuration config})
+    (mongo/create-collection config "exercises" ;; TODO Get collection name from elsewhere
+                             #(dispatch/fire :action {:action :datastore-configuration/collections-verified, :configuration config})
+                             #(dispatch/fire :action {:action :datastore-configuration/initialization-failed, :configuration config}))))
 
 (defn contains-collection? [collections collection-name]
   (some #(= collection-name (% "name")) collections))
 
-(defn initialization-error-callback [api-key response]
+(defn initialization-error-callback [config response]
   (dispatch/fire :action {:action :datastore-configuration/initialization-failed
-                          :api-key api-key
+                          :configuration config
                           :error response}))
 
 ;;; Register reactors
@@ -55,4 +56,5 @@
                      (let [old-config-state (-> event :old :datastore-configuration :state)
                            new-config-state (-> event :new :datastore-configuration :state)]
                        (if-not (= old-config-state new-config-state)
-                         (do-initialization-step new-config-state (-> event :new :datastore-configuration :api-key))))))
+                         (let [config (dissoc (-> event :new :datastore-configuration) :state)]
+                           (do-initialization-step new-config-state config))))))
