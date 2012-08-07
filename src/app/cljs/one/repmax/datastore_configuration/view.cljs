@@ -47,12 +47,7 @@
     (d/set-value! (d/by-id "api-key-input") (:api-key datastore-configuration))
     (d/set-value! (d/by-id "database-input") (:database datastore-configuration))
     (add-event-listener-for-showing-more-info)
-    (event/listen (d/by-id "datastore-configuration-form-button") ; TODO extract fn
-                  event-type/CLICK
-                  #(dispatch/fire :action
-                                  {:action   :datastore-configuration/update
-                                   :api-key  (d/value (d/by-id "api-key-input"))
-                                   :database (d/value (d/by-id "database-input"))}))))
+    (add-event-listener-for-submitting-form)))
 
 (defmulti render-datastore-configuration-state
   (fn [datastore-configuration] (:state datastore-configuration)))
@@ -111,6 +106,14 @@
   (enable "api-key-input")
   (enable "database-input")
   (enable "datastore-configuration-form-button"))
+
+(defn add-event-listener-for-submitting-form []
+  (event/listen (d/by-id "datastore-configuration-form-button")
+                event-type/CLICK
+                #(dispatch/fire :action
+                                {:action   :datastore-configuration/update
+                                 :api-key  (d/value (d/by-id "api-key-input"))
+                                 :database (d/value (d/by-id "database-input"))})))
 
 (defn add-event-listener-for-showing-more-info []
   (doseq [node (d/nodes (d/by-class "tell-me-more"))]
