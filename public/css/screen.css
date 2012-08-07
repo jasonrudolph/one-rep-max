@@ -266,37 +266,42 @@ a, a:hover, a:active, a:visited {
   height: 32px;
 }
 
-/* line 42, ../../src/sass/partials/_base.scss */
+/* line 38, ../../src/sass/partials/_base.scss */
+.more-info {
+  display: none;
+}
+
+/* line 46, ../../src/sass/partials/_base.scss */
 #dev-links {
   border-top: 1px solid #999999;
   margin-top: 50px;
   padding-top: 5px;
   text-align: center;
 }
-/* line 48, ../../src/sass/partials/_base.scss */
+/* line 52, ../../src/sass/partials/_base.scss */
 #dev-links ul li {
   display: inline;
 }
 
-/* line 57, ../../src/sass/partials/_base.scss */
+/* line 61, ../../src/sass/partials/_base.scss */
 #datastore-configuration {
   margin-left: 6px;
   margin-right: 6px;
 }
 
-/* line 59, ../../src/sass/partials/_base.scss */
+/* line 63, ../../src/sass/partials/_base.scss */
 #datastore-configuration-form-button {
   display: block;
   width: 100%;
 }
 
-/* line 64, ../../src/sass/partials/_base.scss */
+/* line 68, ../../src/sass/partials/_base.scss */
 .how-it-works ol li {
   list-style-type: decimal;
   margin-left: 24px;
 }
 
-/* line 69, ../../src/sass/partials/_base.scss */
+/* line 73, ../../src/sass/partials/_base.scss */
 .tell-me-more {
   display: -moz-inline-stack;
   display: inline-block;
@@ -316,7 +321,7 @@ a, a:hover, a:active, a:visited {
   color: white;
   padding: 0 5px 0 0;
 }
-/* line 75, ../../src/sass/partials/_base.scss */
+/* line 79, ../../src/sass/partials/_base.scss */
 .tell-me-more:before {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -329,12 +334,12 @@ a, a:hover, a:active, a:visited {
   margin-right: 5px;
 }
 
-/* line 85, ../../src/sass/partials/_base.scss */
+/* line 89, ../../src/sass/partials/_base.scss */
 .progress-list li {
   color: #555555;
   margin-left: 10px;
 }
-/* line 89, ../../src/sass/partials/_base.scss */
+/* line 93, ../../src/sass/partials/_base.scss */
 .progress-list li[data-status=pending] {
   color: #999999;
 }
@@ -362,7 +367,7 @@ a, a:hover, a:active, a:visited {
   color: #00ae68;
   padding: 0 5px 0 0;
 }
-/* line 92, ../../src/sass/partials/_base.scss */
+/* line 96, ../../src/sass/partials/_base.scss */
 .progress-list li[data-status=failure] {
   color: red;
 }
@@ -375,13 +380,13 @@ a, a:hover, a:active, a:visited {
   padding: 0 5px 0 0;
 }
 
-/* line 99, ../../src/sass/partials/_base.scss */
+/* line 103, ../../src/sass/partials/_base.scss */
 #exercise-list {
   font-size: 16px;
   font-weight: bold;
 }
 
-/* line 104, ../../src/sass/partials/_base.scss */
+/* line 108, ../../src/sass/partials/_base.scss */
 #exercise-list li {
   -webkit-box-shadow: inset 0 1px 0 white;
   -moz-box-shadow: inset 0 1px 0 white;
@@ -394,11 +399,11 @@ a, a:hover, a:active, a:visited {
   padding: 10px 12px;
   position: relative;
 }
-/* line 114, ../../src/sass/partials/_base.scss */
+/* line 118, ../../src/sass/partials/_base.scss */
 #exercise-list li:first-child {
   border-top: 1px solid #cccccc;
 }
-/* line 116, ../../src/sass/partials/_base.scss */
+/* line 120, ../../src/sass/partials/_base.scss */
 #exercise-list li div {
   position: absolute;
   right: 0;
@@ -406,17 +411,17 @@ a, a:hover, a:active, a:visited {
   font-size: 18px;
 }
 
-/* line 124, ../../src/sass/partials/_base.scss */
+/* line 128, ../../src/sass/partials/_base.scss */
 #search-bar {
   margin: 0 12px 6px;
 }
 
-/* line 132, ../../src/sass/partials/_base.scss */
+/* line 136, ../../src/sass/partials/_base.scss */
 #new-set-form, #recent-sets-by-day {
   margin: 0 6px 12px;
 }
 
-/* line 134, ../../src/sass/partials/_base.scss */
+/* line 138, ../../src/sass/partials/_base.scss */
 #weight-input-label, #reps-input-label {
   display: -moz-inline-stack;
   display: inline-block;
@@ -430,12 +435,12 @@ a, a:hover, a:active, a:visited {
   position: absolute;
 }
 
-/* line 143, ../../src/sass/partials/_base.scss */
+/* line 147, ../../src/sass/partials/_base.scss */
 #weight-input, #reps-input {
   margin: 0;
 }
 
-/* line 147, ../../src/sass/partials/_base.scss */
+/* line 151, ../../src/sass/partials/_base.scss */
 .trailer {
   display: -webkit-box;
   display: -moz-box;
@@ -445,7 +450,7 @@ a, a:hover, a:active, a:visited {
   *zoom: 1;
   width: 100%;
 }
-/* line 151, ../../src/sass/partials/_base.scss */
+/* line 155, ../../src/sass/partials/_base.scss */
 .trailer li {
   -webkit-box-flex: 50;
   -moz-box-flex: 50;
@@ -454,7 +459,7 @@ a, a:hover, a:active, a:visited {
   margin-right: 5px;
   position: relative;
 }
-/* line 157, ../../src/sass/partials/_base.scss */
+/* line 161, ../../src/sass/partials/_base.scss */
 .trailer li:last-child {
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
@@ -463,7 +468,7 @@ a, a:hover, a:active, a:visited {
   margin: 0;
 }
 
-/* line 167, ../../src/sass/partials/_base.scss */
+/* line 171, ../../src/sass/partials/_base.scss */
 .set-history {
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
@@ -475,7 +480,7 @@ a, a:hover, a:active, a:visited {
   color: #666666;
   margin-bottom: 6px;
 }
-/* line 174, ../../src/sass/partials/_base.scss */
+/* line 178, ../../src/sass/partials/_base.scss */
 .set-history h1 {
   -webkit-border-radius: 4px 4px 0 0;
   -moz-border-radius: 4px 4px 0 0;
@@ -488,7 +493,7 @@ a, a:hover, a:active, a:visited {
   padding: 6px 10px;
   margin: 0;
 }
-/* line 183, ../../src/sass/partials/_base.scss */
+/* line 187, ../../src/sass/partials/_base.scss */
 .set-history h3, .set-history p {
   display: -moz-inline-stack;
   display: inline-block;
@@ -497,25 +502,25 @@ a, a:hover, a:active, a:visited {
   zoom: 1;
   *display: inline;
 }
-/* line 184, ../../src/sass/partials/_base.scss */
+/* line 188, ../../src/sass/partials/_base.scss */
 .set-history p {
   color: #999999;
   font-size: 13px;
   margin-bottom: 2px;
 }
-/* line 190, ../../src/sass/partials/_base.scss */
+/* line 194, ../../src/sass/partials/_base.scss */
 .set-history div {
   margin-bottom: 2px;
 }
-/* line 191, ../../src/sass/partials/_base.scss */
+/* line 195, ../../src/sass/partials/_base.scss */
 .set-history .right {
   float: right;
 }
-/* line 193, ../../src/sass/partials/_base.scss */
+/* line 197, ../../src/sass/partials/_base.scss */
 .set-history li:first-child {
   border-top: 0 none;
 }
-/* line 194, ../../src/sass/partials/_base.scss */
+/* line 198, ../../src/sass/partials/_base.scss */
 .set-history li {
   overflow: hidden;
   *zoom: 1;

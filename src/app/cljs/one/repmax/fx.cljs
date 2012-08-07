@@ -6,5 +6,5 @@
   (d/set-style! content "display" "none"))
 
 (defn show [content]
-  (d/set-style! content "display" nil))
+  (d/set-style! content "display" "inherit"))
 

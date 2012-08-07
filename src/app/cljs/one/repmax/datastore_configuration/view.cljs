@@ -5,7 +5,8 @@
             [domina :as d]
             [domina.css :as css]
             [goog.events.EventType :as event-type]
-            [one.dispatch :as dispatch]))
+            [one.dispatch :as dispatch]
+            [one.repmax.fx :as fx]))
 
 (def snippets (snippets/snippets))
 
@@ -45,7 +46,8 @@
     (d/swap-content! content (:datastore-configuration-form snippets))
     (d/set-value! (d/by-id "api-key-input") (:api-key datastore-configuration))
     (d/set-value! (d/by-id "database-input") (:database datastore-configuration))
-    (event/listen (d/by-id "datastore-configuration-form-button")
+    (add-event-listener-for-showing-more-info)
+    (event/listen (d/by-id "datastore-configuration-form-button") ; TODO extract fn
                   event-type/CLICK
                   #(dispatch/fire :action
                                   {:action   :datastore-configuration/update
@@ -109,6 +111,17 @@
   (enable "api-key-input")
   (enable "database-input")
   (enable "datastore-configuration-form-button"))
+
+(defn add-event-listener-for-showing-more-info []
+  (doseq [node (d/nodes (d/by-class "tell-me-more"))]
+    (event/listen-once node
+                       event-type/CLICK
+                       #(show-more-info node))))
+
+(defn- show-more-info [node]
+  (let [parent-node (xpath node "./..")
+        more-info-nodes (css/sel parent-node ".more-info")]
+    (fx/show more-info-nodes)))
 
 ;;; Register reactors
 
