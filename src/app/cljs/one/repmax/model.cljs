@@ -117,6 +117,30 @@
         pattern (re-pattern (str ".*" (normalize value-like) ".*"))]
     (filter #(re-find pattern (normalize (attribute-name %))) s)))
 
+;;; Managing the 'New Exercise' Form
+
+(defmethod update-model :new-exercise/new [state _]
+  (assoc state :state :new-exercise))
+
+(defmethod update-model :new-exercise/create [state {:keys [name]}]
+  (-> state
+    (assoc-in [:new-exercise :name] name)
+    (assoc-in [:new-exercise :state] :ready-to-persist)))
+
+(defmethod update-model :new-exercise/persisted [state {:keys [exercise]}]
+  (-> state
+    (update-in [:exercises] #(conj % exercise))
+    (assoc-in [:new-exercise :name] nil)
+    (assoc-in [:new-exercise :state] :ready-for-new-exercise)))
+
+(defmethod update-model :new-exercise/create-failed [state {:keys [error]}]
+  (-> state
+    (assoc-in [:new-exercise :state] :create-failed)
+    (assoc-in [:new-exercise :error] error)))
+
+(defmethod update-model :new-exercise/back [state _]
+  (assoc state :state :exercise-list))
+
 ;;; Managing the 'New Set' Form
 
 (defmethod update-model :new-set/new [state {:keys [exercise-id]}]

@@ -47,6 +47,8 @@
    :exercises-header               (snippet "exercises.html" [:#header])
    :exercises-content              exercises-content-template
    :exercises-list-item            exercises-list-item-template
+   :new-exercise-header            (snippet "new_exercise.html" [:#header])
+   :new-exercise-form              (snippet "new_exercise.html" [:#new-exercise-form])
    :new-set-header                 (snippet "new_set.html" [:#header])
    :new-set-form                   (snippet "new_set.html" [:#new-set-form])
    :set-history-div                set-history-div-template
