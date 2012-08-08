@@ -39,7 +39,7 @@
     (dispatch/fire :action {:action :datastore-configuration/collections-verified, :configuration config})
     (mongo/create-collection config "exercises" ;; TODO Get collection name from elsewhere
                              #(dispatch/fire :action {:action :datastore-configuration/collections-verified, :configuration config})
-                             #(dispatch/fire :action {:action :datastore-configuration/initialization-failed, :configuration config}))))
+                             #(initialization-error-callback config %))))
 
 (defn contains-collection? [collections collection-name]
   (some #(= collection-name (% "name")) collections))
