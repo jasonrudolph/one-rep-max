@@ -1,5 +1,7 @@
 * { @include box-sizing(border-box); }
 
+@mixin inset-component { margin: 0 6px 12px; }
+
 body {
   background: #efefef;
   font-size: 14px;
@@ -58,7 +60,7 @@ a, a:hover, a:active, a:visited { text-decoration: none; }
 // Datastore configuration
 ////////////////////////////////////////////////////////////////////////////////
 
-#datastore-configuration { margin-left: 6px; margin-right: 6px; }
+#datastore-configuration { @include inset-component };
 
 #datastore-configuration-form-button {
   display: block;
@@ -130,10 +132,16 @@ a, a:hover, a:active, a:visited { text-decoration: none; }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// New Exercise Form
+////////////////////////////////////////////////////////////////////////////////
+
+#new-exercise-form { @include inset-component };
+
+////////////////////////////////////////////////////////////////////////////////
 // New Set Form
 ////////////////////////////////////////////////////////////////////////////////
 
-#new-set-form, #recent-sets-by-day { margin: 0 6px 12px; }
+#new-set-form, #recent-sets-by-day { @include inset-component };
 
 #weight-input-label, #reps-input-label {
   @include inline-block;
