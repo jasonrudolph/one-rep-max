@@ -126,11 +126,15 @@ evaluating *ClojureScript* code from within Vim.)
 
 # TODO
 
+* Provide visual feedback to the user (i.e., spinner or equivalent) when
+  the app is working
+* Validate user input. (The ClojureScript One sample app provides an
+  [example][clojurescript-one-form-state].)
 * Support navigation with the browser's "back" button. See:
   [one.sample.history][history-management].
-* Compile compressed CSS as part of the build (using
-  `compass compile --output-style=compressed`) and remove
-  the generated stylesheet from the repo (i.e., `screen.css`).
+* Compile compressed CSS as part of the build (using `compass compile
+  --output-style=compressed`) and remove the generated stylesheet from
+  the repo (i.e., `screen.css`).
 
 # Credits
 
@@ -155,6 +159,7 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 
 [clojurescript-one]: http://clojurescriptone.com
 [clojurescript-one-build-script]: https://github.com/brentonashworth/one/wiki/Building-deployment-artifacts
+[clojurescript-one-form-state]: https://github.com/jasonrudolph/one-rep-max/blob/6129d57/doc/interactions.png
 [clojurescript-with-vim]: https://github.com/clojure/clojurescript/wiki/Vim
 [compass]: http://compass-style.org/
 [deploy-to-dropbox]: http://www.maclife.com/article/howtos/how_host_your_website_dropbox
