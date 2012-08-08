@@ -35,7 +35,7 @@
         content (d/by-id "content")]
     (d/swap-content! header (:exercises-header snippets))
     (d/swap-content! content (:exercises-content snippets))
-    (add-exercise-search-event-listener)
+    (add-event-listener-for-exercise-search)
     (render-exercise-list exercises)))
 
 (defn- render-exercise-list [exercises]
@@ -52,15 +52,15 @@
     (-> li (css/sel "span.list-item-label")
       (d/set-text! (:name exercise)))
     (-> li (d/single-node)
-      (add-exercise-click-event-listener exercise-id))
+      (add-event-listener-for-exercise-click exercise-id))
     li))
 
-(defn- add-exercise-click-event-listener [node exercise-id]
+(defn- add-event-listener-for-exercise-click [node exercise-id]
   (event/listen node
                 event-type/CLICK
                 #(dispatch/fire :action {:action :new-set/new, :exercise-id exercise-id})))
 
-(defn- add-exercise-search-event-listener []
+(defn- add-event-listener-for-exercise-search []
   (let [field (d/by-id "search-input")]
     (event/listen field
                   event-type/KEYUP
