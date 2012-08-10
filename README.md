@@ -138,18 +138,17 @@ evaluating *ClojureScript* code from within Vim.)
 
 # Credits
 
-* Thanks to @brentonashworth and others at @relevance for ClojureScript
-  One
-* Thanks to @brentonashworth and @stuartsierra for entertaining
-  countless questions and providing valuable feedback as I explored the
-  ClojureScript landscape.
-* Thanks to @itsthatguy and @jgkite for patiently donating their UI
-  design skills to the app.
-* Thanks to @somerandomdude for [Iconic], which provides the icons used
-  in One Rep Max. (Iconic is distributed under a [Creative Commons
-  license][iconic-license].)
-* Thanks to @relevance for [Fridays], where much of this work took
-  place.
+* Thanks to [Brenton Ashworth][brentonashworth] and others at
+  [Relevance] for ClojureScript One.
+* Thanks to [Kevin Altman][itsthatguy] and [Jamie Kite][jgkite] for
+  patiently donating their UI design skills to the app.
+* Thanks to [P.J. Onori][somerandomdude] for [Iconic], which provides
+  the icons used in One Rep Max. (Iconic is distributed under a
+  [Creative Commons license][iconic-license].)
+* Thanks to Relevance for [Fridays], where much of this work took place.
+* Thanks to [Brenton Ashworth][brentonashworth] and [Stuart
+  Sierra][stuartsierra] for entertaining countless questions and
+  providing valuable feedback as I explored the ClojureScript landscape.
 
 # License
 
@@ -157,6 +156,7 @@ Copyright 2012 Jason Rudolph ([jasonrudolph.com](http://jasonrudolph.com)) and R
 
 Distributed under the Eclipse Public License, the same as Clojure uses. See the file COPYING.
 
+[brentonashworth]: https://github.com/brentonashworth
 [clojurescript-one]: http://clojurescriptone.com
 [clojurescript-one-build-script]: https://github.com/brentonashworth/one/wiki/Building-deployment-artifacts
 [clojurescript-one-form-state]: https://github.com/jasonrudolph/one-rep-max/blob/6129d57/doc/interactions.png
@@ -167,9 +167,14 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [history-management]: https://github.com/jasonrudolph/one-rep-max/blob/21099b6/src/app/cljs/one/sample/history.cljs
 [iconic]: http://somerandomdude.com/work/iconic/
 [iconic-license]: https://github.com/jasonrudolph/one-rep-max/blob/master/public/fonts/iconic_license.txt
+[itsthatguy]: https://github.com/itsthatguy
+[jgkite]: https://github.com/jgkite
 [lein]: https://github.com/technomancy/leiningen
 [lein-repls]: https://github.com/franks42/lein-repls
 [mongohq-signup]: https://mongohq.com/signup
 [mongohq-create-db]: https://mongohq.com/databases/new
 [mongohq-backup]: http://support.mongohq.com/topics/using-amazon-s3-to-backup-your-mongohq-database.html
+[relevance]: http://thinkrelevance.com
+[somerandomdude]: https://github.com/somerandomdude
+[stuartsierra]: https://github.com/stuartsierra
 [tslime.vim]: https://github.com/jgdavey/tslime.vim
