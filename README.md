@@ -42,17 +42,9 @@ following commands to install and run One Rep Max:
 At the REPL prompt which appears, type `(go)`. Your browser will
 launch and navigate to the running application.
 
-You will also need an API key and a database for MongoHQ:
-
-1. Sign up for a free account at [mongohq.com][mongohq-signup].
-2. [Create a database][mongohq-create-db] named "one-rep-max". (MongoHQ
-   offers several options when creating a database. The free "Sandbox
-   Database" will likely meet your needs for this app.)
-3. Find your API key in the "My Account" section of mongohq.com.
-4. Until the UI supports the ability to create exercises, you can use
-   the `seed` script to create a few exercises for testing purposes:
-
-         ./script/seed <your-api-key>
+You will also need an API key and a database for [MongoHQ]. Follow the
+instructions in the One Rep Max UI to sign up for a free account and
+create your database.
 
 # SCSS, not CSS
 
@@ -171,8 +163,7 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [jgkite]: https://github.com/jgkite
 [lein]: https://github.com/technomancy/leiningen
 [lein-repls]: https://github.com/franks42/lein-repls
-[mongohq-signup]: https://mongohq.com/signup
-[mongohq-create-db]: https://mongohq.com/databases/new
+[mongohq]: https://mongohq.com
 [mongohq-backup]: http://support.mongohq.com/topics/using-amazon-s3-to-backup-your-mongohq-database.html
 [relevance]: http://thinkrelevance.com
 [somerandomdude]: https://github.com/somerandomdude
