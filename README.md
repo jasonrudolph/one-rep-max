@@ -1,24 +1,34 @@
 # One Rep Max
 
-To some extent, One Rep Max is a ClojureScript app for tracking workout data. But mostly, it's a playground/opportunity for me to learn and explore ClojureScript.
+To some extent, One Rep Max is a ClojureScript app for tracking workout
+data. But mostly, it's a playground/opportunity for me to learn and
+explore ClojureScript.
 
 ## Take it for a spin
 
-One Rep Max logs your workouts, so you can quickly and easily see the performance from your last workout, and push yourself to reach new personal records. It's a mobile web app: you take it with you to the gym and log your sets as you go.
+One Rep Max logs your workouts, so you can quickly and easily see the
+performance from your last workout, and push yourself to reach new
+personal records. It's a mobile web app: you take it with you to the gym
+and log your sets as you go.
 
-**Mobile first, mobile only** — The UI is designed exclusively for use on a mobile device. (Since I don't currently have a need for anything other than a mobile interface, no other interface currently exists.) It's tested on Safari running on an iPhone on iOS 5. It probably works on numerous other browsers and platforms, but they're not officially supported.
+**Mobile first, mobile only** — The UI is designed exclusively for use
+on a mobile device. (Since I don't currently have a need for anything
+other than a mobile interface, no other interface currently exists.)
+It's tested on Safari running on an iPhone on iOS 5. It probably works
+on numerous other browsers and platforms, but they're not officially
+supported.
 
-You can take it for a spin at [onerepmax.jasonrudolph.com](http://onerepmax.jasonrudolph.com), or you can follow the instructions below to [build and deploy](#building-and-deploying) your own copy of the app.
+You can take it for a spin at
+[onerepmax.jasonrudolph.com](http://onerepmax.jasonrudolph.com), or you
+can follow the instructions below to [build and
+deploy](#building-and-deploying) your own copy of the app.
 
 TODO Add background info:
 
 * Built using [ClojureScript One][clojurescript-one]
 * Uses MongoHQ as the backend
-* Tested on Mobile Safari running on an iPhone on iOS 5. (It probably
-  works on numerous other browsers and platforms, but they're not
-  officially supported. Explain why.)
 
-# Screenshots
+## Screenshots
 
 [![One Rep Max Screenshot #1 - Welcome](https://img.skitch.com/20120810-mwpw9stnr4arhg1kcbgsi85dwr.png)](http://skitch.com/jasonrudolph/em654/one-rep-max-1-welcome "One Rep Max Screenshot #1 - Welcome")
 [![One Rep Max Screenshot #2 - Initializing](http://img.skitch.com/20120810-1y2kjawa1qeh9nf6wje3huwnhr.preview.png)](http://skitch.com/jasonrudolph/em6hb/one-rep-max-2-initializing "One Rep Max Screenshot #2 - Initializing")
@@ -26,14 +36,14 @@ TODO Add background info:
 [![One Rep Max Screenshot #4 - Filtering Exercise List](http://img.skitch.com/20120810-kkfhwt7txj6wbxxdimdq4hdj59.preview.png)](http://skitch.com/jasonrudolph/em6h8/one-rep-max-4-filtering-exercise-list "One Rep Max Screenshot #4 - Filtering Exercise List")
 [![One Rep Max Screenshot #5 - Logging a Set](http://img.skitch.com/20120810-n8rm87aitmu2cx8iba4egq88xd.preview.png)](http://skitch.com/jasonrudolph/em6hk/one-rep-max-5-logging-a-set "One Rep Max Screenshot #5 - Logging a Set")
 
-# Open source, but not an "open source project"
+## Open source, but not an "open source project"
 
 "I am sharing my code. I am not launching an open source project." --
 Alan Gutierrez
 
 [http://kiloblog.com/post/sharing-code-for-what-its-worth](http://kiloblog.com/post/sharing-code-for-what-its-worth "GitHub and Git: Sharing Your Code, for What It's Worth ...")
 
-# Dependencies
+## Dependencies
 
 One Rep Max is developed and tested with the following dependencies.
 
@@ -46,7 +56,7 @@ If you want to change the CSS, you'll also need Ruby and Compass.
   * Ruby 1.9.3-p194
   * Compass 0.12.2
 
-# Getting started
+## Getting started
 
 You will need to have Java, [lein][] and Git installed. Execute the
 following commands to install and run One Rep Max:
@@ -64,7 +74,7 @@ You will also need an API key and a database for [MongoHQ]. Follow the
 instructions in the One Rep Max UI to sign up for a free account and
 create your database.
 
-# SCSS, not CSS
+## SCSS, not CSS
 
 One Rep Max uses SCSS and [Compass] to generate the CSS used in the app.
 
@@ -77,7 +87,7 @@ changes to the SCSS files:
 When you change any of the SCSS files (in `src/sass`), Compass will
 compile the CSS into the right spot.
 
-# Building and deploying
+## Building and deploying
 
 ClojureScript One provides a [handy script for producing deployment
 artifacts][clojurescript-one-build-script].
@@ -101,14 +111,14 @@ Personally, I host the app on a simple Apache server, and I use
 deployment. If you want to deploy the app to your own host, this script
 might serve as a starting point.
 
-# Back up your data
+## Back up your data
 
 If you use One Rep Max for real production data (i.e., you use it to
 track your workouts and you care about not losing your data), be sure to
 set up automatic backups for your data. You can use the [backup
 services provided by MongoHQ][mongohq-backup] or your can roll your own.
 
-# Vim users are people too
+## Vim users are people too
 
 If you're a Vim user, you'll want to be able to evalulate ClojureScript
 forms from Vim and have them sent to the browser for execution.
@@ -134,7 +144,7 @@ For more info on working with Vim and ClojureScript, check out the
 subset of the steps described in the wiki, but this is all you need for
 evaluating *ClojureScript* code from within Vim.)
 
-# TODO
+## TODO
 
 * Provide visual feedback to the user (i.e., spinner or equivalent) when
   the app is working
@@ -146,21 +156,21 @@ evaluating *ClojureScript* code from within Vim.)
   --output-style=compressed`) and remove the generated stylesheet from
   the repo (i.e., `screen.css`).
 
-# Credits
+## Credits
 
 * Thanks to [Brenton Ashworth][brentonashworth] and others at
   [Relevance] for ClojureScript One.
 * Thanks to [Kevin Altman][itsthatguy] and [Jamie Kite][jgkite] for
   patiently donating their UI design skills to the app.
-* Thanks to [P.J. Onori][somerandomdude] for [Iconic], which provides
+* Thanks to [P.J. Onori][somerandomdude] for [Iconic][], which provides
   the icons used in One Rep Max. (Iconic is distributed under a
   [Creative Commons license][iconic-license].)
-* Thanks to Relevance for [Fridays], where much of this work took place.
+* Thanks to Relevance for [Fridays][], where much of this work took place.
 * Thanks to [Brenton Ashworth][brentonashworth] and [Stuart
   Sierra][stuartsierra] for entertaining countless questions and
   providing valuable feedback as I explored the ClojureScript landscape.
 
-# License
+## License
 
 Copyright 2012 Jason Rudolph ([jasonrudolph.com](http://jasonrudolph.com)) and Relevance ([thinkrelevance.com](http://thinkrelevance.com)).
 
