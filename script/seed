@@ -1,5 +1,26 @@
 #!/bin/sh
 
+exercises=('Back Extension'
+           'Barbell Curl'
+           'Bench Press'
+           'Bent-over Row'
+           'Chin-up'
+           'Clean and Jerk'
+           'Deadlift'
+           'Dip'
+           'Front Squat'
+           'Hang Clean'
+           'Overhead Squat'
+           'Pull-up'
+           'Push Jerk'
+           'Push Press'
+           'Romanian Deadlift'
+           'Shoulder Press'
+           'Snatch'
+           'Snatch-grip Deadlift'
+           'Split Jerk'
+           'Squat')
+
 [[ -n "$1" ]] || { echo "Usage: seed <api-key>"; exit 0 ; }
 
 echo "\n*** Creating 'exercises' collection"
@@ -10,7 +31,7 @@ curl -X POST https://api.mongohq.com/databases/one-rep-max/collections?_apikey=$
 
 echo "\n*** Seeding 'exercises' collection"
 
-for name in "Barbell Row" "Bench Press" "Chin up" "Deadlift" "Press" "Pull up" "Squat"
+for name in "${exercises[@]}"
 do
   echo "\nAdding '$name' to 'exercises' collection"
 
