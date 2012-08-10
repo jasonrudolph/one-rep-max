@@ -1,5 +1,15 @@
 # One Rep Max
 
+To some extent, One Rep Max is a ClojureScript app for tracking workout data. But mostly, it's a playground/opportunity for me to learn and explore ClojureScript.
+
+## Take it for a spin
+
+One Rep Max logs your workouts, so you can quickly and easily see the performance from your last workout, and push yourself to reach new personal records. It's a mobile web app: you take it with you to the gym and log your sets as you go.
+
+**Mobile first, mobile only** — The UI is designed exclusively for use on a mobile device. (Since I don't currently have a need for anything other than a mobile interface, no other interface currently exists.) It's tested on Safari running on an iPhone on iOS 5. It probably works on numerous other browsers and platforms, but they're not officially supported.
+
+You can take it for a spin at [onerepmax.jasonrudolph.com](http://onerepmax.jasonrudolph.com), or you can follow the instructions below to [build and deploy](#building-and-deploying) your own copy of the app.
+
 TODO Add background info:
 
 * Built using [ClojureScript One][clojurescript-one]
