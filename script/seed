@@ -21,11 +21,14 @@ exercises=('Back Extension'
            'Split Jerk'
            'Squat')
 
-[[ -n "$1" ]] || { echo "Usage: seed <api-key>"; exit 0 ; }
+[[ $# -eq 2 ]] || { echo "Usage: seed <api-key> <database-name>"; exit 0 ; }
+
+apikey=$1
+database=$2
 
 echo "\n*** Creating 'exercises' collection"
 
-curl -X POST https://api.mongohq.com/databases/one-rep-max/collections?_apikey=$1 \
+curl -X POST https://api.mongohq.com/databases/$database/collections?_apikey=$apikey \
   -H "Content-Type: application/json" \
   -d '{"name":"exercises"}'
 
@@ -35,7 +38,7 @@ for name in "${exercises[@]}"
 do
   echo "\nAdding '$name' to 'exercises' collection"
 
-  curl -X POST https://api.mongohq.com/databases/one-rep-max/collections/exercises/documents?_apikey=$1 \
+  curl -X POST https://api.mongohq.com/databases/$database/collections/exercises/documents?_apikey=$apikey \
     -H "Content-Type: application/json" \
     -d "{\"document\" : {\"name\" : \"$name\"}, \"safe\" : true }"
 done
