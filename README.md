@@ -8,6 +8,14 @@ TODO Add background info:
   works on numerous other browsers and platforms, but they're not
   officially supported. Explain why.)
 
+# Screenshots
+
+[![One Rep Max Screenshot #1 - Welcome](https://img.skitch.com/20120810-mwpw9stnr4arhg1kcbgsi85dwr.png)](http://skitch.com/jasonrudolph/em654/one-rep-max-1-welcome "One Rep Max Screenshot #1 - Welcome")
+[![One Rep Max Screenshot #2 - Initializing](http://img.skitch.com/20120810-1y2kjawa1qeh9nf6wje3huwnhr.preview.png)](http://skitch.com/jasonrudolph/em6hb/one-rep-max-2-initializing "One Rep Max Screenshot #2 - Initializing")
+[![One Rep Max Screenshot #3 - Exercise List](http://img.skitch.com/20120810-ufff5k1euamqfs4fn2tfkp4jg.preview.png)](http://skitch.com/jasonrudolph/em6hn/one-rep-max-3-exercise-list "One Rep Max Screenshot #3 - Exercise List")
+[![One Rep Max Screenshot #4 - Filtering Exercise List](http://img.skitch.com/20120810-kkfhwt7txj6wbxxdimdq4hdj59.preview.png)](http://skitch.com/jasonrudolph/em6h8/one-rep-max-4-filtering-exercise-list "One Rep Max Screenshot #4 - Filtering Exercise List")
+[![One Rep Max Screenshot #5 - Logging a Set](http://img.skitch.com/20120810-n8rm87aitmu2cx8iba4egq88xd.preview.png)](http://skitch.com/jasonrudolph/em6hk/one-rep-max-5-logging-a-set "One Rep Max Screenshot #5 - Logging a Set")
+
 # Open source, but not an "open source project"
 
 "I am sharing my code. I am not launching an open source project." --
