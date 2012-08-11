@@ -80,7 +80,6 @@ following commands to install and run One Rep Max:
 
     git clone https://github.com/jasonrudolph/one-rep-max.git
     cd one-rep-max
-    lein plugin install lein-repls 1.9.7 # TODO Automate this in "lein bootstrap"
     lein bootstrap
     lein repl
 
