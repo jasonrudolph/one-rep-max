@@ -58,14 +58,9 @@ subsequent communication flows exclusively between your browser and
 api.mongohq.com, all via HTTPS. Your MongoHQ API key is never sent to
 the One Rep Max server, nor is any other user data.
 
-## Open source, but not an "open source project"
+## Hacking
 
-"I am sharing my code. I am not launching an open source project." --
-Alan Gutierrez
-
-[http://kiloblog.com/post/sharing-code-for-what-its-worth](http://kiloblog.com/post/sharing-code-for-what-its-worth "GitHub and Git: Sharing Your Code, for What It's Worth ...")
-
-## Dependencies
+### Dependencies
 
 One Rep Max is developed and tested with the following dependencies.
 
@@ -78,7 +73,7 @@ If you want to change the CSS, you'll also need Ruby and Compass.
   * Ruby 1.9.3-p194
   * Compass 0.12.2
 
-## Getting started
+### Getting started
 
 You will need to have Java, [lein][] and Git installed. Execute the
 following commands to install and run One Rep Max:
@@ -96,7 +91,7 @@ You will also need an API key and a database for [MongoHQ]. Follow the
 instructions in the One Rep Max UI to sign up for a free account and
 create your database.
 
-## SCSS, not CSS
+### SCSS, not CSS
 
 One Rep Max uses SCSS and [Compass] to generate the CSS used in the app.
 
@@ -109,7 +104,7 @@ changes to the SCSS files:
 When you change any of the SCSS files (in `src/sass`), Compass will
 compile the CSS into the right spot.
 
-## Building and deploying
+### Building and deploying
 
 ClojureScript One provides a [handy script for producing deployment
 artifacts][clojurescript-one-build-script].
@@ -133,14 +128,7 @@ Personally, I host the app on a simple Apache server, and I use
 deployment. If you want to deploy the app to your own host, this script
 might serve as a starting point.
 
-## Back up your data
-
-If you use One Rep Max for real production data (i.e., you use it to
-track your workouts and you care about not losing your data), be sure to
-set up automatic backups for your data. You can use the [backup
-services provided by MongoHQ][mongohq-backup] or your can roll your own.
-
-## Vim users are people too
+### Vim users are people too
 
 If you're a Vim user, you'll want to be able to evalulate ClojureScript
 forms from Vim and have them sent to the browser for execution.
@@ -178,6 +166,13 @@ evaluating *ClojureScript* code from within Vim.)
   --output-style=compressed`) and remove the generated stylesheet from
   the repo (i.e., `screen.css`).
 
+## Back up your data
+
+If you use One Rep Max for real production data (i.e., you use it to
+track your workouts and you care about not losing your data), be sure to
+set up automatic backups for your data. You can use the [backup
+services provided by MongoHQ][mongohq-backup] or your can roll your own.
+
 ## Credits
 
 * Thanks to [Brenton Ashworth][brentonashworth] and others at
@@ -191,6 +186,13 @@ evaluating *ClojureScript* code from within Vim.)
 * Thanks to [Brenton Ashworth][brentonashworth] and [Stuart
   Sierra][stuartsierra] for entertaining countless questions and
   providing valuable feedback as I explored the ClojureScript landscape.
+
+## Open source, but not an "open source project"
+
+"I am sharing my code. I am not launching an open source project." --
+Alan Gutierrez
+
+[http://kiloblog.com/post/sharing-code-for-what-its-worth](http://kiloblog.com/post/sharing-code-for-what-its-worth "GitHub and Git: Sharing Your Code, for What It's Worth ...")
 
 ## License
 
