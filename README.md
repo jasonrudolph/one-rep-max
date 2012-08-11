@@ -23,11 +23,6 @@ You can take it for a spin at
 can follow the instructions below to [build and
 deploy](#building-and-deploying) your own copy of the app.
 
-TODO Add background info:
-
-* Built using [ClojureScript One][clojurescript-one]
-* Uses MongoHQ as the backend
-
 ## Screenshots
 
 [![One Rep Max Screenshot #1 - Welcome](https://img.skitch.com/20120810-mwpw9stnr4arhg1kcbgsi85dwr.png)](http://skitch.com/jasonrudolph/em654/one-rep-max-1-welcome "One Rep Max Screenshot #1 - Welcome")
@@ -35,6 +30,33 @@ TODO Add background info:
 [![One Rep Max Screenshot #3 - Exercise List](http://img.skitch.com/20120810-ufff5k1euamqfs4fn2tfkp4jg.preview.png)](http://skitch.com/jasonrudolph/em6hn/one-rep-max-3-exercise-list "One Rep Max Screenshot #3 - Exercise List")
 [![One Rep Max Screenshot #4 - Filtering Exercise List](http://img.skitch.com/20120810-kkfhwt7txj6wbxxdimdq4hdj59.preview.png)](http://skitch.com/jasonrudolph/em6h8/one-rep-max-4-filtering-exercise-list "One Rep Max Screenshot #4 - Filtering Exercise List")
 [![One Rep Max Screenshot #5 - Logging a Set](http://img.skitch.com/20120810-n8rm87aitmu2cx8iba4egq88xd.preview.png)](http://skitch.com/jasonrudolph/em6hk/one-rep-max-5-logging-a-set "One Rep Max Screenshot #5 - Logging a Set")
+
+## Architecture
+
+One Rep Max is a "single-page application" built on top of
+[ClojureScript One][clojurescript-one], with [MongoHQ][] as the backend
+data store.
+
+Wikipedia [describes the interaction with a single-page
+app][single-page-app] as follows:
+
+> All necessary code – HTML, JavaScript, and CSS – is retrieved with a
+> single page load. ... [There is] no page reload by the browser during
+> an application session. All user interaction and changes of the
+> application state are handled in the context of a single Web document.
+> [As a result], the user experience becomes more continuous and fluid...
+
+Each user has his/her own MongoDB database hosted at MongoHQ.  One Rep
+Max uses MongoHQ's REST API to fetch and persist user data.  When you
+launch One Rep Max, it prompts you to provide your MongoHQ API key and
+database name. With that information, One Rep Max is able to access your
+database at MongoHQ and use it as the data store for your workouts.
+
+After One Rep Max downloads to your browser, there is no further
+communication between your browser and the One Rep Max server; all
+subsequent communication flows exclusively between your browser and
+api.mongohq.com, all via HTTPS. Your MongoHQ API key is never sent to
+the One Rep Max server, nor is any other user data.
 
 ## Open source, but not an "open source project"
 
@@ -194,6 +216,7 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [mongohq]: https://mongohq.com
 [mongohq-backup]: http://support.mongohq.com/topics/using-amazon-s3-to-backup-your-mongohq-database.html
 [relevance]: http://thinkrelevance.com
+[single-page-app]: http://en.wikipedia.org/wiki/Single-page_application
 [somerandomdude]: https://github.com/somerandomdude
 [stuartsierra]: https://github.com/stuartsierra
 [tslime.vim]: https://github.com/jgdavey/tslime.vim
