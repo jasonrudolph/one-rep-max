@@ -1,6 +1,6 @@
 # One Rep Max
 
-To some extent, One Rep Max is a ClojureScript app for tracking workout
+To some extent, One Rep Max is a mobile web app for tracking workout
 data. But mostly, it's a playground/opportunity for me to learn and
 explore ClojureScript.
 
@@ -87,7 +87,7 @@ following commands to install and run One Rep Max:
 At the REPL prompt which appears, type `(go)`. Your browser will
 launch and navigate to the running application.
 
-You will also need an API key and a database for [MongoHQ]. Follow the
+You will need an API key and a database for [MongoHQ]. Follow the
 instructions in the One Rep Max UI to sign up for a free account and
 create your database.
 
@@ -182,7 +182,8 @@ services provided by MongoHQ][mongohq-backup] or your can roll your own.
 * Thanks to [P.J. Onori][somerandomdude] for [Iconic][], which provides
   the icons used in One Rep Max. (Iconic is distributed under a
   [Creative Commons license][iconic-license].)
-* Thanks to Relevance for [Fridays][], where much of this work took place.
+* Thanks to Relevance for [20% time][relevance-fridays], where much of
+  this work took place.
 * Thanks to [Brenton Ashworth][brentonashworth] and [Stuart
   Sierra][stuartsierra] for entertaining countless questions and
   providing valuable feedback as I explored the ClojureScript landscape.
@@ -207,7 +208,6 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [clojurescript-with-vim]: https://github.com/clojure/clojurescript/wiki/Vim
 [compass]: http://compass-style.org/
 [deploy-to-dropbox]: http://www.maclife.com/article/howtos/how_host_your_website_dropbox
-[fridays]: http://thinkrelevance.com/how-we-work/dev_team#dev_team-fridays
 [history-management]: https://github.com/jasonrudolph/one-rep-max/blob/21099b6/src/app/cljs/one/sample/history.cljs
 [iconic]: http://somerandomdude.com/work/iconic/
 [iconic-license]: https://github.com/jasonrudolph/one-rep-max/blob/master/public/fonts/iconic_license.txt
@@ -218,6 +218,7 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [mongohq]: https://mongohq.com
 [mongohq-backup]: http://support.mongohq.com/topics/using-amazon-s3-to-backup-your-mongohq-database.html
 [relevance]: http://thinkrelevance.com
+[relevance-fridays]: http://thinkrelevance.com/how-we-work/dev_team#dev_team-fridays
 [single-page-app]: http://en.wikipedia.org/wiki/Single-page_application
 [somerandomdude]: https://github.com/somerandomdude
 [stuartsierra]: https://github.com/stuartsierra
