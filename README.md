@@ -129,7 +129,7 @@ might serve as a starting point.
 
 ### Vim users are people too
 
-If you're a Vim user, you'll want to be able to evalulate ClojureScript
+If you're a Vim user, you'll want to be able to evaluate ClojureScript
 forms from Vim and have them sent to the browser for execution.
 
 1. Install tmux
@@ -156,7 +156,7 @@ evaluating *ClojureScript* code from within Vim.)
 ## TODO
 
 * Provide visual feedback to the user (i.e., spinner or equivalent) when
-  the app is working
+  the app is working.
 * Validate user input. (The ClojureScript One sample app provides an
   [example][clojurescript-one-form-state].)
 * Support navigation with the browser's "back" button. See:
@@ -170,7 +170,7 @@ evaluating *ClojureScript* code from within Vim.)
 If you use One Rep Max for real production data (i.e., you use it to
 track your workouts and you care about not losing your data), be sure to
 set up automatic backups for your data. You can use the [backup
-services provided by MongoHQ][mongohq-backup] or your can roll your own.
+services provided by MongoHQ][mongohq-backup] or you can roll your own.
 
 ## Credits
 
