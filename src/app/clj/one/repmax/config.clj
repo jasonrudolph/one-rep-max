@@ -58,6 +58,6 @@
                    "goog.require('one.repmax.sets.view');"
                    "goog.require('one.repmax.logging');"
                    "one.repmax.core.start();one.repmax.core.repl();"]
-          :prod-js ["one.repmax.core.start();"]
+          :prod-js ["one.repmax.core.auto_authenticate();one.repmax.core.start();"]
           :prod-transform production-transform
           :reloadables [clj-reloads cljs-reloads macro-reloads templates]})

@@ -2,7 +2,6 @@
   (:refer-clojure :exclude [set])
   (:require [clojure.string :as string]
             [one.dispatch :as dispatch]
-            [one.repmax.cookies :as cookies]
             [one.repmax.mongohq :as mongo]))
 
 (def initial-state {:state :start
@@ -59,14 +58,7 @@
 ;  If any step fails along the way, the state changes to :initialization-failed.
 
 (defmethod update-model :datastore-configuration/initialize [state _]
-  (-> state
-    (assoc :state :datastore-configuration)
-    (assoc :datastore-configuration (datastore-configuration-from-cookies))))
-
-(defn datastore-configuration-from-cookies []
-  (let [api-key (cookies/get-cookie :api-key)
-        database (cookies/get-cookie :database)]
-    (new-datastore-configuration api-key database)))
+  (assoc state :state :datastore-configuration))
 
 (defn new-datastore-configuration [api-key database]
   (if (or (nil? api-key) (nil? database))
