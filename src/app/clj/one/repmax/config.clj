@@ -57,6 +57,7 @@
                    "goog.require('one.repmax.sets.statistics');"
                    "goog.require('one.repmax.sets.view');"
                    "goog.require('one.repmax.logging');"
+                   "goog.require('one.repmax.test.integration_util');"
                    "one.repmax.core.start();one.repmax.core.repl();"]
           :prod-js ["one.repmax.core.auto_authenticate();one.repmax.core.start();"]
           :prod-transform production-transform
