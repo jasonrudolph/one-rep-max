@@ -11,3 +11,4 @@
 /.lein-git-deps/
 /.lein_repls
 /.sass-cache/
+/resources/datastore.clj
