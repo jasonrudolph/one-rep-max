@@ -13,7 +13,7 @@
                      [marginalia "0.7.0-SNAPSHOT"]
                      [lein-marginalia "0.7.0-SNAPSHOT"]]
   :git-dependencies [["https://github.com/clojure/clojurescript.git"
-                      "0f73237dce2a1432a2da9760bdd925c45d84a407"]
+                      "3ea593825f60c228f6a384be52bcf2fc4e417567"]
                      ["https://github.com/levand/domina.git"
                       "a328080ca4a754e808454f589caae90fac951d10"]]
   :repl-init one.repmax.repl
