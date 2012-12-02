@@ -25,11 +25,11 @@ deploy](#building-and-deploying) your own copy of the app.
 
 ## Screenshots
 
-[![One Rep Max Screenshot #1 - Welcome](https://img.skitch.com/20120810-mwpw9stnr4arhg1kcbgsi85dwr.png)](http://skitch.com/jasonrudolph/em654/one-rep-max-1-welcome "One Rep Max Screenshot #1 - Welcome")
-[![One Rep Max Screenshot #2 - Initializing](http://img.skitch.com/20120810-1y2kjawa1qeh9nf6wje3huwnhr.preview.png)](http://skitch.com/jasonrudolph/em6hb/one-rep-max-2-initializing "One Rep Max Screenshot #2 - Initializing")
-[![One Rep Max Screenshot #3 - Exercise List](http://img.skitch.com/20120810-ufff5k1euamqfs4fn2tfkp4jg.preview.png)](http://skitch.com/jasonrudolph/em6hn/one-rep-max-3-exercise-list "One Rep Max Screenshot #3 - Exercise List")
-[![One Rep Max Screenshot #4 - Filtering Exercise List](http://img.skitch.com/20120810-kkfhwt7txj6wbxxdimdq4hdj59.preview.png)](http://skitch.com/jasonrudolph/em6h8/one-rep-max-4-filtering-exercise-list "One Rep Max Screenshot #4 - Filtering Exercise List")
-[![One Rep Max Screenshot #5 - Logging a Set](http://img.skitch.com/20120810-n8rm87aitmu2cx8iba4egq88xd.preview.png)](http://skitch.com/jasonrudolph/em6hk/one-rep-max-5-logging-a-set "One Rep Max Screenshot #5 - Logging a Set")
+[![One Rep Max Screenshot #1 - Welcome](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-1-welcome-medium.png)](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-1-welcome.png "One Rep Max Screenshot #1 - Welcome")
+[![One Rep Max Screenshot #2 - Initializing](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-2-initializing-small.png)](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-2-initializing.png "One Rep Max Screenshot #2 - Initializing")
+[![One Rep Max Screenshot #3 - Exercise List](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-3-exercise-list-small.png)](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-3-exercise-list.png "One Rep Max Screenshot #3 - Exercise List")
+[![One Rep Max Screenshot #4 - Filtering Exercise List](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-4-filtering-exercise-list-small.png)](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-4-filtering-exercise-list.png "One Rep Max Screenshot #4 - Filtering Exercise List")
+[![One Rep Max Screenshot #5 - Logging a Set](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-5-logging-a-set-small.png)](https://raw.github.com/jasonrudolph/one-rep-max/master/doc/screenshots/one-rep-max-5-logging-a-set.png "One Rep Max Screenshot #5 - Logging a Set")
 
 ## Architecture
 
